@@ -1,0 +1,39 @@
+{
+  "name": "antd-pro-toolkit",
+  "version": "0.0.1",
+  "description": "antd pro toolkit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m430/antd-pro-toolkit.git"
+  },
+  "keywords": [
+    "antd",
+    "pro",
+    "toolkit"
+  ],
+  "author": "m430",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m430/antd-pro-toolkit/issues"
+  },
+  "homepage": "https://github.com/m430/antd-pro-toolkit#readme",
+  "devDependencies": {
+    "@types/react": "^16.8.6",
+    "@types/react-dom": "^16.8.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.3.3333",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "antd": "^3.13.6",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
+  }
+}

@@ -1,0 +1,76 @@
+@import '~antd/lib/style/themes/default.less';
+
+.login {
+  :global {
+    .ant-tabs .ant-tabs-bar {
+      border-bottom: 0;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .ant-form-item {
+      margin: 0 2px 20px;
+    }
+    .has-error {
+      .ant-input-affix-wrapper .ant-input:focus {
+        border-right-width: 0px !important;
+        box-shadow: none;
+      }
+    }
+    .ant-input {
+      border-width: 0;
+      border-bottom-width: 1px;
+      border-radius: 0;
+      font-size: 14px;
+      &:hover {
+        border-right-width: 0px !important;
+      }
+      &:focus {
+        box-shadow: none;
+        border-right-width: 0px !important;
+      }
+      &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px white inset;
+      }
+    }
+    .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
+      border-right-width: 0px !important;
+    }
+  }
+
+  .icon {
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.2);
+    margin-left: 16px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+
+  .other {
+    text-align: left;
+    margin-top: 24px;
+    line-height: 22px;
+
+    .register {
+      float: right;
+    }
+  }
+
+  .prefixIcon {
+    font-size: @font-size-base;
+    color: @disabled-color;
+  }
+
+  .submit {
+    width: 100%;
+    margin-top: 24px;
+    border-radius: 0;
+    background-color: #2D53F2;
+    border: 0;
+  }
+}
