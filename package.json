@@ -2,9 +2,13 @@
   "name": "antd-pro-toolkit",
   "version": "0.0.1",
   "description": "antd pro toolkit",
-  "main": "index.js",
+  "main": "src/index.js",
+  "module": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -25,14 +29,22 @@
     "@types/react": "^16.8.6",
     "@types/react-dom": "^16.8.2",
     "awesome-typescript-loader": "^5.2.1",
+    "less-loader": "^4.1.0",
     "source-map-loader": "^0.2.4",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "@storybook/react": "^4.1.13",
+    "@storybook/addon-actions": "^4.1.13",
+    "@storybook/addon-links": "^4.1.13",
+    "@storybook/addons": "^4.1.13",
+    "@babel/core": "^7.3.4",
+    "babel-loader": "^8.0.5"
   },
   "dependencies": {
     "antd": "^3.13.6",
+    "classnames": "^2.2.6",
     "react": "^16.8.3",
     "react-dom": "^16.8.3"
   }
