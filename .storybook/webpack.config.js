@@ -12,6 +12,13 @@ module.exports = (baseConfig, env, config) => {
     test: /\.(ts|tsx)$/,
     include: path.resolve(__dirname, '..src'),
     loader: require.resolve('awesome-typescript-loader')
+  }, {
+    test: /\.less$/,
+    use: [
+      { loader: 'style-loader' },
+      { loader: 'css-loader' },
+      { loader: 'less-loader' }
+    ]
   })
   config.resolve.extensions.push('.ts', '.tsx');
   

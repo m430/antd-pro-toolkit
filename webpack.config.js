@@ -12,6 +12,53 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/, loader: "awesome-typescript-loader"
+      },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [
+                require('autoprefixer')({
+                  'browsers': ['> 1%', 'last 2 versions']
+                })
+              ]
+            }
+          },
+        ]
+      },
+      {
+        test: /.less$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [
+                require('autoprefixer')({
+                  'browsers': ['> 1%', 'last 2 versions']
+                })
+              ]
+            }
+          },
+          {
+            loader: 'less-loader'
+          }
+        ]
       }
     ]
   },
@@ -19,8 +66,8 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", ".json", ".jsx"]
   },
   externals: {
-    'react': 'react',
-    'react-dom': 'react-dom',
+    'react': 'React',
+    'react-dom': 'ReactDOM',
     'antd': 'antd',
     'calssnames': 'classnames'
   }
