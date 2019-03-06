@@ -1,4 +1,7 @@
 .antd-pro-cascader {
+  * {
+    box-sizing: border-box;
+  }
   position: relative;
   z-index: 9;
   height: 26px;
@@ -6,30 +9,35 @@
   display: inline-block;
   width: 335px;
 
+  .antd-pro-hidden {
+    display: none;
+  }
+
   .antd-pro-cascader-text-wrap {
     float: left;
     position: relative;
     top: 0;
     height: 36px;
+    line-height: 36px;
     background: #fff;
     border: 1px solid #e8e8e8;
     padding: 0 24px 0 10px;
-    line-height: 32px;
     overflow: hidden;
-    width: 290px;
+    width: 100%;
     border-radius: 4px;
+    .antd-pro-cascader-text {
+      height: 100%;
+    }
     .icon-tab-down {
       position: absolute;
-      top: 9px;
       right: 5px;
+      top: 0;
+      height: 36px;
+      line-height: 36px;
     }
   }
 
-  &:hover > .antd-pro-cascader-content-wrap {
-    display: block;
-  }
   .antd-pro-cascader-content-wrap {
-    display: none;
     float: left;
     position: absolute;
     top: 36px;
@@ -84,9 +92,6 @@
     }
 
     .antd-pro-tab-content {
-      .antd-pro-hidden {
-        display: none;
-      }
 
       .andt-pro-tab-panel {
         .antd-pro-panel-list {

@@ -5,6 +5,7 @@ const merge2 = require('merge2');
 const ts = require('gulp-typescript');
 const webpack = require('webpack');
 const tsConfig = require('./getTSCommonConfig')();
+const webpackConfig = require('./getWebpackConfig')();
 const getBabelCommonConfig = require('./getBabelCommonConfig');
 const { cssInjection } = require('./config/utils/styleUtil');
 const { getProjectPath } = require('./config/utils/helper');
@@ -20,7 +21,6 @@ const tsDefaultReporter = ts.reporter.defaultReporter();
 function dist(done) {
   rimraf.sync('dist');
   process.env.RUN_ENV = 'PRODUCTION';
-  const webpackConfig = require('./webpack.config');
   webpack(webpackConfig, (err, stats) => {
     if (err) {
       console.error(err.stack || err);

@@ -6,21 +6,33 @@
 // When you add this file, we won't add the default configurations which is similar
 // to "React Create App". This only has babel loader to load JavaScript.
 const path = require('path');
+const { resolve } = require('../config/utils/helper'); 
+const babelConfig = require('../getBabelCommonConfig')();
 
 module.exports = (baseConfig, env, config) => {
   config.module.rules.push({
-    test: /\.(ts|tsx)$/,
-    include: path.resolve(__dirname, '..src'),
-    loader: require.resolve('awesome-typescript-loader')
-  }, {
-    test: /\.less$/,
+    test: /\.tsx?$/,
     use: [
-      { loader: 'style-loader' },
-      { loader: 'css-loader', importLoaders: 1 },
-      { loader: 'less-loader' }
-    ]
-  })
+      {
+        loader: resolve('babel-loader'),
+        options: babelConfig,
+      },
+      {
+        loader: resolve('ts-loader'),
+        options: {
+          transpileOnly: true,
+        },
+      },
+    ],
+  }, {
+      test: /\.less$/,
+      use: [
+        { loader: 'style-loader' },
+        { loader: 'css-loader', options: { importLoaders: 1 } },
+        { loader: 'less-loader' }
+      ]
+    })
   config.resolve.extensions.push('.ts', '.tsx');
-  
+
   return config;
 }
