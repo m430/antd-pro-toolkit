@@ -1,20 +1,12 @@
 import React, { Component } from 'react'
 import ClassNames from 'classnames';
-import Dropdown from 'antd/lib/dropdown';
-import 'antd/lib/dropdown/style/css';
-import Tabs from 'antd/lib/tabs';
-import 'antd/lib/tabs/style/css';
 import './index.less';
-import Button from 'antd/lib/button/button';
-import 'antd/lib/button/style/css';
-import Icon from 'antd/lib/icon/index';
-import 'antd/lib/icon/style/css';
+import { Icon } from 'antd';
 
-const { TabPane } = Tabs;
 
-export default class Cascader extends Component {
+export default class Cascader extends Component<{}, any> {
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       text: '',
@@ -40,13 +32,13 @@ export default class Cascader extends Component {
     }
   }
 
-  handleClickTab = (index) => {
+  handleClickTab = (index: number) => {
     this.setState({
       tabIndex: index
     })
   }
 
-  handleClickItem = (tabIdx, item) => {
+  handleClickItem = (tabIdx: number, item: any) => {
     const { selectedItems, tabs } = this.state;
     selectedItems[tabIdx] = item;
     tabs[tabIdx].title = item.name;
@@ -59,12 +51,12 @@ export default class Cascader extends Component {
 
   renderContent = () => {
 
-    const { text, tabs, tabIndex, selectedItems } = this.state;
+    const { tabs, tabIndex, selectedItems } = this.state;
 
     return (
       <div className="antd-pro-cascader-content-wrap">
         <div className="antd-pro-tab">
-          {tabs.map((tab, index) => (
+          {tabs.map((tab: any, index: number) => (
             <a
               onClick={() => this.handleClickTab(index)}
               className={ClassNames({
@@ -78,13 +70,13 @@ export default class Cascader extends Component {
           ))}
         </div>
         <div className="antd-pro-tab-content">
-          {tabs.map((tab, tabIdx) => (
+          {tabs.map((tab: any, tabIdx: number) => (
             <div key={tabIdx} className={ClassNames({
               'andt-pro-tab-panel': true,
               'antd-pro-hidden': tabIdx !== tabIndex
             })}>
               <ul className="antd-pro-panel-list">
-                {tab.items.map((item, itemIdx) =>
+                {tab.items.map((item: any, itemIdx: number) =>
                   <li
                     key={itemIdx}
                     className={ClassNames({
@@ -110,7 +102,7 @@ export default class Cascader extends Component {
       <div className="antd-pro-cascader">
         <div className="antd-pro-cascader-text-wrap">
           <div className="antd-pro-cascader-text">
-            {selectedItems.map(item => item.name).join('')}
+            {selectedItems.map((item: any) => item.name).join('')}
           </div>
           <Icon type="down" className="icon-tab-down" />
         </div>

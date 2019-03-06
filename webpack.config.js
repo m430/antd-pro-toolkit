@@ -1,7 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: './src/index.js',
+  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'antd-pro-toolkit.js',
@@ -11,7 +12,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/, loader: "awesome-typescript-loader"
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.css$/,
@@ -37,6 +42,7 @@ module.exports = {
       },
       {
         test: /.less$/,
+        exclude: /node_modules/,
         use: [
           { loader: 'style-loader' },
           {

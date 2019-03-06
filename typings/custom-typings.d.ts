@@ -1,1 +1,1 @@
-declare module "ActiveChart";
+declare module "Cascader";

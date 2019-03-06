@@ -16,7 +16,7 @@ module.exports = (baseConfig, env, config) => {
     test: /\.less$/,
     use: [
       { loader: 'style-loader' },
-      { loader: 'css-loader' },
+      { loader: 'css-loader', importLoaders: 1 },
       { loader: 'less-loader' }
     ]
   })

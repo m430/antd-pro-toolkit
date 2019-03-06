@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
-import { Cascader } from '../src';
+import { Cascader } from '../src/components';
 
 storiesOf('Cascader', module)
   .add('default', () =>
