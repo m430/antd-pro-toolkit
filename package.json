@@ -1,6 +1,6 @@
 {
   "name": "antd-pro-toolkit",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "description": "antd pro toolkit",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -69,6 +69,7 @@
     "postcss-loader": "^3.0.0",
     "rimraf": "^2.6.3",
     "rucksack": "^4.0.4",
+    "rucksack-css": "^1.0.2",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "through2": "^3.0.1",
@@ -83,5 +84,11 @@
     "classnames": "^2.2.6",
     "react": "^16.8.3",
     "react-dom": "^16.8.3"
-  }
+  },
+  "sideEffects": [
+    "dist/*",
+    "es/**/style/*",
+    "lib/**/style/*",
+    "*.less"
+  ]
 }

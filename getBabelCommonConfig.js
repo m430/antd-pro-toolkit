@@ -12,11 +12,11 @@ module.exports = function(modules) {
         helpers: false,
       },
     ],
-    resolve('@babel/plugin-transform-spread'),
-    resolve('@babel/plugin-transform-template-literals'),
+    // resolve('@babel/plugin-transform-spread'),
+    // resolve('@babel/plugin-transform-template-literals'),
     resolve('@babel/plugin-proposal-export-default-from'),
     resolve('@babel/plugin-proposal-export-namespace-from'),
-    resolve('@babel/plugin-proposal-object-rest-spread'),
+    // resolve('@babel/plugin-proposal-object-rest-spread'),
     [
       resolve('@babel/plugin-proposal-decorators'),
       {

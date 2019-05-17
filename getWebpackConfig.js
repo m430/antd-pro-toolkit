@@ -35,13 +35,14 @@ function getWebpackConfig(modules) {
   babelConfig.plugins.push([
     resolve('babel-plugin-import'),
     {
+      name: pkg.name,
       style: true,
       libraryName: pkg.name,
-      libraryDirectory: 'components',
+      libraryDirectory: 'es',
     },
+    pkg.name
   ]);
 
-  // Other package
   if (pkg.name !== 'antd') {
     babelConfig.plugins.push([
       resolve('babel-plugin-import'),
@@ -50,6 +51,7 @@ function getWebpackConfig(modules) {
         libraryDirectory: 'es',
         libraryName: 'antd',
       },
+      'antd'
     ]);
   }
 
@@ -193,7 +195,7 @@ All rights reserved.
       hints: false,
     },
   };
-
+  process.env.RUN_ENV = 'PRODUCTION';
   if (process.env.RUN_ENV === 'PRODUCTION') {
     const entry = ['./index'];
 
