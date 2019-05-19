@@ -2,7 +2,7 @@
 
 const { dirname } = require('path');
 const fs = require('fs');
-const { getProjectPath } = require('./config/utils/helper');
+const { getProjectPath } = require('./utils/helper');
 
 function replacePath(path) {
   if (path.node.source && /\/lib\//.test(path.node.source.value)) {

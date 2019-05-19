@@ -1,4 +1,4 @@
-const { resolve } = require('./config/utils/helper');
+const { resolve } = require('./utils/helper');
 
 module.exports = function(modules) {
   const plugins = [

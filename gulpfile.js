@@ -4,15 +4,15 @@ const through2 = require('through2');
 const merge2 = require('merge2');
 const ts = require('gulp-typescript');
 const webpack = require('webpack');
-const tsConfig = require('./getTSCommonConfig')();
-const webpackConfig = require('./getWebpackConfig')(false);
-const getBabelCommonConfig = require('./getBabelCommonConfig');
+const tsConfig = require('./config/getTSCommonConfig')();
+const webpackConfig = require('./config/getWebpackConfig')(false);
+const getBabelCommonConfig = require('./config/getBabelCommonConfig');
 const { cssInjection } = require('./config/utils/styleUtil');
 const { getProjectPath } = require('./config/utils/helper');
-const replaceLib = require('./replaceLib');
+const replaceLib = require('./config/replaceLib');
 const stripCode = require('gulp-strip-code');
 const babel = require('gulp-babel');
-const transformLess = require('./transformLess');
+const transformLess = require('./config/transformLess');
 
 const libDir = getProjectPath('lib');
 const esDir = getProjectPath('es');
@@ -21,7 +21,6 @@ const tsDefaultReporter = ts.reporter.defaultReporter();
 function dist(done) {
   rimraf.sync('dist');
   process.env.RUN_ENV = 'PRODUCTION';
-  console.log(JSON.stringify(webpackConfig[1], null, 2));
   webpack(webpackConfig, (err, stats) => {
     if (err) {
       console.error(err.stack || err);

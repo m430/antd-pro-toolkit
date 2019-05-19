@@ -1,4 +1,4 @@
-const { getProjectPath, resolve, injectRequire } = require('./config/utils/helper'); // eslint-disable-line import/order
+const { getProjectPath, resolve, injectRequire } = require('./utils/helper'); // eslint-disable-line import/order
 
 injectRequire();
 
@@ -15,7 +15,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const postcssConfig = require('./postcssConfig');
-const CleanUpStatsPlugin = require('./config/utils/CleanUpStatsPlugin');
+const CleanUpStatsPlugin = require('./utils/CleanUpStatsPlugin');
 
 const svgRegex = /\.svg(\?v=\d+\.\d+\.\d+)?$/;
 const svgOptions = {
@@ -178,14 +178,9 @@ function getWebpackConfig(modules) {
 
     plugins: [
       new CaseSensitivePathsPlugin(),
-      new webpack.BannerPlugin(`
-${pkg.name} v${pkg.version}
-
-Copyright 2015-present, Alipay, Inc.
-All rights reserved.
-      `),
+      new webpack.BannerPlugin(`${pkg.name} v${pkg.version}`),
       new WebpackBar({
-        name: '🚚  Ant Design Tools',
+        name: 'Ant Design Pro Toolkit',
         color: '#2f54eb',
       }),
       new CleanUpStatsPlugin(),

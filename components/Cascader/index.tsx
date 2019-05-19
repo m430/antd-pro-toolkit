@@ -37,8 +37,6 @@ export default class Cascader extends Component<CascaderProps, CascaderState> {
 
   constructor(props: CascaderProps) {
     super(props);
-    console.log(props);
-    console.log(props);
     this.state = {
       tabIndex: -1,
       tabs: (props.value || []).map(v => ({ title: v.name, items: []})),

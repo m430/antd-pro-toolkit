@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const assign = require('object-assign');
-const { getProjectPath } = require('./config/utils/helper');
+const { getProjectPath } = require('./utils/helper');
 
 module.exports = function() {
   let my = {};
