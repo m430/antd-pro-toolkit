@@ -1,6 +1,6 @@
 {
   "name": "antd-pro-toolkit",
-  "version": "0.0.13",
+  "version": "0.1.1",
   "description": "antd pro toolkit",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -51,7 +51,7 @@
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.5",
-    "babel-plugin-import": "^1.11.0",
+    "babel-plugin-import": "^1.11.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^2.1.0",
@@ -65,6 +65,7 @@
     "less-plugin-npm-import": "^2.1.0",
     "merge2": "^1.2.3",
     "module": "^1.2.5",
+    "numeral": "^2.0.6",
     "postcss": "^7.0.14",
     "postcss-loader": "^3.0.0",
     "rimraf": "^2.6.3",
@@ -80,10 +81,17 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@antv/data-set": "^0.10.2",
     "antd": "^3.13.6",
+    "bizcharts": "^3.5.3-beta.0",
+    "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "classnames": "^2.2.6",
+    "lodash-decorators": "^6.0.1",
+    "moment": "^2.24.0",
     "react": "^16.8.3",
-    "react-dom": "^16.8.3"
+    "react-dom": "^16.8.3",
+    "react-fittext": "^1.0.0",
+    "umi": "^2.6.17"
   },
   "sideEffects": [
     "dist/*",

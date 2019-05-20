@@ -1,6 +1,6 @@
 const { resolve } = require('./utils/helper');
 
-module.exports = function(modules) {
+module.exports = function (modules) {
   const plugins = [
     resolve('babel-plugin-inline-import-data-uri'),
     resolve('@babel/plugin-transform-member-expression-literals'),
@@ -23,7 +23,12 @@ module.exports = function(modules) {
         legacy: true,
       },
     ],
-    resolve('@babel/plugin-proposal-class-properties'),
+    [
+      resolve('@babel/plugin-proposal-class-properties'),
+      {
+        loose: true
+      }
+    ]
   ];
   return {
     presets: [
