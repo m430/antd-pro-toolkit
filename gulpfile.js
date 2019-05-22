@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const { execSync } = require('child_process');
 const rimraf = require('rimraf');
 const through2 = require('through2');
 const merge2 = require('merge2');
@@ -13,6 +14,8 @@ const replaceLib = require('./config/replaceLib');
 const stripCode = require('gulp-strip-code');
 const babel = require('gulp-babel');
 const transformLess = require('./config/transformLess');
+const shell = require('shelljs');
+const packageJson = require(getProjectPath('package.json'));
 
 const libDir = getProjectPath('lib');
 const esDir = getProjectPath('es');
@@ -55,13 +58,14 @@ function dist(done) {
   })
 }
 
-function tag() {
+function tag(done) {
   console.log('tagging');
   const { version } = packageJson;
   execSync(`git tag ${version}`);
   execSync(`git push origin ${version}:${version}`);
   execSync('git push origin master:master');
   console.log('tagged');
+  done(0);
 }
 
 function babelify(js, modules) {
@@ -181,3 +185,16 @@ gulp.task('compile-with-lib', done => {
 
 gulp.task('compile', gulp.parallel('compile-with-es', 'compile-with-lib'));
 
+gulp.task('pub',
+  gulp.series(['dist', 'compile'], done => {
+    if (shell.exec('npm publish').code !== 0) {
+      shell.echo(`npm publish ${packageJson.version} error!`);
+      shell.exit(1);
+    } else {
+      tag();
+    }
+    done();
+  })
+)
+
+gulp.task('tag', done => tag(done));
