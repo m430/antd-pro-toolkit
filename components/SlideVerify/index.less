@@ -1,0 +1,57 @@
+.slideVerify {
+  width: 400px;
+  height: 50px;
+  border: 1px solid #999;
+  position: relative;
+  border-radius: 4px;
+  .progress {
+    width: 0;
+    height: 50px;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    &.dragging {
+      border-color: #1991fa;
+      background-color: #d1e9fe;
+    }
+    &.error {
+      border-color: #f57a7a;
+      background-color: #fce1e1;
+    }
+    &.done {
+      border-color: #52ccba;
+      background-color: #d2f4ef;
+    }
+  }
+  .slideHandler {
+    width: 50px;
+    height: 48px;
+    line-height: 48px;
+    border-radius: 4px;
+    box-shadow: 0 0 3px rgba(0,0,0,.3);
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 26px;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      background: #1890ff;
+      color: #fff;
+    }
+    &.dragging {
+      background: #1890ff;
+      color: #fff;
+    }
+    &.error {
+      background: #ff5c57;
+      color: #fff;
+    }
+    &.done {
+      background: #52ccba;
+      color: #fff;
+    }
+  }
+}

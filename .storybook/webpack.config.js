@@ -8,27 +8,29 @@
 const path = require('path');
 const { resolve } = require('../config/utils/helper');
 
-module.exports = (baseConfig, env, config) => {
-  config.module.rules.push({
-    test: /\.tsx?$/,
-    use: [
-      {
-        loader: resolve('babel-loader'),
-      },
-      {
-        loader: resolve('ts-loader'),
-        options: {
-          transpileOnly: true,
+module.exports = ({ config }) => {
+  config.module.rules.push(
+    {
+      test: /\.tsx?$/,
+      use: [
+        {
+          loader: resolve('babel-loader'),
         },
-      },
-    ],
-  }, {
+        {
+          loader: resolve('ts-loader'),
+          options: {
+            transpileOnly: true,
+          },
+        },
+      ],
+    },
+    {
       test: /\.less$/,
       use: [
         { loader: 'style-loader' },
-        { 
-          loader: 'css-loader', 
-          options: { importLoaders: 1, modules: true } 
+        {
+          loader: 'css-loader',
+          options: { importLoaders: 1, modules: true }
         },
         {
           loader: 'less-loader', options: {
@@ -36,7 +38,13 @@ module.exports = (baseConfig, env, config) => {
           }
         }
       ]
-    })
+    },
+    {
+      test: /\.stories\.js?$/,
+      loaders: [require.resolve('@storybook/addon-storysource/loader')],
+      enforce: 'pre',
+    }
+  )
   config.resolve.extensions.push('.ts', '.tsx', '.js');
 
   return config;

@@ -10,3 +10,5 @@ export { default as Charts } from './Charts';
 export { default as NumberInfo } from './NumberInfo';
 
 export { default as Trend } from './Trend';
+
+export { default as SlideVerify } from './SlideVerify';
