@@ -36,7 +36,7 @@ class SlideVerify extends React.Component {
 
   handleStop = (e, draggableData) => {
     const { onStop } = this.props;
-    let offset = draggableData.x + draggableData.node.offsetWidth;
+    let offset = draggableData.x - draggableData.y + draggableData.node.offsetWidth;
     let isVerify = false;
     if (offset !== this.refs.slider.clientWidth) {
       this.setState({
@@ -58,8 +58,8 @@ class SlideVerify extends React.Component {
 
   handleDrag = (e, draggableData) => {
     const { onDrag } = this.props;
-    let offset = draggableData.x + draggableData.node.offsetWidth;
-    this.setState({ offset, position: { x: draggableData.x, y: 0 } })
+    let offset = draggableData.x - draggableData.y + draggableData.node.offsetWidth;
+    this.setState({ offset, position: { x: draggableData.x - draggableData.y, y: 0 } })
     if (onDrag) onDrag(e, draggableData);
   }
 
