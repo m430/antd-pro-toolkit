@@ -3,7 +3,7 @@ import { Chart, Axis, Tooltip, Geom } from 'bizcharts';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import autoHeight from '../autoHeight';
-import styles from '../index.less';
+import '../index.less';
 
 @autoHeight()
 class Bar extends Component {
@@ -84,7 +84,7 @@ class Bar extends Component {
     ];
 
     return (
-      <div className={styles.chart} style={{ height }} ref={this.handleRoot}>
+      <div className="chart" style={{ height }} ref={this.handleRoot}>
         <div ref={this.handleRef}>
           {title && <h4 style={{ marginBottom: 20 }}>{title}</h4>}
           <Chart

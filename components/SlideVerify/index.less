@@ -1,9 +1,36 @@
 .slideVerify {
   width: 400px;
   height: 50px;
-  border: 1px solid #999;
+  border: 1px solid rgb(177, 175, 175);
   position: relative;
   border-radius: 4px;
+  text-align: center;
+  &.is-small {
+    height: 40px;
+    .hintTxt {
+      font-size: 16px;
+      line-height: 40px;
+    }
+    .progress {
+      height: 40px;
+      .passTxt {
+        line-height: 40px;
+        margin-left: -32px;
+        font-size: 16px;
+        width: 64px;
+      }
+    }
+    .slideHandler {
+      width: 40px;
+      height: 38px;
+      line-height: 38px;
+      font-size: 20px;
+    }
+  }
+  .hintTxt {
+    font-size: 18px;
+    line-height: 50px;
+  }
   .progress {
     width: 0;
     height: 50px;
@@ -12,6 +39,17 @@
     left: -1px;
     border-radius: 4px;
     border: 1px solid transparent;
+    overflow: hidden;
+    .passTxt {
+      position: absolute;
+      left: 200px;
+      line-height: 50px;
+      margin-left: -36px;
+      font-size: 18px;
+      width: 72px;
+      color: #52ccba;
+      display: none;
+    }
     &.dragging {
       border-color: #1991fa;
       background-color: #d1e9fe;
@@ -23,6 +61,9 @@
     &.done {
       border-color: #52ccba;
       background-color: #d2f4ef;
+      .passTxt {
+        display: inline-block;
+      }
     }
   }
   .slideHandler {

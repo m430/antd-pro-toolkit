@@ -5,7 +5,7 @@ import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import classNames from 'classnames';
 import autoHeight from '../autoHeight';
-import styles from './index.less';
+import './index.less';
 
 /* eslint no-underscore-dangle: 0 */
 /* eslint no-param-reassign: 0 */
@@ -143,7 +143,7 @@ class TagCloud extends Component {
 
     return (
       <div
-        className={classNames(styles.tagCloud, className)}
+        className={classNames("tagCloud", className)}
         style={{ width: '100%', height }}
         ref={this.saveRootRef}
       >

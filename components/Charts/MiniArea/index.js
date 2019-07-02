@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart, Axis, Tooltip, Geom } from 'bizcharts';
 import autoHeight from '../autoHeight';
-import styles from '../index.less';
+import '../index.less';
 
 @autoHeight()
 class MiniArea extends React.PureComponent {
@@ -45,8 +45,8 @@ class MiniArea extends React.PureComponent {
     const chartHeight = height + 54;
 
     return (
-      <div className={styles.miniChart} style={{ height }}>
-        <div className={styles.chartContent}>
+      <div className="miniChart" style={{ height }}>
+        <div className="chartContent">
           {height > 0 && (
             <Chart
               animate={animate}

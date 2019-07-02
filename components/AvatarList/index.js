@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip, Avatar } from 'antd';
 import classNames from 'classnames';
 
-import styles from './index.less';
+import './index.less';
 
 const AvatarList = ({ children, size, ...other }) => {
   const childrenWithProps = React.Children.map(children, child =>
@@ -12,17 +12,17 @@ const AvatarList = ({ children, size, ...other }) => {
   );
 
   return (
-    <div {...other} className={styles.avatarList}>
+    <div {...other} className="avatarList">
       <ul> {childrenWithProps} </ul>
     </div>
   );
 };
 
 const Item = ({ src, size, tips, onClick = () => {} }) => {
-  const cls = classNames(styles.avatarItem, {
-    [styles.avatarItemLarge]: size === 'large',
-    [styles.avatarItemSmall]: size === 'small',
-    [styles.avatarItemMini]: size === 'mini',
+  const cls = classNames("avatarItem", {
+    "avatarItemLarge": size === 'large',
+    "avatarItemSmall": size === 'small',
+    "avatarItemMini": size === 'mini',
   });
 
   return (

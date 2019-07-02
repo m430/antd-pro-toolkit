@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'antd';
 import classNames from 'classnames';
 
-import styles from './index.less';
+import './index.less';
 
 const renderTotal = total => {
   let totalDom;
@@ -11,10 +11,10 @@ const renderTotal = total => {
       totalDom = null;
       break;
     case 'function':
-      totalDom = <div className={styles.total}>{total()}</div>;
+      totalDom = <div className="total">{total()}</div>;
       break;
     default:
-      totalDom = <div className={styles.total}>{total}</div>;
+      totalDom = <div className="total">{total}</div>;
   }
   return totalDom;
 };
@@ -26,30 +26,30 @@ class ChartCard extends React.PureComponent {
       return false;
     }
     return (
-      <div className={styles.chartCard}>
+      <div className="chartCard">
         <div
-          className={classNames(styles.chartTop, {
-            [styles.chartTopMargin]: !children && !footer,
+          className={classNames("chartTop", {
+            "chartTopMargin": !children && !footer,
           })}
         >
-          <div className={styles.avatar}>{avatar}</div>
-          <div className={styles.metaWrap}>
-            <div className={styles.meta}>
-              <span className={styles.title}>{title}</span>
-              <span className={styles.action}>{action}</span>
+          <div className="avatar">{avatar}</div>
+          <div className="metaWrap">
+            <div className="meta">
+              <span className="title">{title}</span>
+              <span className="action">{action}</span>
             </div>
             {renderTotal(total)}
           </div>
         </div>
         {children && (
-          <div className={styles.content} style={{ height: contentHeight || 'auto' }}>
-            <div className={contentHeight && styles.contentFixed}>{children}</div>
+          <div className="content" style={{ height: contentHeight || 'auto' }}>
+            <div className={contentHeight && "contentFixed"}>{children}</div>
           </div>
         )}
         {footer && (
           <div
-            className={classNames(styles.footer, {
-              [styles.footerMargin]: !children,
+            className={classNames("footer", {
+              "footerMargin": !children,
             })}
           >
             {footer}

@@ -3,7 +3,7 @@ import { Chart, Tooltip, Geom, Legend, Axis } from 'bizcharts';
 import DataSet from '@antv/data-set';
 import Slider from 'bizcharts-plugin-slider';
 import autoHeight from '../autoHeight';
-import styles from './index.less';
+import './index.less';
 
 @autoHeight()
 class TimelineChart extends React.Component {
@@ -103,7 +103,7 @@ class TimelineChart extends React.Component {
     );
 
     return (
-      <div className={styles.timelineChart} style={{ height: height + 30 }}>
+      <div className="timelineChart" style={{ height: height + 30 }}>
         <div>
           {title && <h4>{title}</h4>}
           <Chart height={height} padding={padding} data={dv} scale={cols} forceFit>

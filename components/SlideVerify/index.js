@@ -1,7 +1,7 @@
 import React from 'react';
 import Draggable from 'react-draggable';
 import cx from 'classnames';
-import styles from './index.less';
+import './index.less';
 import {
   Icon
 } from 'antd';
@@ -77,15 +77,19 @@ class SlideVerify extends React.Component {
   }
 
   render() {
+    const { size = 'middle', hintTxt = '向右滑动验证', passTxt = "验证通过", width = 400 } = this.props;
     const { position, icon, disabled, handlerStatus, offset } = this.state;
-    let dragCls = handlerStatus ? styles[handlerStatus] : "";
+    let dragCls = handlerStatus ? `${handlerStatus}` : "";
     let handlerSty = {};
     if (handlerStatus == 'error') {
       handlerSty.transition = 'all .2s linear';
     }
     return (
-      <div ref="slider" className={styles.slideVerify}>
-        <div className={`${styles.progress} ${dragCls}`} style={{ width: offset }}></div>
+      <div ref="slider" className={cx('slideVerify', `is-${size}`)} style={{width}}>
+        <div className={`progress ${dragCls}`} style={{ width: offset }}>
+          <span className="passTxt" style={{left: width / 2}}>{passTxt}</span>
+        </div>
+        <span className="hintTxt">{hintTxt}</span>
         <Draggable
           axis="x"
           bounds="parent"
@@ -96,7 +100,7 @@ class SlideVerify extends React.Component {
           onStop={this.handleStop}
           position={position}
         >
-          <div ref="handler" className={`${styles.slideHandler} ${dragCls}`} style={handlerSty}>
+          <div ref="handler" className={`slideHandler ${dragCls}`} style={handlerSty}>
             <Icon type={icon} />
           </div>
         </Draggable>

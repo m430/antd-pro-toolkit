@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import autoHeight from '../autoHeight';
-import styles from './index.less';
+import './index.less';
 
 /* eslint no-return-assign: 0 */
 /* eslint no-mixed-operators: 0 */
@@ -189,19 +189,19 @@ class WaterWave extends PureComponent {
     const { percent, title, height } = this.props;
     return (
       <div
-        className={styles.waterWave}
+        className="waterWave"
         ref={n => (this.root = n)}
         style={{ transform: `scale(${radio})` }}
       >
         <div style={{ width: height, height, overflow: 'hidden' }}>
           <canvas
-            className={styles.waterWaveCanvasWrapper}
+            className="waterWaveCanvasWrapper"
             ref={n => (this.node = n)}
             width={height * 2}
             height={height * 2}
           />
         </div>
-        <div className={styles.text} style={{ width: height }}>
+        <div className="text" style={{ width: height }}>
           {title && <span>{title}</span>}
           <h4>{percent}%</h4>
         </div>
