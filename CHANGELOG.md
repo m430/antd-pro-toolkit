@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.2.6] (2019-06-25)
+  - bug fix: 修复`passTxt`定位偏离的问题
+
 ## [0.2.5] (2019-07-3)
   - feature: `SlideVerify`添加`size`属性，支持`small|middle|large`
   - feature: `SlideVerify`添加`width`属性，可自定义宽度
