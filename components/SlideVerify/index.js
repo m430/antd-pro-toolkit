@@ -17,8 +17,15 @@ class SlideVerify extends React.Component {
       position: {
         x: 0,
         y: 0
-      }
+      },
+      passTxtLeft: 0
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      passTxtLeft: this.refs.slider.clientWidth / 2
+    })
   }
 
   handleMouseDown = (e) => {
@@ -78,7 +85,7 @@ class SlideVerify extends React.Component {
 
   render() {
     const { size = 'middle', hintTxt = '向右滑动验证', passTxt = "验证通过", width = 400 } = this.props;
-    const { position, icon, disabled, handlerStatus, offset } = this.state;
+    const { position, icon, disabled, handlerStatus, offset, passTxtLeft } = this.state;
     let dragCls = handlerStatus ? `${handlerStatus}` : "";
     let handlerSty = {};
     if (handlerStatus == 'error') {
@@ -87,7 +94,7 @@ class SlideVerify extends React.Component {
     return (
       <div ref="slider" className={cx('slideVerify', `is-${size}`)} style={{width}}>
         <div className={`progress ${dragCls}`} style={{ width: offset }}>
-          <span className="passTxt" style={{left: width / 2}}>{passTxt}</span>
+          <span className="passTxt" style={{left: passTxtLeft}}>{passTxt}</span>
         </div>
         <span className="hintTxt">{hintTxt}</span>
         <Draggable
