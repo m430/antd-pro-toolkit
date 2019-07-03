@@ -191,7 +191,7 @@ gulp.task('pub',
       shell.echo(`npm publish ${packageJson.version} error!`);
       shell.exit(1);
     } else {
-      tag();
+      tag(done);
     }
     done();
   })

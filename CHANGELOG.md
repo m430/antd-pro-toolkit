@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [0.2.5] (2019-07-3)
+  - feature: `SlideVerify`添加`size`属性，支持`small|middle|large`
+  - feature: `SlideVerify`添加`width`属性，可自定义宽度
+  - feature: `SlideVerify`添加`hintTxt`属性，可自定义提示语
+  - feature: `SlideVerify`添加`passTxt`属性，可自定义验证通过提示语
+  - 移除css module
+
 ## [0.2.3] (2019-06-25)
   - bug fix: 修复firefox下无法拖到头的bug
 
