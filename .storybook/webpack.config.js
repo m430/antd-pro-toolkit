@@ -17,12 +17,10 @@ module.exports = ({ config }) => {
           loader: resolve('babel-loader'),
         },
         {
-          loader: resolve('ts-loader'),
-          options: {
-            transpileOnly: true,
-          },
+          loader: resolve('awesome-typescript-loader'),
         },
       ],
+      exclude: /node_modules/
     },
     {
       test: /\.less$/,

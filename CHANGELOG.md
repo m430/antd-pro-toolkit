@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.2.7] (2019-07-08)
+  - refactor: 重构使用`typescript`进行开发。
+
 ## [0.2.6] (2019-06-25)
   - bug fix: 修复`passTxt`定位偏离的问题
 
