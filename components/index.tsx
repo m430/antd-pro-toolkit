@@ -12,3 +12,5 @@ export { default as NumberInfo } from './NumberInfo/index';
 export { default as Trend } from './Trend/index';
 
 export { default as SlideVerify } from './SlideVerify/index';
+
+export { default as CountDown } from './CountDown/index';
