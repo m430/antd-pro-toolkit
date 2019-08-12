@@ -1,0 +1,130 @@
+.antd-pro-cascader {
+  * {
+    box-sizing: border-box;
+  }
+
+  position: relative;
+  z-index: 9;
+  height: 26px;
+  margin-right: 6px;
+  display: inline-block;
+  width: 335px;
+
+  .antd-pro-hidden {
+    display: none;
+  }
+
+  .antd-pro-cascader-text-wrap {
+    float: left;
+    position: relative;
+    top: 0;
+    height: 36px;
+    line-height: 36px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    padding: 0 24px 0 10px;
+    overflow: hidden;
+    width: 100%;
+    border-radius: 4px;
+
+    .antd-pro-cascader-text {
+      height: 100%;
+    }
+
+    .icon-tab-down {
+      position: absolute;
+      right: 5px;
+      top: 0;
+      height: 36px;
+      line-height: 36px;
+    }
+  }
+
+  .antd-pro-cascader-content-wrap {
+    float: left;
+    position: absolute;
+    top: 36px;
+    left: 0;
+    border: 1px solid #e8e8e8;
+    width: 390px;
+    padding: 12px 12px 15px;
+    background: #fff;
+    box-shadow: 0 0 5px #ddd;
+    z-index: 9;
+    font-size: 12px;
+    min-height: 200px;
+
+    .antd-pro-tab {
+      cursor: default;
+      width: 100%;
+      height: 25px;
+      border-bottom: 2px solid #1890ff;
+      overflow: visible;
+
+      .icon-tab-down {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+      }
+
+      &-item {
+        position: relative;
+        float: left;
+        height: 23px;
+        line-height: 23px;
+        padding: 0 25px 1px 6px;
+        margin-right: 4px;
+        border: 1px solid #ddd;
+        border-bottom: 0;
+        color: #005AA0;
+        text-align: center;
+        cursor: pointer;
+        overflow: hidden;
+        max-width: 72px;
+
+        &.antd-pro-tab-item-current {
+          height: 25px;
+          background-color: #fff;
+          border: 2px solid #1890ff;
+          border-bottom: 0;
+          padding: 0 25px 0 6px;
+          line-height: 22px;
+          text-decoration: none;
+        }
+      }
+
+    }
+
+    .antd-pro-tab-content {
+
+      .andt-pro-tab-panel {
+        .antd-pro-panel-list {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          padding-top: 10px;
+          overflow: hidden;
+          width: 100%;
+          margin-bottom: -5px;
+
+          li {
+            float: left;
+            width: auto;
+            padding: 0 16px 1px 0;
+            clear: none;
+            line-height: 18px;
+
+            &.panel-list-item-current a {
+              color: #1890ff;
+            }
+
+            a {
+              color: #333;
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
