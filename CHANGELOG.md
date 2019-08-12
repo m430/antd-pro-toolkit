@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.2.8] (2019-08-12)
+  - fix: `SlideVerify`组件在`IE`浏览器无法使用的问题
+  - 
 ## [0.2.7] (2019-07-08)
   - refactor: 重构使用`typescript`进行开发。
 
