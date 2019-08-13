@@ -12,3 +12,5 @@ declare module "ScrollSelect";
 declare module "Trend";
 
 declare module "SlideVerify";
+
+declare module "CountDown";

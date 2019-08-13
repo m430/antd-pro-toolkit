@@ -144,6 +144,8 @@ function compile(modules) {
     source.unshift('components/**/*.js');
   }
 
+  delete tsConfig.noEmit;
+
   const tsResult = gulp.src(source).pipe(
     ts(tsConfig, {
       error(e) {
