@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import ClassNames from 'classnames';
 import './index.less';
 import { Icon } from 'antd';
-import { AxiosResponse } from 'axios';
+import { AxiosPromise } from 'axios';
 
-export interface CascaderProps {
-  onClickItem?: Function;
-  onChange?: Function;
-  value?: Array<Item>;
-  dataSource: Array<TabItem>;
+export interface Result {
+  errorCode?: number;
+  data?: any;
+  msg?: string;
 }
 
-export interface TabItem {
-  title: string;
-  items: Array<Item>;
+export interface CascaderProps {
+  onClickItem?: (code: string, level: number, ) => AxiosPromise<Result>;
+  onChange?: Function;
+  value?: Array<Item>;
+  dataSource: Array<Array<Item>>;
 }
 
 export interface Item {
@@ -22,23 +23,16 @@ export interface Item {
 }
 
 export interface CascaderState {
-  tabIndex: number;
+  currentTab: number;
   selectedItems: Array<Item>;
   visible: Boolean;
-}
-
-export interface HttpResponse {
-  data: Array<any>;
-  errorCode: number;
-  msg: string;
-  pagination?: Object;
 }
 
 export default class TabCascader extends Component<CascaderProps, CascaderState> {
   constructor(props: CascaderProps) {
     super(props);
     this.state = {
-      tabIndex: 0,
+      currentTab: 0,
       // tabs: setTabs(props.value),
       selectedItems: [],
       visible: false,
@@ -57,47 +51,59 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { onClickItem, dataSource } = this.props;
     const { selectedItems } = this.state;
     this.setState({
-      tabIndex: index,
+      currentTab: index,
     });
     if (index > 0 && !dataSource[index] && onClickItem) {
       onClickItem(selectedItems[index - 1].code, index);
     }
   };
 
-  handleClickItem = (tabIdx: number, item: Item) => {
-    let { onChange, onClickItem } = this.props;
+  handleClickItem = async (tabIdx: number, item: Item) => {
+    let { onChange, onClickItem, dataSource } = this.props;
     let { selectedItems } = this.state;
     selectedItems = selectedItems.slice(0, tabIdx + 1);
     selectedItems[tabIdx] = item;
+
     if (onClickItem) {
-      onClickItem(item.code, tabIdx + 1, selectedItems).then((res: AxiosResponse) => {
-        let tabLen;
-        if (selectedItems.length >= 4) {
-          tabLen = 4;
-        } else {
-          tabLen = selectedItems.length + 1;
-        }
-  
-        if (tabIdx === 2 && res.data.length === 0) {
-          tabLen = 3;
-        }
-  
-        this.setState({
-          selectedItems,
-        });
-        if (tabIdx + 1 < tabLen) {
-          this.setState({ tabIndex: tabIdx + 1 });
-        }
+      // 异步加载子项数据
+      onClickItem(item.code, tabIdx + 1).then(() => {
+        this.setState({ selectedItems, currentTab: tabIdx + 1 });
         if (onChange) {
           onChange(selectedItems);
         }
-      });
+      })
+    } else {
+      console.log(dataSource, tabIdx, item);
+      if (dataSource[tabIdx].length > 0) {
+        this.setState({ selectedItems });
+      }
+      if (dataSource[tabIdx + 1] && dataSource[tabIdx + 1].length > 0) {
+        this.setState({ currentTab: tabIdx + 1 });
+      }
     }
   };
 
+  renderTabHeader = (title: string, index: number) => {
+    const { currentTab } = this.state;
+    return (
+      <a
+        onClick={() => this.handleClickTab(index)}
+        className={ClassNames({
+          'antd-pro-tab-item': true,
+          'antd-pro-tab-item-current': index === currentTab,
+        })}
+      >
+        {title}
+        <Icon type="down" className="icon-tab-down" />
+      </a>
+    )
+  }
+
   renderContent = () => {
     const { dataSource } = this.props;
-    const { tabIndex, selectedItems, visible } = this.state;
+    const { currentTab, selectedItems, visible } = this.state;
+
+    console.log(currentTab, selectedItems);
     return (
       <div
         className={ClassNames({
@@ -106,44 +112,17 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         })}
       >
         <div className="antd-pro-tab">
-          {selectedItems.length == 0 && (
-            <a
-              onClick={() => this.handleClickTab(0)}
-              className={ClassNames({
-                'antd-pro-tab-item': true,
-                'antd-pro-tab-item-current': 0 === tabIndex,
-              })}
-            >
-              请选择
-              <Icon type="down" className="icon-tab-down" />
-            </a>
-          )}
-          {selectedItems.map((item, index: number) => (
-            <a
-              onClick={() => this.handleClickTab(index)}
-              className={ClassNames({
-                'antd-pro-tab-item': true,
-                'antd-pro-tab-item-current': index === tabIndex,
-              })}
-            >
-              {item.name}
-              <Icon type="down" className="icon-tab-down" />
-            </a>
-          ))}
-          {selectedItems.length > 0 &&
-            selectedItems.length < 4 &&
-            dataSource[dataSource.length - 1].items.length !== 0 && (
-              <a
-                onClick={() => this.handleClickTab(selectedItems.length)}
-                className={ClassNames({
-                  'antd-pro-tab-item': true,
-                  'antd-pro-tab-item-current': selectedItems.length === tabIndex,
-                })}
-              >
-                请选择
-                <Icon type="down" className="icon-tab-down" />
-              </a>
-            )}
+          {
+            selectedItems.length == 0 && this.renderTabHeader('请选择', 0)
+          }
+          {
+            selectedItems.map((item: Item, index: number) => (
+              this.renderTabHeader(item.name, index)
+            ))
+          }
+          {
+            currentTab !== 0 && dataSource[selectedItems.length] && this.renderTabHeader('请选择', selectedItems.length)
+          }
         </div>
         <div className="antd-pro-tab-content">
           {dataSource.map((tab, tabIdx: number) => (
@@ -151,13 +130,13 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
               key={tabIdx}
               className={ClassNames({
                 'andt-pro-tab-panel': true,
-                'antd-pro-hidden': tabIdx !== tabIndex,
+                'antd-pro-hidden': tabIdx !== currentTab,
               })}
             >
               <ul className="antd-pro-panel-list">
-                {tab.items.map((item: Item, itemIdx: number) => (
+                {tab.map((item: Item, itemIdx: number) => (
                   <li
-                    key={itemIdx}
+                    key={`${tabIdx}-${itemIdx}`}
                     className={ClassNames({
                       'panel-list-item-current':
                         selectedItems[tabIdx] && selectedItems[tabIdx].code == item.code,
