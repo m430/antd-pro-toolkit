@@ -5,7 +5,7 @@ import { linkTo } from '@storybook/addon-links';
 import TabCascader from '../components/TabCascader';
 import DemoContainer from '../tools/DemoContainer';
 
-// level=-1
+// level=3 常用市
 let hotCities = [
   {
     "code": "A440300000",
@@ -457,7 +457,7 @@ let hotCities = [
   }
 ]
 
-// level=2
+// level=2 省
 let provinces = [
   {
     "distId": 41,
@@ -864,7 +864,7 @@ let provinces = [
   }
 ]
 
-//level=3
+//level=3 市
 let cities = [
   {
     "distId": 351,
@@ -998,7 +998,7 @@ let cities = [
   }
 ]
 
-//level=4
+//level=4 区
 let districts = [
   {
     "distId": 2547,
@@ -1171,6 +1171,654 @@ let districts = [
   }
 ]
 
+// 港澳台  level=2
+let gat = [
+  {
+    "distId": 14,
+    "level": 2,
+    "code": "A000820000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000820000",
+    "name": "澳门",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "853"
+  },
+  {
+    "distId": 12,
+    "level": 2,
+    "code": "A000710000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000710000",
+    "name": "台湾",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 13,
+    "level": 2,
+    "code": "A000810000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000810000",
+    "name": "香港",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "852"
+  },
+]
+
+// level=3
+let gatCities = [
+  {
+    "distId": 3408,
+    "level": 4,
+    "code": "A000710100",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "高雄市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3409,
+    "level": 4,
+    "code": "A000710200",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "花莲县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3410,
+    "level": 4,
+    "code": "A000710300",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "基隆市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 10209879366037,
+    "level": 4,
+    "code": "A007101100",
+    "parentId": 10086328163336,
+    "parentCode": "A00720000",
+    "countryCode": "A000710000",
+    "name": "嘉义市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3412,
+    "level": 4,
+    "code": "A000710500",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "嘉义县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3413,
+    "level": 4,
+    "code": "A000710600",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "苗栗县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3414,
+    "level": 4,
+    "code": "A000710700",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "南投县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3415,
+    "level": 4,
+    "code": "A000710800",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "屏东县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3416,
+    "level": 4,
+    "code": "A000710900",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "台北市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3417,
+    "level": 4,
+    "code": "A000711000",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "台东县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3418,
+    "level": 4,
+    "code": "A000711100",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "台南市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3419,
+    "level": 4,
+    "code": "A000711200",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "台中市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3420,
+    "level": 4,
+    "code": "A000711300",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "桃园市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3421,
+    "level": 4,
+    "code": "A000711400",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "新北市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 10209821676342,
+    "level": 4,
+    "code": "A00720017",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "新竹市",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3423,
+    "level": 4,
+    "code": "A000711591",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "新竹县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3424,
+    "level": 4,
+    "code": "A000711600",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "宜兰县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3425,
+    "level": 4,
+    "code": "A000711700",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "云林县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  },
+  {
+    "distId": 3426,
+    "level": 4,
+    "code": "A000711800",
+    "parentId": 10086328163336,
+    "parentCode": "A000710000",
+    "countryCode": "A000710000",
+    "name": "彰化县",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "886"
+  }
+]
+
+let foreignCountries = [
+  {
+    "distId": 10165156727278,
+    "level": 1,
+    "code": "A000971000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000971000",
+    "name": "阿拉伯联合酋长国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "AE"
+  },
+  {
+    "distId": 3,
+    "level": 1,
+    "code": "A000061000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000061000",
+    "name": "澳大利亚",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "AU"
+  },
+  {
+    "distId": 10163866568389,
+    "level": 1,
+    "code": "A000032000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000032000",
+    "name": "比利时",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "BE"
+  },
+  {
+    "distId": 10163866568242,
+    "level": 1,
+    "code": "A000049000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000049000",
+    "name": "德国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "DE"
+  },
+  {
+    "distId": 10104036025968,
+    "level": 1,
+    "code": "A000007000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000007000",
+    "name": "俄罗斯",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "RU"
+  },
+  {
+    "distId": 10163866568292,
+    "level": 1,
+    "code": "A000033000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000033000",
+    "name": "法国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "FR"
+  },
+  {
+    "distId": 8,
+    "level": 1,
+    "code": "A000082000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000082000",
+    "name": "韩国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "KR"
+  },
+  {
+    "distId": 10163866568478,
+    "level": 1,
+    "code": "A000031000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000031000",
+    "name": "荷兰",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "NL"
+  },
+  {
+    "distId": 10163994449088,
+    "level": 1,
+    "code": "A000011000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000011000",
+    "name": "加拿大",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "CA"
+  },
+  {
+    "distId": 10151643876325,
+    "level": 1,
+    "code": "A000855000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000855000",
+    "name": "柬埔寨",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "KH"
+  },
+  {
+    "distId": 2,
+    "level": 1,
+    "code": "A000060000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000060000",
+    "name": "马来西亚",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "MY"
+  },
+  {
+    "distId": 1,
+    "level": 1,
+    "code": "A000001000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000001000",
+    "name": "美国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "US"
+  },
+  {
+    "distId": 10,
+    "level": 1,
+    "code": "A000976000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000976000",
+    "name": "蒙古国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "MN"
+  },
+  {
+    "distId": 10165156722880,
+    "level": 1,
+    "code": "A000880000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000880000",
+    "name": "孟加拉国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "BD"
+  },
+  {
+    "distId": 10164139500254,
+    "level": 1,
+    "code": "A000095000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000095000",
+    "name": "缅甸",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "MM"
+  },
+  {
+    "distId": 10165156723734,
+    "level": 1,
+    "code": "A000977000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000977000",
+    "name": "尼泊尔",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "NP"
+  },
+  {
+    "distId": 7,
+    "level": 1,
+    "code": "A000081000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000081000",
+    "name": "日本",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "JP"
+  },
+  {
+    "distId": 10165156727943,
+    "level": 1,
+    "code": "A000094000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000094000",
+    "name": "斯里兰卡",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "LK"
+  },
+  {
+    "distId": 6,
+    "level": 1,
+    "code": "A000066000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000066000",
+    "name": "泰国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "TH"
+  },
+  {
+    "distId": 10163866568319,
+    "level": 1,
+    "code": "A000034000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000034000",
+    "name": "西班牙",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "ES"
+  },
+  {
+    "distId": 5,
+    "level": 1,
+    "code": "A000064000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000064000",
+    "name": "新加坡",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "SG"
+  },
+  {
+    "distId": 10164155064338,
+    "level": 1,
+    "code": "A000164000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000164000",
+    "name": "新西兰",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "NZ"
+  },
+  {
+    "distId": 10163866568348,
+    "level": 1,
+    "code": "A000039000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000039000",
+    "name": "意大利",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "IT"
+  },
+  {
+    "distId": 10130885782282,
+    "level": 1,
+    "code": "A000091000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000091000",
+    "name": "印度",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "IN"
+  },
+  {
+    "distId": 4,
+    "level": 1,
+    "code": "A000062000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000062000",
+    "name": "印度尼西亚",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "ID"
+  },
+  {
+    "distId": 10163866568367,
+    "level": 1,
+    "code": "A000044000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000044000",
+    "name": "英国",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "GB"
+  },
+  {
+    "distId": 9,
+    "level": 1,
+    "code": "A000084000",
+    "parentId": 0,
+    "parentCode": "A000000000",
+    "countryCode": "A000084000",
+    "name": "越南",
+    "lang": "SC",
+    "available": true,
+    "opening": false,
+    "rateCode": "VN"
+  },
+]
+
 class Demo1 extends React.Component {
 
   constructor(props) {
@@ -1178,55 +1826,108 @@ class Demo1 extends React.Component {
     this.state = {
       dataSource: [
         {
-          title: '常用市',
-          level: 3,
-          entry: true,
-          items: hotCities
+          title: '国内',
+          data: [
+            {
+              title: '常用市',
+              level: 3,
+              entry: true,
+              items: hotCities
+            },
+            {
+              title: '省/直辖市',
+              level: 2,
+              entry: false,
+              items: []
+            }
+          ]
         },
         {
-          title: '省/直辖市',
-          level: 2,
-          entry: false,
-          items: []
-        }
+          title: '港澳台',
+          data: [
+            {
+              title: '港澳台',
+              level: 2,
+              entry: true,
+              items: gat
+            }
+          ]
+        },
+        {
+          title: '国际',
+          data: [
+            {
+              title: '海外',
+              level: 2,
+              entry: true,
+              items: foreignCountries
+            }
+          ]
+        },
       ]
     }
   }
 
-  queryRegion = (level) => {
+  queryRegion = (level, topKey) => {
     return new Promise((resolve) => {
-      switch (level) {
-        case -1:
-          resolve(hotCities);
-          break;
-        case 2:
-          resolve(provinces);
-          break;
-        case 3:
-          resolve(cities);
-          break;
-        case 4:
-          resolve(districts);
-          break;
-        default:
-          resolve([]);
+      if (topKey == 0) { // 内地
+        switch (level) {
+          case -1:
+            resolve(hotCities);
+            break;
+          case 2:
+            resolve(provinces);
+            break;
+          case 3:
+            resolve(cities);
+            break;
+          case 4:
+            resolve(districts);
+            break;
+          default:
+            resolve([]);
+        }
+      } else if (topKey == 1) { // 港澳台
+        switch (level) {
+          case 2:
+            resolve(gat);
+            break;
+          case 3:
+            resolve(gatCities);
+            break;
+          default:
+            resolve([]);
+        }
+      } else if (topKey == 2) { // 国际
+        switch (level) {
+          case 1:
+            resolve(foreignCountries);
+            break;
+          case 2:
+            resolve(gatCities);
+            break;
+          default:
+            resolve([]);
+        }
       }
     })
   }
 
-  handleTabClick = (index, level) => {
+  handleTabChange = (key, topKey) => {
     const { dataSource } = this.state;
-    return this.queryRegion(level).then(data => {
-      dataSource[index].items = data;
+    let level = dataSource[topKey].data[key].level;
+    return this.queryRegion(level, topKey).then(data => {
+      dataSource[topKey].data[key].items = data;
       this.setState({ dataSource });
     });
   }
 
-  buildDataSource = (index, item, data) => {
+  buildDataSource = (key, topKey, item, data) => {
     let { dataSource } = this.state;
-    let currentData = dataSource[index];
-    if (index == 0) {
-      dataSource = [
+    let tabData = dataSource[topKey].data;
+    let currentData = tabData[key];
+    if (key == 0) {
+      tabData = [
         {
           title: '常用市',
           level: 3,
@@ -1238,46 +1939,44 @@ class Demo1 extends React.Component {
           level: 2,
           entry: false,
           items: []
+        },
+        {
+          title: '请选择',
+          level: currentData.level + 1,
+          items: data
         }
       ];
     } else {
-      dataSource = dataSource.slice(0, index + 1);
-    }
-    dataSource[index].entry = true;
-    if (index == 0) {
-      dataSource.push({
-        title: '请选择',
-        level: currentData.level + 1,
-        items: data
-      });
-    } else {
-      dataSource[index].title = item.name;
+      tabData = tabData.slice(0, key + 1);
+      tabData[key].title = item.name;
       if (item.level !== 4) {
-        dataSource.push({
+        tabData.push({
           title: '请选择',
           level: currentData.level + 1,
           items: data
         });
       }
     }
+    tabData[key].entry = true;
+
+    dataSource[topKey].data = tabData;
     this.setState({ dataSource });
     return dataSource;
   }
 
-  handleItemClick = (index, item) => {
+  handleItemClick = (key, topKey, item) => {
     let { dataSource } = this.state;
-    let currentData = dataSource[index];
     if (item.level === 4) {
-      dataSource[index].title = item.name;
-      dataSource[index].entry = true;
+      dataSource[topKey].data[key].title = item.name;
+      dataSource[topKey].data[key].entry = true;
       this.setState({ dataSource });
-      return Promise.resolve(dataSource.length - 1);
+      return Promise.resolve(dataSource[topKey].data.length - 1);
     }
     // 请求下一级的数据， TODO: 真实接口把item的code参数带上
-    return this.queryRegion(currentData.level + 1).then(data => {
-      let newDataSource = this.buildDataSource(index, item, data);
+    return this.queryRegion(item.level + 1, topKey).then(data => {
+      let newDataSource = this.buildDataSource(key, topKey, item, data);
       console.log('newDataSource', newDataSource)
-      return newDataSource.length - 1;
+      return newDataSource[topKey].data.length - 1;
     });
   }
 
@@ -1286,7 +1985,7 @@ class Demo1 extends React.Component {
     return (
       <DemoContainer>
         <TabCascader
-          onTabClick={this.handleTabClick}
+          onTabChange={this.handleTabChange}
           onItemClick={this.handleItemClick}
           style={{ width: 600 }}
           dataSource={dataSource}
@@ -1295,7 +1994,6 @@ class Demo1 extends React.Component {
     )
   }
 }
-
 storiesOf('Address', module)
   .add('TabCascader',
     () => <Demo1 />,

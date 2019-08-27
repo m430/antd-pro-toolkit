@@ -13,6 +13,11 @@ export interface Result {
   msg?: string;
 }
 
+export interface PanelData {
+  title: string;
+  data: Array<TabData>
+}
+
 export interface TabData {
   title: string;
   level: number;
@@ -21,12 +26,13 @@ export interface TabData {
 }
 
 export interface CascaderProps {
-  onItemClick?: (tabIdx: number, item: Item, ) => Promise<any>;
-  onTabClick?: (index: number, level: number) => AxiosPromise<Result>;
+  onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
+  onTopTabChange?: (tabKey: string) => AxiosPromise<Result>;
+  onTabChange?: (key: number, topKey: number) => AxiosPromise<Result>;
   onSearch?: (val: string) => Promise<Result>;
   onChange?: Function;
   value?: Array<Item>;
-  dataSource: Array<TabData>;
+  dataSource: Array<PanelData>;
   className?: string;
   level: number;
 }
@@ -38,7 +44,8 @@ export interface Item {
 }
 
 export interface CascaderState {
-  currentTab: number;
+  firstTab: number;
+  secondTab: number;
   inputVal: string;
   selectedItems: Array<Item>;
   visible: Boolean;
@@ -56,7 +63,8 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   constructor(props: CascaderProps) {
     super(props);
     this.state = {
-      currentTab: 0,
+      firstTab: 0,
+      secondTab: 0,
       inputVal: '',
       selectedItems: [],
       visible: false,
@@ -88,47 +96,73 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     })
   }
 
-  handleClickTab = (tabIdx: number) => {
-    const { dataSource, onTabClick } = this.props;
-    let currentData = dataSource[tabIdx];
+  handleTopTabChange = (tabKey: string) => {
+    const { dataSource, onTopTabChange } = this.props;
+    let numKey = Number(tabKey);
+    let currentData = dataSource[numKey];
+    this.setState({ secondTab: 0 });
     if (currentData) {
-      if (currentData.items.length > 0) {
-        this.setState({ currentTab: tabIdx });
+      if (currentData.data.length > 0) {
+        this.setState({ firstTab: numKey });
       } else {
-        if (onTabClick) {
-          onTabClick(tabIdx, currentData.level).then(() => {
-            this.setState({ currentTab: tabIdx });
+        if (onTopTabChange) {
+          onTopTabChange(tabKey).then(() => {
+            this.setState({ firstTab: numKey });
           });
         }
       }
     }
   };
 
-  handleClickItem = async (tabIdx: number, item: Item) => {
-    const { onChange, onItemClick, dataSource } = this.props;
-    let { selectedItems } = this.state;
+  handleSecondTabChange = (tabKey: string) => {
+    const { dataSource, onTabChange } = this.props;
+    const { firstTab } = this.state;
 
-    if (tabIdx === 0 || tabIdx === 1) {
-      selectedItems = [];
-      selectedItems.push(item);
+    let currentKey = Number(tabKey);
+
+    let currentPanelData = dataSource[firstTab];
+    let currentTabData = currentPanelData.data[currentKey];
+    if (currentTabData && currentTabData.items.length > 0) {
+      this.setState({ secondTab: currentKey });
     } else {
-      selectedItems = selectedItems.slice(0, tabIdx - 1);
-      selectedItems[tabIdx - 1] = item;
+      if (onTabChange) {
+        onTabChange(currentKey, firstTab).then(() => {
+          this.setState({ secondTab: currentKey });
+        })
+      }
     }
-    const displayVal = selectedItems.map((item: Item) => item.name).join('-');
-    this.setState({ selectedItems, inputVal: displayVal });
 
-    // 异步加载子项数据
-    if (onItemClick) {
-      onItemClick(tabIdx, item).then((data: number) => {
-        this.setState({ currentTab: data });
-        if (onChange) {
-          onChange(selectedItems);
+  };
+
+
+  handleClickItem = async (item: Item) => {
+    const { onChange, onItemClick, dataSource } = this.props;
+    let { selectedItems, firstTab, secondTab } = this.state;
+
+    if (firstTab == 0) {
+      if (secondTab === 0 || secondTab === 1) {
+        selectedItems = [];
+        selectedItems.push(item);
+      } else {
+        selectedItems = selectedItems.slice(0, secondTab - 1);
+        selectedItems[secondTab - 1] = item;
+      }
+      const displayVal = selectedItems.map((item: Item) => item.name).join('-');
+      this.setState({ selectedItems, inputVal: displayVal });
+  
+      // 异步加载子项数据
+      if (onItemClick) {
+        onItemClick(secondTab, firstTab, item).then((data: number) => {
+          this.setState({ secondTab: data });
+          if (onChange) {
+            onChange(selectedItems);
+          }
+        })
+      } else { // 静态数据
+        let nextTabData = dataSource[firstTab].data[secondTab + 1];
+        if (nextTabData && nextTabData.items.length > 0) {
+          this.setState({ secondTab: secondTab + 1 });
         }
-      })
-    } else { // 静态数据
-      if (dataSource[tabIdx + 1] && dataSource[tabIdx + 1].items.length > 0) {
-        this.setState({ currentTab: tabIdx + 1 });
       }
     }
   };
@@ -161,23 +195,22 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     console.log(e);
   }
 
-  renderItems = (tabIdx: number) => {
-    const { dataSource } = this.props;
-    const { selectedItems } = this.state;
+  renderItems = (items: Array<Item>) => {
+    const { selectedItems, secondTab } = this.state;
 
     return (
       <div className="antd-pro-tab-items">
         <ul className="antd-pro-panel-list">
           <Row>
-            {dataSource[tabIdx].items.map((item: Item, itemIdx: number) => (
+            {items.map((item: Item) => (
               <Col xs={12} md={8} lg={6}>
                 <li
-                  key={`${tabIdx}-${itemIdx}`}
+                  key={item.code}
                   className={ClassNames({
                     'panel-list-item-current':
-                      selectedItems[tabIdx] && selectedItems[tabIdx].code == item.code,
+                      selectedItems[secondTab] && selectedItems[secondTab].code == item.code,
                   })}
-                  onClick={() => this.handleClickItem(tabIdx, item)}
+                  onClick={() => this.handleClickItem(item)}
                 >
                   <a>{item.name}</a>
                 </li>
@@ -192,7 +225,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   renderContent = () => {
     const { dataSource } = this.props;
-    const { visible, currentTab } = this.state;
+    const { visible, firstTab, secondTab } = this.state;
 
     const contentCls = ClassNames('antd-pro-cascader-content-wrap', {
       'antd-pro-hidden': !visible
@@ -203,23 +236,37 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         <Tabs
           animated={false}
           className="antd-pro-tab-content"
-          activeKey={`${currentTab}`}
-          onTabClick={this.handleClickTab}
+          activeKey={`${firstTab}`}
+          onChange={this.handleTopTabChange}
         >
           {
-            dataSource.map((item: TabData, tabIdx: number) => (
-              <TabPane
-                key={`${tabIdx}`}
-                className="andt-pro-tab-panel"
-                tab={
-                  <span>
-                    {dataSource[tabIdx].entry &&<i className="tab-header-dot"></i>}
-                    {item.title}
-                  </span>
-                }
-              >
-                {this.renderItems(tabIdx)}
+            dataSource.map((item: PanelData, panelIdx: number) => (
+              <TabPane key={`${panelIdx}`} tab={item.title}>
+                <Tabs
+                  animated={false}
+                  className="antd-pro-tab-content"
+                  activeKey={`${secondTab}`}
+                  onChange={this.handleSecondTabChange}
+                >
+                  {
+                    item.data.map((tabItem: TabData, tabIdx: number) => (
+                      <TabPane
+                        key={`${tabIdx}`}
+                        className="andt-pro-tab-panel"
+                        tab={
+                          <span>
+                            {tabItem.entry && <i className="tab-header-dot"></i>}
+                            {tabItem.title}
+                          </span>
+                        }
+                      >
+                        {this.renderItems(tabItem.items)}
+                      </TabPane>
+                    ))
+                  }
+                </Tabs>
               </TabPane>
+
             ))
           }
         </Tabs>
