@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import TabCascader from '../components/TabCascader';
 import DemoContainer from '../tools/DemoContainer';
+import _ from 'lodash';
 
 // level=3 常用市
 let hotCities = [
@@ -1218,7 +1219,7 @@ let gat = [
 let gatCities = [
   {
     "distId": 3408,
-    "level": 4,
+    "level": 3,
     "code": "A000710100",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1231,7 +1232,7 @@ let gatCities = [
   },
   {
     "distId": 3409,
-    "level": 4,
+    "level": 3,
     "code": "A000710200",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1244,7 +1245,7 @@ let gatCities = [
   },
   {
     "distId": 3410,
-    "level": 4,
+    "level": 3,
     "code": "A000710300",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1257,7 +1258,7 @@ let gatCities = [
   },
   {
     "distId": 10209879366037,
-    "level": 4,
+    "level": 3,
     "code": "A007101100",
     "parentId": 10086328163336,
     "parentCode": "A00720000",
@@ -1270,7 +1271,7 @@ let gatCities = [
   },
   {
     "distId": 3412,
-    "level": 4,
+    "level": 3,
     "code": "A000710500",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1283,7 +1284,7 @@ let gatCities = [
   },
   {
     "distId": 3413,
-    "level": 4,
+    "level": 3,
     "code": "A000710600",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1296,7 +1297,7 @@ let gatCities = [
   },
   {
     "distId": 3414,
-    "level": 4,
+    "level": 3,
     "code": "A000710700",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1309,7 +1310,7 @@ let gatCities = [
   },
   {
     "distId": 3415,
-    "level": 4,
+    "level": 3,
     "code": "A000710800",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1322,7 +1323,7 @@ let gatCities = [
   },
   {
     "distId": 3416,
-    "level": 4,
+    "level": 3,
     "code": "A000710900",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1335,7 +1336,7 @@ let gatCities = [
   },
   {
     "distId": 3417,
-    "level": 4,
+    "level": 3,
     "code": "A000711000",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1348,7 +1349,7 @@ let gatCities = [
   },
   {
     "distId": 3418,
-    "level": 4,
+    "level": 3,
     "code": "A000711100",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1361,7 +1362,7 @@ let gatCities = [
   },
   {
     "distId": 3419,
-    "level": 4,
+    "level": 3,
     "code": "A000711200",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1374,7 +1375,7 @@ let gatCities = [
   },
   {
     "distId": 3420,
-    "level": 4,
+    "level": 3,
     "code": "A000711300",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1387,7 +1388,7 @@ let gatCities = [
   },
   {
     "distId": 3421,
-    "level": 4,
+    "level": 3,
     "code": "A000711400",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1400,7 +1401,7 @@ let gatCities = [
   },
   {
     "distId": 10209821676342,
-    "level": 4,
+    "level": 3,
     "code": "A00720017",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1413,7 +1414,7 @@ let gatCities = [
   },
   {
     "distId": 3423,
-    "level": 4,
+    "level": 3,
     "code": "A000711591",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1426,7 +1427,7 @@ let gatCities = [
   },
   {
     "distId": 3424,
-    "level": 4,
+    "level": 3,
     "code": "A000711600",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1439,7 +1440,7 @@ let gatCities = [
   },
   {
     "distId": 3425,
-    "level": 4,
+    "level": 3,
     "code": "A000711700",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1452,7 +1453,7 @@ let gatCities = [
   },
   {
     "distId": 3426,
-    "level": 4,
+    "level": 3,
     "code": "A000711800",
     "parentId": 10086328163336,
     "parentCode": "A000710000",
@@ -1819,6 +1820,20 @@ let foreignCountries = [
   },
 ]
 
+let initData = [
+  {
+    title: '常用市',
+    level: 3,
+    entry: true,
+    items: hotCities
+  },
+  {
+    title: '省/直辖市',
+    level: 2,
+    entry: false,
+    items: []
+  }
+];
 class Demo1 extends React.Component {
 
   constructor(props) {
@@ -1827,23 +1842,12 @@ class Demo1 extends React.Component {
       dataSource: [
         {
           title: '国内',
-          data: [
-            {
-              title: '常用市',
-              level: 3,
-              entry: true,
-              items: hotCities
-            },
-            {
-              title: '省/直辖市',
-              level: 2,
-              entry: false,
-              items: []
-            }
-          ]
+          maxLevel: 4,
+          data: _.cloneDeep(initData)
         },
         {
           title: '港澳台',
+          maxLevel: 3,
           data: [
             {
               title: '港澳台',
@@ -1855,6 +1859,7 @@ class Demo1 extends React.Component {
         },
         {
           title: '国际',
+          maxLevel: 1,
           data: [
             {
               title: '海外',
@@ -1926,36 +1931,18 @@ class Demo1 extends React.Component {
     let { dataSource } = this.state;
     let tabData = dataSource[topKey].data;
     let currentData = tabData[key];
-    if (key == 0) {
-      tabData = [
-        {
-          title: '常用市',
-          level: 3,
-          entry: true,
-          items: hotCities
-        },
-        {
-          title: '省/直辖市',
-          level: 2,
-          entry: false,
-          items: []
-        },
-        {
-          title: '请选择',
-          level: currentData.level + 1,
-          items: data
-        }
-      ];
+    if (key == 0 && topKey == 0) {
+      tabData = _.cloneDeep(initData);
     } else {
       tabData = tabData.slice(0, key + 1);
       tabData[key].title = item.name;
-      if (item.level !== 4) {
-        tabData.push({
-          title: '请选择',
-          level: currentData.level + 1,
-          items: data
-        });
-      }
+    }
+    if (item.level !== 4) {
+      tabData.push({
+        title: '请选择',
+        level: currentData.level + 1,
+        items: data
+      });
     }
     tabData[key].entry = true;
 
@@ -1966,7 +1953,7 @@ class Demo1 extends React.Component {
 
   handleItemClick = (key, topKey, item) => {
     let { dataSource } = this.state;
-    if (item.level === 4) {
+    if (item.level === dataSource[topKey].maxLevel) {
       dataSource[topKey].data[key].title = item.name;
       dataSource[topKey].data[key].entry = true;
       this.setState({ dataSource });

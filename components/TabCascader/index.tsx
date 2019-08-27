@@ -15,6 +15,7 @@ export interface Result {
 
 export interface PanelData {
   title: string;
+  maxLevel: number;
   data: Array<TabData>
 }
 
@@ -139,30 +140,36 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { onChange, onItemClick, dataSource } = this.props;
     let { selectedItems, firstTab, secondTab } = this.state;
 
-    if (firstTab == 0) {
-      if (secondTab === 0 || secondTab === 1) {
-        selectedItems = [];
-        selectedItems.push(item);
-      } else {
+    if ((secondTab === 0 || secondTab === 1) && firstTab == 0) {
+      selectedItems = [];
+      selectedItems.push(item);
+    } else {
+      if (firstTab == 0) {
         selectedItems = selectedItems.slice(0, secondTab - 1);
         selectedItems[secondTab - 1] = item;
+      } else {
+        selectedItems = selectedItems.slice(0, secondTab);
+        selectedItems[secondTab] = item;
       }
-      const displayVal = selectedItems.map((item: Item) => item.name).join('-');
-      this.setState({ selectedItems, inputVal: displayVal });
-  
-      // 异步加载子项数据
-      if (onItemClick) {
-        onItemClick(secondTab, firstTab, item).then((data: number) => {
-          this.setState({ secondTab: data });
-          if (onChange) {
-            onChange(selectedItems);
-          }
-        })
-      } else { // 静态数据
-        let nextTabData = dataSource[firstTab].data[secondTab + 1];
-        if (nextTabData && nextTabData.items.length > 0) {
-          this.setState({ secondTab: secondTab + 1 });
+    }
+    const displayVal = selectedItems.map((item: Item) => item.name).join('-');
+    this.setState({ selectedItems, inputVal: displayVal });
+
+    if (dataSource[firstTab].maxLevel == item.level) {
+      this.setState({ visible: false });
+    }
+    // 异步加载子项数据
+    if (onItemClick) {
+      onItemClick(secondTab, firstTab, item).then((data: number) => {
+        this.setState({ secondTab: data });
+        if (onChange) {
+          onChange(selectedItems);
         }
+      })
+    } else { // 静态数据
+      let nextTabData = dataSource[firstTab].data[secondTab + 1];
+      if (nextTabData && nextTabData.items.length > 0) {
+        this.setState({ secondTab: secondTab + 1 });
       }
     }
   };
