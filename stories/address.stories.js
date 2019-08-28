@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import TabCascader from '../components/TabCascader';
 import DemoContainer from '../tools/DemoContainer';
+import { Icon } from 'antd';
 import _ from 'lodash';
 
 // level=3 常用市
@@ -1824,7 +1825,7 @@ let initData = [
   {
     title: '常用市',
     level: 3,
-    entry: true,
+    entry: false,
     items: hotCities
   },
   {
@@ -1841,7 +1842,7 @@ class Demo1 extends React.Component {
     this.state = {
       dataSource: [
         {
-          title: '国内',
+          title: '内地',
           maxLevel: 4,
           data: _.cloneDeep(initData)
         },
@@ -1918,11 +1919,24 @@ class Demo1 extends React.Component {
     })
   }
 
+  searchRegion = (val) => {
+    console.log('搜索的值--->', val);
+    return new Promise((resolve) => {
+      resolve(gatCities);
+    })
+  }
+
   handleTabChange = (key, topKey) => {
     const { dataSource } = this.state;
-    let level = dataSource[topKey].data[key].level;
+    let tabData = dataSource[topKey].data; 
+    let level = tabData[key].level;
+    // TODO: 此处可根据items的数据添加缓存处理
     return this.queryRegion(level, topKey).then(data => {
-      dataSource[topKey].data[key].items = data;
+      tabData[key].items = data;
+      if (topKey == 0 && key > 0) {
+        tabData = tabData.slice(0, key + 1);
+      }
+      dataSource[topKey].data = tabData;
       this.setState({ dataSource });
     });
   }
@@ -1935,6 +1949,7 @@ class Demo1 extends React.Component {
       tabData = _.cloneDeep(initData);
     } else {
       tabData = tabData.slice(0, key + 1);
+      tabData[0].entry = false;
       tabData[key].title = item.name;
     }
     if (item.level !== 4) {
@@ -1974,8 +1989,12 @@ class Demo1 extends React.Component {
         <TabCascader
           onTabChange={this.handleTabChange}
           onItemClick={this.handleItemClick}
-          style={{ width: 600 }}
+          onSearch={this.searchRegion}
+          style={{ width: 500 }}
           dataSource={dataSource}
+          placeholder="请选择地址"
+          addonAfter={<Icon type="ellipsis" />}
+          hint="温馨提示：支持中文或拼音首字母输入，如：西安 或 XA"
         />
       </DemoContainer>
     )

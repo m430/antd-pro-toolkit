@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import debounce from 'lodash/debounce';
-import ClassNames from 'classnames';
+import classNames from 'classnames';
 import './index.less';
-import { Icon, Tabs, Input, Row, Col } from 'antd';
+import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
 import { AxiosPromise } from 'axios';
 
 const TabPane = Tabs.TabPane
@@ -30,12 +30,15 @@ export interface CascaderProps {
   onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
   onTopTabChange?: (tabKey: string) => AxiosPromise<Result>;
   onTabChange?: (key: number, topKey: number) => AxiosPromise<Result>;
-  onSearch?: (val: string) => Promise<Result>;
+  onSearch?: (val: string) => Promise<any>;
+  onBlur?: React.FocusEventHandler<Element>;
   onChange?: Function;
   value?: Array<Item>;
   dataSource: Array<PanelData>;
   className?: string;
-  level: number;
+  placeholder?: string;
+  addonAfter?: string | React.ReactNode;
+  hint?: string | React.ReactNode;
 }
 
 export interface Item {
@@ -50,12 +53,14 @@ export interface CascaderState {
   inputVal: string;
   selectedItems: Array<Item>;
   visible: Boolean;
-  isSearch: Boolean;
+  searchVisible: Boolean;
+  isSearching: Boolean;
   fetchList: Array<any>;
 }
 
 export default class TabCascader extends Component<CascaderProps, CascaderState> {
   el: HTMLDivElement | null;
+  debounceSearch: Function;
 
   static defaultProps = {
     level: 4
@@ -69,10 +74,12 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       inputVal: '',
       selectedItems: [],
       visible: false,
-      isSearch: false,
+      searchVisible: false,
+      isSearching: false,
       fetchList: []
     };
-    console.log(props);
+    this.debounceSearch = debounce(this.handleSearch, 600);
+
   }
 
   componentDidMount() {
@@ -98,41 +105,25 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   handleTopTabChange = (tabKey: string) => {
-    const { dataSource, onTopTabChange } = this.props;
+    const { onTopTabChange } = this.props;
     let numKey = Number(tabKey);
-    let currentData = dataSource[numKey];
-    this.setState({ secondTab: 0 });
-    if (currentData) {
-      if (currentData.data.length > 0) {
-        this.setState({ firstTab: numKey });
-      } else {
-        if (onTopTabChange) {
-          onTopTabChange(tabKey).then(() => {
-            this.setState({ firstTab: numKey });
-          });
-        }
-      }
+    this.setState({ secondTab: 0, firstTab: numKey });
+    if (onTopTabChange) {
+      onTopTabChange(tabKey);
     }
   };
 
   handleSecondTabChange = (tabKey: string) => {
-    const { dataSource, onTabChange } = this.props;
+    const { onTabChange } = this.props;
     const { firstTab } = this.state;
 
     let currentKey = Number(tabKey);
 
-    let currentPanelData = dataSource[firstTab];
-    let currentTabData = currentPanelData.data[currentKey];
-    if (currentTabData && currentTabData.items.length > 0) {
-      this.setState({ secondTab: currentKey });
-    } else {
-      if (onTabChange) {
-        onTabChange(currentKey, firstTab).then(() => {
-          this.setState({ secondTab: currentKey });
-        })
-      }
+    if (onTabChange) {
+      onTabChange(currentKey, firstTab).then(() => {
+        this.setState({ secondTab: currentKey });
+      })
     }
-
   };
 
 
@@ -175,17 +166,30 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   };
 
   hanldeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { onSearch } = this.props;
     let inputVal = e.target.value;
     this.setState({ inputVal });
-    if (onSearch) {
-      const debounceSearch = debounce(onSearch, 600);
-      this.setState({ isSearch: true });
-      debounceSearch(inputVal).then(res => {
-        this.setState({ fetchList: res.data, isSearch: false });
+    if (!inputVal) {
+      this.setState({
+        visible: false,
+        searchVisible: false
       })
+      return;
     }
+    this.setState({ isSearching: true, visible: false, searchVisible: true });
+    this.debounceSearch(inputVal);
 
+  }
+
+  handleSearch = (val: string) => {
+    const { onSearch } = this.props;
+    const { searchVisible } = this.state;
+
+    if (onSearch && searchVisible) {
+      this.setState({ isSearching: true, visible: false, searchVisible: true });
+      onSearch(val).then(data => {
+        this.setState({ fetchList: data, isSearching: false });
+      });
+    }
   }
 
   handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -193,17 +197,27 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     this.setState({ visible: true });
   }
 
-  handleSearchFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.select();
-    this.setState({ visible: true });
-  }
-
-  handleSearchBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    console.log(e);
+  handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { searchVisible } = this.state;
+    const { onBlur } = this.props;
+    if (searchVisible) {
+      this.setState({
+        searchVisible: false,
+        selectedItems: [],
+        inputVal: ''
+      });
+    }
+    if (onBlur) {
+      onBlur(e);
+    }
   }
 
   renderItems = (items: Array<Item>) => {
-    const { selectedItems, secondTab } = this.state;
+    const { selectedItems } = this.state;
+
+    const hasSelectedItem = (item: Item) => {
+      return selectedItems.findIndex(sItem => item.code == sItem.code) > -1;
+    }
 
     return (
       <div className="antd-pro-tab-items">
@@ -213,9 +227,8 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
               <Col xs={12} md={8} lg={6}>
                 <li
                   key={item.code}
-                  className={ClassNames({
-                    'panel-list-item-current':
-                      selectedItems[secondTab] && selectedItems[secondTab].code == item.code,
+                  className={classNames({
+                    'tab-item-selected': hasSelectedItem(item)
                   })}
                   onClick={() => this.handleClickItem(item)}
                 >
@@ -231,18 +244,22 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   renderContent = () => {
-    const { dataSource } = this.props;
+    const { dataSource, hint } = this.props;
     const { visible, firstTab, secondTab } = this.state;
 
-    const contentCls = ClassNames('antd-pro-cascader-content-wrap', {
-      'antd-pro-hidden': !visible
-    });
+    const contentCls = classNames(
+      'antd-pro-cascader-content-wrap',
+      {
+        'antd-pro-hidden': !visible
+      }
+    );
 
     return (
       <div className={contentCls}>
+        <div className="hint">{hint}</div>
         <Tabs
           animated={false}
-          className="antd-pro-tab-content"
+          className="antd-pro-top-tab"
           activeKey={`${firstTab}`}
           onChange={this.handleTopTabChange}
         >
@@ -251,7 +268,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
               <TabPane key={`${panelIdx}`} tab={item.title}>
                 <Tabs
                   animated={false}
-                  className="antd-pro-tab-content"
+                  className="antd-pro-second-tab"
                   activeKey={`${secondTab}`}
                   onChange={this.handleSecondTabChange}
                 >
@@ -261,10 +278,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
                         key={`${tabIdx}`}
                         className="andt-pro-tab-panel"
                         tab={
-                          <span>
-                            {tabItem.entry && <i className="tab-header-dot"></i>}
+                          <li className={classNames({ 'tab-header-dot': tabItem.entry })}>
                             {tabItem.title}
-                          </span>
+                          </li>
                         }
                       >
                         {this.renderItems(tabItem.items)}
@@ -282,18 +298,28 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   };
 
   renderSearchSection() {
+    const { fetchList, isSearching } = this.state;
+    const searchList = fetchList.length == 0
+      ? <Empty className="empty" />
+      : fetchList.map(item => (
+        <li className="list-item">
+          {item.name}
+        </li>
+      ))
     return (
       <div className="search-section">
-
+        {
+          isSearching ? <Spin className="loading-spin" /> : searchList
+        }
       </div>
     )
   }
 
   render() {
-    const { inputVal } = this.state;
-    const { value, onItemClick, onChange, className, ...restProps } = this.props;
+    const { inputVal, searchVisible } = this.state;
+    const { value, onItemClick, onChange, className, placeholder, addonAfter, ...restProps } = this.props;
 
-    const cascaderCls = ClassNames('antd-pro-cascader', className);
+    const cascaderCls = classNames('antd-pro-cascader', className);
     return (
       <div
         ref={node => this.el = node}
@@ -303,11 +329,14 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         <Input
           value={inputVal}
           className="tab-search-bar"
-          addonAfter={<Icon type="ellipsis" />}
+          addonAfter={addonAfter}
           onChange={this.hanldeInputChange}
           onClick={this.handleInputClick}
+          onBlur={this.handleInputBlur}
+          placeholder={placeholder}
         ></Input>
         {this.renderContent()}
+        {searchVisible && this.renderSearchSection()}
       </div>
     );
   }
