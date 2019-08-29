@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import TabCascader from '../components/TabCascader';
+import AddressSelector from './biz-components/AddressSelector'
 import DemoContainer from '../tools/DemoContainer';
 import { Icon } from 'antd';
 import _ from 'lodash';
@@ -1920,7 +1921,6 @@ class Demo1 extends React.Component {
   }
 
   searchRegion = (val) => {
-    console.log('搜索的值--->', val);
     return new Promise((resolve) => {
       resolve(gatCities);
     })
@@ -1986,16 +1986,7 @@ class Demo1 extends React.Component {
     const { dataSource } = this.state;
     return (
       <DemoContainer>
-        <TabCascader
-          onTabChange={this.handleTabChange}
-          onItemClick={this.handleItemClick}
-          onSearch={this.searchRegion}
-          style={{ width: 500 }}
-          dataSource={dataSource}
-          placeholder="请选择地址"
-          addonAfter={<Icon type="ellipsis" />}
-          hint="温馨提示：支持中文或拼音首字母输入，如：西安 或 XA"
-        />
+        <AddressSelector />
       </DemoContainer>
     )
   }
