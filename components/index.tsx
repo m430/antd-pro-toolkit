@@ -14,3 +14,5 @@ export { default as Trend } from './Trend/index';
 export { default as SlideVerify } from './SlideVerify/index';
 
 export { default as CountDown } from './CountDown/index';
+
+export { default as TabCascader } from './TabCascader/index';
