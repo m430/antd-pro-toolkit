@@ -202,8 +202,11 @@ export default class AddressSelector extends Component {
     let betweenLastLevel = item.level - lastData.level;
     const fillGroupData = async () => {
       for (let i = 0; i < groupData.length; i++) {
-        if (item.groupCode == 0 && i == 0) continue;
         let dataItem = groupData[i];
+        if (item.groupCode == 0 && i == 0) {
+          dataItem.entry = false;
+          continue;
+        }
         let level = dataItem.level;
         dataItem.code = level === item.level ? item.code : item[`areaCode${level}`];
         dataItem.title = level === item.level? item.name : item[`areaName${level}`];
