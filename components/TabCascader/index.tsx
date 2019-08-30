@@ -31,7 +31,7 @@ export interface CascaderProps {
   onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
   onSearchItemClick?: (item: Item, ) => Promise<any>;
   onTopTabChange?: (tabKey: string) => AxiosPromise<Result>;
-  onTabChange?: (key: number, topKey: number, item: Item) => AxiosPromise<Result>;
+  onTabChange?: (key: number, topKey: number, item: Item | undefined) => AxiosPromise<Result>;
   onSearch?: (val: string) => Promise<any>;
   onBlur?: React.FocusEventHandler<Element>;
   onChange?: Function;
@@ -143,9 +143,6 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       if (onTabChange) {
         this.setState({ tabLoading: true });
         let currentItem = selectedItems.find(item => item.level === currentTabData.level);
-        if (!currentItem) {
-          throw new Error(`No such the item, second tab key is ${currentKey}`);
-        }
         onTabChange(currentKey, firstTab, currentItem).then(() => {
           this.setState({ tabLoading: false });
           this.setState({ secondTab: currentKey });

@@ -5,6 +5,7 @@ import { linkTo } from '@storybook/addon-links';
 import TabCascader from '../components/TabCascader';
 import AddressSelector from './biz-components/AddressSelector'
 import DemoContainer from '../tools/DemoContainer';
+import doc from '../components/TabCascader/README.md';
 import { Icon } from 'antd';
 import _ from 'lodash';
 
@@ -1928,7 +1929,7 @@ class Demo1 extends React.Component {
 
   handleTabChange = (key, topKey) => {
     const { dataSource } = this.state;
-    let tabData = dataSource[topKey].data; 
+    let tabData = dataSource[topKey].data;
     let level = tabData[key].level;
     // TODO: 此处可根据items的数据添加缓存处理
     return this.queryRegion(level, topKey).then(data => {
@@ -1994,4 +1995,5 @@ class Demo1 extends React.Component {
 storiesOf('Address', module)
   .add('TabCascader',
     () => <Demo1 />,
+    { notes: doc }
   )

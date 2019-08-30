@@ -19,7 +19,7 @@ let initData = [
   }
 ];
 
-let maxLevelMap = [4, 3, 2]
+let maxLevelMap = [4, 3, 1]
 
 export default class AddressSelector extends Component {
 
@@ -135,7 +135,6 @@ export default class AddressSelector extends Component {
   }
 
   handleTabChange = (key, topKey, item) => {
-    debugger;
     const { dataSource } = this.state;
     let tabData = dataSource[topKey].data;
     let level = tabData[key].level;
