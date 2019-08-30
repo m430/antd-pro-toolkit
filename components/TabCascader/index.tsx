@@ -99,7 +99,11 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   componentDidMount() {
-    this.handleOutsideClick();
+    document.addEventListener('click', this.handleOutsideClick, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick, false);
   }
 
   componentWillReceiveProps(nextProps: CascaderProps) {
@@ -110,15 +114,13 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     }
   }
 
-  handleOutsideClick = () => {
+  handleOutsideClick = (e: MouseEvent) => {
     const el = this.el as HTMLDivElement;
-    document.addEventListener('click', (e: MouseEvent) => {
-      e.stopPropagation();
-      const target = e.target as Node;
-      if (!el.contains(target)) {
-        this.setState({ visible: false });
-      }
-    })
+    e.stopPropagation();
+    const target = e.target as Node;
+    if (!el.contains(target)) {
+      this.setState({ visible: false });
+    }
   }
 
   handleTopTabChange = (tabKey: string) => {
@@ -225,8 +227,8 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     if (onSearchItemClick) {
       this.setState({ tabLoading: true });
       onSearchItemClick(item).then(() => {
-        this.setState({ 
-          tabLoading: false, 
+        this.setState({
+          tabLoading: false,
           secondTab: dataSource[firstTab].data.length - 1
         });
       });

@@ -142,7 +142,11 @@ export default class AddressSelector extends Component {
     if (key == 0) {
       query.isHot = true;
     } else {
-      query.parentCode = item.parentCode;
+      if (item) {
+        query.parentCode = item.parentCode;
+      } else {
+        query.level = level;
+      }
     }
     return this.searchArea(query).then(res => {
       tabData[key].items = res.data;
