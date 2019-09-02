@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
-import './index.less';
+import './style';
 import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
-import { AxiosPromise } from 'axios';
 
 const TabPane = Tabs.TabPane
 
@@ -30,8 +29,8 @@ export interface TabData {
 export interface CascaderProps {
   onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
   onSearchItemClick?: (item: Item, ) => Promise<any>;
-  onTopTabChange?: (tabKey: string) => AxiosPromise<Result>;
-  onTabChange?: (key: number, topKey: number, item: Item | undefined) => AxiosPromise<Result>;
+  onTopTabChange?: (topKey: number) => void;
+  onTabChange?: (key: number, topKey: number, item: Item | undefined) => Promise<Result>;
   onSearch?: (val: string) => Promise<any>;
   onBlur?: React.FocusEventHandler<Element>;
   onChange?: Function;
@@ -77,10 +76,6 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   el: HTMLDivElement | null;
   debounceSearch: Function;
 
-  static defaultProps = {
-    level: 4
-  }
-
   constructor(props: CascaderProps) {
     super(props);
     this.state = {
@@ -109,7 +104,8 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   componentWillReceiveProps(nextProps: CascaderProps) {
     if (nextProps.value) {
       this.setState({
-        selectedItems: nextProps.value.filter(v => v.code && v.name),
+        selectedItems: nextProps.value,
+        inputVal: nextProps.value.map(item => item.name).join('-')
       });
     }
   }
@@ -128,7 +124,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     let numKey = Number(tabKey);
     this.setState({ secondTab: 0, firstTab: numKey });
     if (onTopTabChange) {
-      onTopTabChange(tabKey);
+      onTopTabChange(numKey);
     }
   };
 

@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import Draggable, { DraggableData, ControlPosition } from 'react-draggable';
 import cx from 'classnames';
-import './index.less';
+import './style';
 import {
   Icon
 } from 'antd';

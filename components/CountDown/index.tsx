@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-function fixedZero(val) {
+function fixedZero(val: number) {
   return val * 1 < 10 ? `0${val}` : val;
 }
-const initTime = props => {
+const initTime = (props: ICountDownProps) => {
   let lastTime = 0;
   let targetTime = 0;
   try {
     if (Object.prototype.toString.call(props.target) === '[object Date]') {
-      targetTime = props.target.getTime();
+      targetTime = (props.target as Date).getTime();
     } else {
       targetTime = new Date(props.target).getTime();
     }
   } catch (e) {
-    throw new Error('invalid target prop', e);
+    throw new Error(`invalid target prop ${e}`);
   }
 
   lastTime = targetTime - new Date().getTime();
@@ -22,12 +22,19 @@ const initTime = props => {
   };
 };
 
-class CountDown extends Component {
+export interface ICountDownProps {
+  format?: (time: number) => string | React.ReactNode;
+  target: Date | number;
+  onEnd?: () => void;
+  style?: React.CSSProperties;
+}
+
+export default class CountDown extends React.Component<ICountDownProps, any> {
   timer = 0;
 
   interval = 1000;
 
-  constructor(props) {
+  constructor(props: ICountDownProps) {
     super(props);
     const { lastTime } = initTime(props);
     this.state = {
@@ -35,7 +42,7 @@ class CountDown extends Component {
     };
   }
 
-  static getDerivedStateFromProps(nextProps, preState) {
+  static getDerivedStateFromProps(nextProps: ICountDownProps, preState: any) {
     const { lastTime } = initTime(nextProps);
     if (preState.lastTime !== lastTime) {
       return {
@@ -49,7 +56,7 @@ class CountDown extends Component {
     this.tick();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: ICountDownProps) {
     const { target } = this.props;
     if (target !== prevProps.target) {
       clearTimeout(this.timer);
@@ -61,10 +68,7 @@ class CountDown extends Component {
     clearTimeout(this.timer);
   }
 
-  // defaultFormat = time => (
-  //  <span>{moment(time).format('hh:mm:ss')}</span>
-  // );
-  defaultFormat = time => {
+  defaultFormat = (time: number) => {
     const hours = 60 * 60 * 1000;
     const minutes = 60 * 1000;
 
@@ -82,7 +86,7 @@ class CountDown extends Component {
     const { onEnd } = this.props;
     let { lastTime } = this.state;
 
-    this.timer = setTimeout(() => {
+    this.timer = window.setTimeout(() => {
       if (lastTime < this.interval) {
         clearTimeout(this.timer);
         this.setState(
@@ -117,5 +121,3 @@ class CountDown extends Component {
     return <span {...rest}>{result}</span>;
   }
 }
-
-export default CountDown;

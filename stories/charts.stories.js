@@ -1,12 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
-import axios from '../http';
 import numeral from 'numeral';
-import { Row, Col, Icon, Tooltip } from 'antd';
+import { Icon, Tooltip } from 'antd';
 
 import { Charts, NumberInfo, Trend } from '../components';
 

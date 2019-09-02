@@ -8,11 +8,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "target": "es5",
-    "lib": ["dom", "es7"],
-    "allowJs": true,
-    "rootDirs": ["components", "stories"],
-    "noEmit": true
+    "target": "es6",
+    "lib": ["dom", "es2017"]
   },
   "exclude": ["node_modules", "lib", "es"]
 }

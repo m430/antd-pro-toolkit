@@ -8,6 +8,7 @@ module.exports = function() {
   let my = {};
   if (fs.existsSync(getProjectPath('tsconfig.json'))) {
     my = require(getProjectPath('tsconfig.json'));
+    console.log(my);
   }
   return assign(
     {

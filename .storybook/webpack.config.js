@@ -28,7 +28,7 @@ module.exports = ({ config }) => {
         { loader: 'style-loader' },
         {
           loader: 'css-loader',
-          options: { importLoaders: 1}
+          // options: { importLoaders: 1}
         },
         {
           loader: 'less-loader', options: {

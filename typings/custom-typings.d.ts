@@ -1,6 +1,4 @@
 
-declare module "AvatarList";
-
 declare module "Charts";
 
 declare module "Headline";

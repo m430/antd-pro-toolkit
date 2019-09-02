@@ -1,10 +1,16 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import {
   Card,
   Icon
 } from 'antd';
 
-export default class Headline extends Component {
+export interface IHeadlineProps {
+  backRoute?: string;
+  title?: string;
+  backClick?: (e: React.MouseEvent) => void;
+}
+
+export default class Headline extends Component<IHeadlineProps, any> {
 
   render() {
     const { backRoute, title, backClick, ...restProps } = this.props;
