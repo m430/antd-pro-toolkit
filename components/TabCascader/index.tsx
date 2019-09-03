@@ -102,11 +102,34 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   componentWillReceiveProps(nextProps: CascaderProps) {
-    if (nextProps.value) {
-      this.setState({
-        selectedItems: nextProps.value,
-        inputVal: nextProps.value.map(item => item.name).join('-')
-      });
+    const { value } = this.props;
+    const { selectedItems } = this.state;
+    if (nextProps.value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+      if (selectedItems.length == 0 || value != nextProps.value) {
+        this.setState({
+          selectedItems: nextProps.value,
+          inputVal: nextProps.value.map(item => item.name).join('-')
+        });
+      }
+      this.setInitialValue(nextProps.dataSource, nextProps.value);
+    }
+  }
+
+  setInitialValue = (dataSource: Array<PanelData>, value: Array<Item>) => {
+    let groupCode = value[0].groupCode;
+    let panelIdx = dataSource.findIndex((data: PanelData) => data.code == groupCode);
+    if (panelIdx == -1) {
+      throw new Error(`value cannot in the top datas.`);
+    }
+    let panelData = dataSource[panelIdx];
+    let lastItem = value[value.length - 1];
+    if (panelData && panelData.data.length > 0) {
+      for (let i = 0; i < panelData.data.length; i++) {
+        if (panelData.data[i].level == lastItem.level) {
+          this.setState({ firstTab: panelIdx, secondTab: i });
+          break;
+        }
+      }
     }
   }
 
@@ -155,16 +178,35 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { onChange, onItemClick, dataSource } = this.props;
     let { selectedItems, firstTab, secondTab } = this.state;
 
-    if ((secondTab === 0 || secondTab === 1) && firstTab == 0) {
-      selectedItems = [];
+    // if ((secondTab === 0 || secondTab === 1) && firstTab == 0) {
+    //   selectedItems = [];
+    //   selectedItems.push(item);
+    // } else {
+    //   if (firstTab == 0) {
+    //     selectedItems = selectedItems.slice(0, secondTab - 1);
+    //     selectedItems[secondTab - 1] = item;
+    //   } else {
+    //     selectedItems = selectedItems.slice(0, secondTab);
+    //     selectedItems[secondTab] = item;
+    //   }
+    // }
+    if (selectedItems.length == 0) {
       selectedItems.push(item);
     } else {
-      if (firstTab == 0) {
-        selectedItems = selectedItems.slice(0, secondTab - 1);
-        selectedItems[secondTab - 1] = item;
+      if (selectedItems[selectedItems.length - 1].level < item.level) {
+        selectedItems.push(item);
+      } else if (selectedItems[0].level > item.level) {
+        selectedItems = [item];
       } else {
-        selectedItems = selectedItems.slice(0, secondTab);
-        selectedItems[secondTab] = item;
+        for(let i = 0; i < selectedItems.length; i++) {
+          let sItem = selectedItems[i];
+          if (sItem.level < item.level) {
+            continue;
+          } else if (sItem.level == item.level) {
+            selectedItems[i] = item;
+            selectedItems = selectedItems.slice(0, i + 1);
+          }
+        }
       }
     }
     const displayVal = selectedItems.map((item: Item) => item.name).join('-');
