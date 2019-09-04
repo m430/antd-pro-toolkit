@@ -5,8 +5,22 @@ import Slider from 'bizcharts-plugin-slider';
 import autoHeight from '../autoHeight';
 import './index.less';
 
-@autoHeight()
-class TimelineChart extends React.Component {
+
+export interface ITimelineChartProps {
+  data: Array<{
+    x: number;
+    y1: number;
+    y2: number;
+  }>;
+  titleMap: { y1: string; y2: string };
+  padding?: [number, number, number, number];
+  height?: number;
+  style?: React.CSSProperties;
+  title?: string;
+  borderWidth?: number;
+}
+
+class TimelineChart extends React.Component<ITimelineChartProps, any> {
   render() {
     const {
       title,
@@ -47,14 +61,14 @@ class TimelineChart extends React.Component {
     dv.source(data)
       .transform({
         type: 'filter',
-        callback: obj => {
+        callback: (obj: any) => {
           const date = obj.x;
           return date <= ds.state.end && date >= ds.state.start;
         },
       })
       .transform({
         type: 'map',
-        callback(row) {
+        callback(row: any) {
           const newRow = { ...row };
           newRow[titleMap.y1] = row.y1;
           newRow[titleMap.y2] = row.y2;
@@ -95,7 +109,7 @@ class TimelineChart extends React.Component {
         start={ds.state.start}
         end={ds.state.end}
         backgroundChart={{ type: 'line' }}
-        onChange={({ startValue, endValue }) => {
+        onChange={({ startValue, endValue }: any) => {
           ds.setState('start', startValue);
           ds.setState('end', endValue);
         }}
@@ -106,7 +120,7 @@ class TimelineChart extends React.Component {
       <div className="timelineChart" style={{ height: height + 30 }}>
         <div>
           {title && <h4>{title}</h4>}
-          <Chart height={height} padding={padding} data={dv} scale={cols} forceFit>
+          <Chart height={height} padding={padding as [number, number, number, number]} data={dv} scale={cols} forceFit>
             <Axis name="x" />
             <Tooltip />
             <Legend name="key" position="top" />
@@ -121,4 +135,4 @@ class TimelineChart extends React.Component {
   }
 }
 
-export default TimelineChart;
+export default autoHeight()(TimelineChart);

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Card } from 'antd';
+import { CardProps } from 'antd/lib/card';
 import classNames from 'classnames';
 
 import './index.less';
 
-const renderTotal = total => {
+const renderTotal = (total: React.ReactNode | number | (() => React.ReactNode | number)) => {
   let totalDom;
   switch (typeof total) {
     case 'undefined':
@@ -19,7 +20,17 @@ const renderTotal = total => {
   return totalDom;
 };
 
-class ChartCard extends React.PureComponent {
+export interface IChartCardProps extends CardProps {
+  title: React.ReactNode;
+  action?: React.ReactNode;
+  total?: React.ReactNode | number | (() => React.ReactNode | number);
+  footer?: React.ReactNode;
+  contentHeight?: number;
+  avatar?: React.ReactNode;
+  style?: React.CSSProperties;
+}
+
+export default class ChartCard extends React.Component<IChartCardProps, any> {
   renderConnet = () => {
     const { contentHeight, title, avatar, action, total, footer, children, loading } = this.props;
     if (loading) {
@@ -43,7 +54,7 @@ class ChartCard extends React.PureComponent {
         </div>
         {children && (
           <div className="content" style={{ height: contentHeight || 'auto' }}>
-            <div className={contentHeight && "contentFixed"}>{children}</div>
+            <div className={contentHeight ? "contentFixed" : undefined}>{children}</div>
           </div>
         )}
         {footer && (
@@ -78,5 +89,3 @@ class ChartCard extends React.PureComponent {
     );
   }
 }
-
-export default ChartCard;

@@ -1,16 +1,26 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import autoHeight from '../autoHeight';
 import './index.less';
 
 /* eslint no-return-assign: 0 */
 /* eslint no-mixed-operators: 0 */
 // riddle: https://riddle.alibaba-inc.com/riddles/2d9a4b90
+export interface IWaterWaveProps {
+  title: React.ReactNode;
+  color?: string;
+  height: number;
+  percent: number;
+  style?: React.CSSProperties;
+}
 
-@autoHeight()
-class WaterWave extends PureComponent {
+class WaterWave extends React.Component<IWaterWaveProps, any> {
   state = {
     radio: 1,
   };
+
+  root: HTMLDivElement | null;
+  node: HTMLCanvasElement | null;
+  timer: number;
 
   componentDidMount() {
     this.renderChart();
@@ -24,7 +34,7 @@ class WaterWave extends PureComponent {
     );
   }
 
-  componentDidUpdate(props) {
+  componentDidUpdate(props: IWaterWaveProps) {
     const { percent } = this.props;
     if (props.percent !== percent) {
       // 不加这个会造成绘制缓慢
@@ -43,14 +53,14 @@ class WaterWave extends PureComponent {
   resize = () => {
     if (this.root) {
       const { height } = this.props;
-      const { offsetWidth } = this.root.parentNode;
+      const { offsetWidth } = this.root.parentNode as HTMLDivElement;
       this.setState({
         radio: offsetWidth < height ? offsetWidth / height : 1,
       });
     }
   };
 
-  renderChart(type) {
+  renderChart(type?: string) {
     const { percent, color = '#1890FF' } = this.props;
     const data = percent / 100;
     const self = this;
@@ -68,6 +78,8 @@ class WaterWave extends PureComponent {
     const lineWidth = 2;
     const cR = radius - lineWidth;
 
+    if (!ctx) throw new Error(`this browser not support canvas.`);
+    
     ctx.beginPath();
     ctx.lineWidth = lineWidth * 2;
 
@@ -80,7 +92,7 @@ class WaterWave extends PureComponent {
     let currData = 0;
     const waveupsp = 0.005; // 水波上涨速度
 
-    let arcStack = [];
+    let arcStack: Array<any> = [];
     const bR = radius - lineWidth;
     const circleOffset = -(Math.PI / 2);
     let circleLock = true;
@@ -94,6 +106,8 @@ class WaterWave extends PureComponent {
     ctx.moveTo(cStartPoint[0], cStartPoint[1]);
 
     function drawSin() {
+      if (!ctx) throw new Error(`this browser not support canvas.`);
+
       ctx.beginPath();
       ctx.save();
 
@@ -112,7 +126,9 @@ class WaterWave extends PureComponent {
 
       ctx.lineTo(xOffset + axisLength, canvasHeight);
       ctx.lineTo(xOffset, canvasHeight);
-      ctx.lineTo(startPoint[0], startPoint[1]);
+      if (startPoint && startPoint[0] && startPoint[1]) {
+        ctx.lineTo(startPoint[0], startPoint[1]);
+      }
 
       const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
       gradient.addColorStop(0, '#ffffff');
@@ -123,6 +139,8 @@ class WaterWave extends PureComponent {
     }
 
     function render() {
+      if (!ctx) throw new Error(`this browser not support canvas.`);
+
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
       if (circleLock && type !== 'update') {
         if (arcStack.length) {
@@ -133,16 +151,16 @@ class WaterWave extends PureComponent {
           circleLock = false;
           ctx.lineTo(cStartPoint[0], cStartPoint[1]);
           ctx.stroke();
-          arcStack = null;
+          arcStack = [];
 
           ctx.globalCompositeOperation = 'destination-over';
           ctx.beginPath();
           ctx.lineWidth = lineWidth;
-          ctx.arc(radius, radius, bR, 0, 2 * Math.PI, 1);
+          ctx.arc(radius, radius, bR, 0, 2 * Math.PI, true);
 
           ctx.beginPath();
           ctx.save();
-          ctx.arc(radius, radius, radius - 3 * lineWidth, 0, 2 * Math.PI, 1);
+          ctx.arc(radius, radius, radius - 3 * lineWidth, 0, 2 * Math.PI, true);
 
           ctx.restore();
           ctx.clip();
@@ -210,4 +228,4 @@ class WaterWave extends PureComponent {
   }
 }
 
-export default WaterWave;
+export default autoHeight()(WaterWave);

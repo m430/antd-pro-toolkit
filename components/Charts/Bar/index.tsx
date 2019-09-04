@@ -1,15 +1,35 @@
-import React, { Component } from 'react';
-import { Chart, Axis, Tooltip, Geom } from 'bizcharts';
+import React from 'react';
+import { Chart, Axis, Tooltip, Geom, tooltipData } from 'bizcharts';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import autoHeight from '../autoHeight';
 import '../index.less';
 
-@autoHeight()
-class Bar extends Component {
+export interface IBarProps {
+  title: React.ReactNode;
+  color?: string;
+  padding?: [number, number, number, number];
+  height: number;
+  data: Array<{
+    x: string;
+    y: number;
+  }>;
+  autoLabel?: boolean;
+  style?: React.CSSProperties;
+  forceFit?: boolean;
+}
+
+class Bar extends React.Component<IBarProps, any> {
   state = {
     autoHideXLabels: false,
   };
+
+  constructor(props: IBarProps) {
+    super(props);
+  } 
+
+  root: HTMLDivElement | null;
+  node: HTMLDivElement | null;
 
   componentDidMount() {
     window.addEventListener('resize', this.resize, { passive: true });
@@ -19,11 +39,11 @@ class Bar extends Component {
     window.removeEventListener('resize', this.resize);
   }
 
-  handleRoot = n => {
+  handleRoot = (n: HTMLDivElement) => {
     this.root = n;
   };
 
-  handleRef = n => {
+  handleRef = (n: HTMLDivElement) => {
     this.node = n;
   };
 
@@ -33,7 +53,7 @@ class Bar extends Component {
     if (!this.node) {
       return;
     }
-    const canvasWidth = this.node.parentNode.clientWidth;
+    const canvasWidth = (this.node.parentNode as HTMLDivElement).clientWidth;
     const { data = [], autoLabel = true } = this.props;
     if (!autoLabel) {
       return;
@@ -64,8 +84,6 @@ class Bar extends Component {
       padding,
     } = this.props;
 
-    const { autoHideXLabels } = this.state;
-
     const scale = {
       x: {
         type: 'cat',
@@ -77,7 +95,7 @@ class Bar extends Component {
 
     const tooltip = [
       'x*y',
-      (x, y) => ({
+      (x: string, y: string) => ({
         name: x,
         value: y,
       }),
@@ -97,12 +115,10 @@ class Bar extends Component {
             <Axis
               name="x"
               title={false}
-              label={autoHideXLabels ? false : {}}
-              tickLine={autoHideXLabels ? false : {}}
             />
             <Axis name="y" min={0} />
             <Tooltip showTitle={false} crosshairs={false} />
-            <Geom type="interval" position="x*y" color={color} tooltip={tooltip} />
+            <Geom type="interval" position="x*y" color={color} tooltip={tooltip as tooltipData} />
           </Chart>
         </div>
       </div>
@@ -110,4 +126,4 @@ class Bar extends Component {
   }
 }
 
-export default Bar;
+export default autoHeight()(Bar);

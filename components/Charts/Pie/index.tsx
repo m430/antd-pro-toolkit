@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Chart, Tooltip, Geom, Coord } from 'bizcharts';
+import React from 'react';
+import { Chart, Tooltip, Geom, Coord, tooltipData, LegendItem } from 'bizcharts';
 import { DataView } from '@antv/data-set';
 import { Divider } from 'antd';
 import classNames from 'classnames';
@@ -10,13 +10,49 @@ import autoHeight from '../autoHeight';
 
 import './index.less';
 
-/* eslint react/no-danger:0 */
-@autoHeight()
-class Pie extends Component {
-  state = {
-    legendData: [],
-    legendBlock: false,
-  };
+export interface IPieProps {
+  animate?: boolean;
+  color?: string;
+  colors?: string[];
+  height: number;
+  hasLegend?: boolean;
+  padding?: [number, number, number, number];
+  percent?: number;
+  data?: Array<{
+    x: string | string;
+    y: number;
+  }>;
+  total?: React.ReactNode | number | (() => React.ReactNode | number);
+  title?: React.ReactNode;
+  tooltip?: boolean;
+  valueFormat?: (value: string) => string | React.ReactNode;
+  subTitle?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  forceFit?: boolean;
+  inner?: number;
+  lineWidth?: number;
+  selected?: boolean;
+}
+
+interface IPieState {
+  legendData?: Array<LegendItem>;
+  legendBlock?: boolean;
+}
+
+class Pie extends React.Component<IPieProps, IPieState> {
+
+  requestRef: number;
+  chart: any;
+  root: any;
+
+  constructor(props: IPieProps) {
+    super(props);
+    this.state = {
+      legendData: [],
+      legendBlock: false,
+    };
+  }
 
   componentDidMount() {
     window.addEventListener(
@@ -28,7 +64,7 @@ class Pie extends Component {
     );
   }
 
-  componentDidUpdate(preProps) {
+  componentDidUpdate(preProps: IPieProps) {
     const { data } = this.props;
     if (data !== preProps.data) {
       // because of charts data create when rendered
@@ -40,10 +76,9 @@ class Pie extends Component {
   componentWillUnmount() {
     window.cancelAnimationFrame(this.requestRef);
     window.removeEventListener('resize', this.resize);
-    this.resize.cancel();
   }
 
-  getG2Instance = chart => {
+  getG2Instance = (chart: G2.Chart) => {
     this.chart = chart;
     requestAnimationFrame(() => {
       this.getLegendData();
@@ -58,7 +93,7 @@ class Pie extends Component {
     if (!geom) return;
     const items = geom.get('dataArray') || []; // 获取图形对应的
 
-    const legendData = items.map(item => {
+    const legendData = items.map((item: any) => {
       /* eslint no-underscore-dangle:0 */
       const origin = item[0]._origin;
       origin.color = item[0].color;
@@ -71,26 +106,28 @@ class Pie extends Component {
     });
   };
 
-  handleRoot = n => {
+  handleRoot = (n: HTMLDivElement) => {
     this.root = n;
   };
 
-  handleLegendClick = (item, i) => {
+  handleLegendClick = (item: any, i: number) => {
     const newItem = item;
     newItem.checked = !newItem.checked;
 
     const { legendData } = this.state;
-    legendData[i] = newItem;
+    if (legendData) {
+      legendData[i] = newItem;
 
-    const filteredLegendData = legendData.filter(l => l.checked).map(l => l.x);
+      const filteredLegendData = legendData.filter((l: LegendItem) => l.checked).map((l: LegendItem) => l.x);
 
-    if (this.chart) {
-      this.chart.filter('x', val => filteredLegendData.indexOf(val) > -1);
+      if (this.chart) {
+        this.chart.filter('x', (val: number) => filteredLegendData.indexOf(val) > -1);
+      }
+
+      this.setState({
+        legendData,
+      });
     }
-
-    this.setState({
-      legendData,
-    });
   };
 
   // for window resize auto responsive legend
@@ -150,7 +187,7 @@ class Pie extends Component {
     let selected = propsSelected;
     let tooltip = propsTooltip;
 
-    const defaultColors = colors;
+    const defaultColors = colors || [];
     data = data || [];
     selected = selected || true;
     tooltip = tooltip || true;
@@ -169,7 +206,7 @@ class Pie extends Component {
     if (percent || percent === 0) {
       selected = false;
       tooltip = false;
-      formatColor = value => {
+      formatColor = (value: string) => {
         if (value === '占比') {
           return color || 'rgba(24, 144, 255, 0.85)';
         }
@@ -179,19 +216,19 @@ class Pie extends Component {
       data = [
         {
           x: '占比',
-          y: parseFloat(percent),
+          y: parseFloat(`${percent}`),
         },
         {
           x: '反比',
-          y: 100 - parseFloat(percent),
+          y: 100 - parseFloat(`${percent}`),
         },
       ];
     }
 
     const tooltipFormat = [
       'x*percent',
-      (x, p) => ({
-        name: x,
+      (x: number, p: number) => ({
+        name: `${x}`,
         value: `${(p * 100).toFixed(2)}%`,
       }),
     ];
@@ -215,7 +252,7 @@ class Pie extends Component {
               height={height}
               forceFit={forceFit}
               data={dv}
-              padding={padding}
+              padding={padding as [number, number, number, number]}
               animate={animate}
               onGetG2Instance={this.getG2Instance}
             >
@@ -223,10 +260,10 @@ class Pie extends Component {
               <Coord type="theta" innerRadius={inner} />
               <Geom
                 style={{ lineWidth, stroke: '#fff' }}
-                tooltip={tooltip && tooltipFormat}
+                tooltip={tooltip ? tooltipFormat as tooltipData : undefined}
                 type="intervalStack"
                 position="percent"
-                color={['x', percent || percent === 0 ? formatColor : defaultColors]}
+                color={['x', percent || percent === 0 ? formatColor : defaultColors] as [string, string[]] | [string, (d?: any) => string]}
                 selected={selected}
               />
             </Chart>
@@ -243,7 +280,7 @@ class Pie extends Component {
           </div>
         </ReactFitText>
 
-        {hasLegend && (
+        {hasLegend && legendData && (
           <ul className="legend">
             {legendData.map((item, i) => (
               <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
@@ -258,7 +295,7 @@ class Pie extends Component {
                 <span className="percent">
                   {`${(Number.isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}
                 </span>
-                <span className="value">{valueFormat ? valueFormat(item.y) : item.y}</span>
+                <span className="value">{valueFormat ? valueFormat(`${item.y}`) : item.y}</span>
               </li>
             ))}
           </ul>
@@ -268,4 +305,4 @@ class Pie extends Component {
   }
 }
 
-export default Pie;
+export default autoHeight()(Pie);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Chart, Geom, Coord, Shape } from 'bizcharts';
 import DataSet from '@antv/data-set';
 import Debounce from 'lodash-decorators/debounce';
@@ -12,11 +12,28 @@ import './index.less';
 
 const imgUrl = 'https://gw.alipayobjects.com/zos/rmsportal/gWyeGLCdFFRavBGIDzWk.png';
 
-@autoHeight()
-class TagCloud extends Component {
+
+export interface ITagCloudProps {
+  data: Array<{
+    name: string;
+    value: number;
+  }>;
+  height: number;
+  style?: React.CSSProperties;
+  className?: string;
+}
+
+class TagCloud extends React.Component<ITagCloudProps, any> {
   state = {
     dv: null,
+    w: 0,
+    h: 0
   };
+
+  isUnmount: boolean;
+  requestRef: number;
+  root: HTMLDivElement;
+  imageMask: any;
 
   componentDidMount() {
     requestAnimationFrame(() => {
@@ -26,7 +43,7 @@ class TagCloud extends Component {
     window.addEventListener('resize', this.resize, { passive: true });
   }
 
-  componentDidUpdate(preProps) {
+  componentDidUpdate(preProps: ITagCloudProps) {
     const { data } = this.props;
     if (JSON.stringify(preProps.data) !== JSON.stringify(data)) {
       this.renderChart(this.props);
@@ -45,12 +62,12 @@ class TagCloud extends Component {
     });
   };
 
-  saveRootRef = node => {
+  saveRootRef = (node: HTMLDivElement) => {
     this.root = node;
   };
 
   initTagCloud = () => {
-    function getTextAttrs(cfg) {
+    function getTextAttrs(cfg: any) {
       return Object.assign(
         {},
         {
@@ -68,22 +85,24 @@ class TagCloud extends Component {
     }
 
     // 给point注册一个词云的shape
-    Shape.registerShape('point', 'cloud', {
-      drawShape(cfg, container) {
-        const attrs = getTextAttrs(cfg);
-        return container.addShape('text', {
-          attrs: Object.assign(attrs, {
-            x: cfg.x,
-            y: cfg.y,
-          }),
-        });
-      },
-    });
+    if (Shape.registerShape) {
+      Shape.registerShape('point', 'cloud', {
+        drawShape(cfg: any, container: any) {
+          const attrs = getTextAttrs(cfg);
+          return container.addShape('text', {
+            attrs: Object.assign(attrs, {
+              x: cfg.x,
+              y: cfg.y,
+            }),
+          });
+        },
+      });
+    }
   };
 
   @Bind()
   @Debounce(500)
-  renderChart(nextProps) {
+  renderChart(nextProps?: ITagCloudProps) {
     // const colors = ['#1890FF', '#41D9C7', '#2FC25B', '#FACC14', '#9AE65C'];
     const { data, height } = nextProps || this.props;
 
@@ -109,7 +128,7 @@ class TagCloud extends Component {
         rotate() {
           return 0;
         },
-        fontSize(d) {
+        fontSize(d: any) {
           // eslint-disable-next-line
           return Math.pow((d.value - min) / (max - min), 2) * (70 - 20) + 20;
         },
@@ -167,4 +186,4 @@ class TagCloud extends Component {
   }
 }
 
-export default TagCloud;
+export default autoHeight()(TagCloud);

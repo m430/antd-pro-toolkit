@@ -1,28 +1,55 @@
-import React, { Component } from 'react';
-import { Chart, Tooltip, Geom, Coord, Axis } from 'bizcharts';
+import React from 'react';
+import { LegendItem, Chart, Tooltip, Axis, Coord, Geom } from 'bizcharts';
 import { Row, Col } from 'antd';
 import autoHeight from '../autoHeight';
 import './index.less';
 
 /* eslint react/no-danger:0 */
-@autoHeight()
-class Radar extends Component {
-  state = {
-    legendData: [],
-  };
+export interface IRadarProps {
+  title?: React.ReactNode;
+  height: number;
+  padding?: [number, number, number, number];
+  hasLegend?: boolean;
+  data: Array<{
+    name: string;
+    label: string;
+    value: string;
+  }>;
+  style?: React.CSSProperties;
+  forceFit?: boolean;
+  tickCount?: number;
+  animate?: boolean;
+  colors?: Array<any>;
+}
+
+interface IRadarState {
+  legendData: Array<LegendItem>
+}
+
+class Radar extends React.Component<IRadarProps, IRadarState> {
+
+  constructor(props: IRadarProps) {
+    super(props);
+    this.state = {
+      legendData: []
+    }
+  }
+
+  chart: any;
+  node: HTMLDivElement;
 
   componentDidMount() {
     this.getLegendData();
   }
 
-  componentDidUpdate(preProps) {
+  componentDidUpdate(preProps: IRadarProps) {
     const { data } = this.props;
     if (data !== preProps.data) {
       this.getLegendData();
     }
   }
 
-  getG2Instance = chart => {
+  getG2Instance = (chart: G2.Chart) => {
     this.chart = chart;
   };
 
@@ -33,9 +60,9 @@ class Radar extends Component {
     if (!geom) return;
     const items = geom.get('dataArray') || []; // 获取图形对应的
 
-    const legendData = items.map(item => {
+    const legendData = items.map((item: Array<any>) => {
       // eslint-disable-next-line
-      const origins = item.map(t => t._origin);
+      const origins = item.map((t: any) => t._origin);
       const result = {
         name: origins[0].name,
         color: item[0].color,
@@ -51,27 +78,29 @@ class Radar extends Component {
     });
   };
 
-  handleRef = n => {
+  handleRef = (n: HTMLDivElement) => {
     this.node = n;
   };
 
-  handleLegendClick = (item, i) => {
+  handleLegendClick = (item: LegendItem, i: number) => {
     const newItem = item;
     newItem.checked = !newItem.checked;
 
     const { legendData } = this.state;
-    legendData[i] = newItem;
-
-    const filteredLegendData = legendData.filter(l => l.checked).map(l => l.name);
-
-    if (this.chart) {
-      this.chart.filter('name', val => filteredLegendData.indexOf(val) > -1);
-      this.chart.repaint();
+    if (legendData) {
+      legendData[i] = newItem;
+  
+      const filteredLegendData = legendData.filter((l: LegendItem) => l.checked).map((l: LegendItem) => l.name);
+  
+      if (this.chart) {
+        this.chart.filter('name', (val: string) => filteredLegendData.indexOf(val) > -1);
+        this.chart.repaint();
+      }
+  
+      this.setState({
+        legendData,
+      });
     }
-
-    this.setState({
-      legendData,
-    });
   };
 
   render() {
@@ -117,7 +146,7 @@ class Radar extends Component {
           height={chartHeight}
           forceFit={forceFit}
           data={data}
-          padding={padding}
+          padding={padding as [number, number, number, number]}
           animate={animate}
           onGetG2Instance={this.getG2Instance}
         >
@@ -129,7 +158,7 @@ class Radar extends Component {
             tickLine={null}
             grid={{
               lineStyle: {
-                lineDash: null,
+                lineDash: undefined,
               },
               hideFirstLine: false,
             }}
@@ -139,7 +168,7 @@ class Radar extends Component {
             grid={{
               type: 'polygon',
               lineStyle: {
-                lineDash: null,
+                lineDash: undefined,
               },
             }}
           />
@@ -154,7 +183,7 @@ class Radar extends Component {
         </Chart>
         {hasLegend && (
           <Row className="legend">
-            {legendData.map((item, i) => (
+            {legendData.map((item: LegendItem, i) => (
               <Col
                 span={24 / legendData.length}
                 key={item.name}
@@ -181,4 +210,4 @@ class Radar extends Component {
   }
 }
 
-export default Radar;
+export default autoHeight()(Radar);

@@ -4,7 +4,7 @@ import autoHeight from '../autoHeight';
 
 const { Arc, Html, Line } = Guide;
 
-const defaultFormatter = val => {
+const defaultFormatter = (val: string) => {
   switch (val) {
     case '2':
       return '差';
@@ -19,40 +19,52 @@ const defaultFormatter = val => {
   }
 };
 
-Shape.registerShape('point', 'pointer', {
-  drawShape(cfg, group) {
-    let point = cfg.points[0];
-    point = this.parsePoint(point);
-    const center = this.parsePoint({
-      x: 0,
-      y: 0,
-    });
-    group.addShape('line', {
-      attrs: {
-        x1: center.x,
-        y1: center.y,
-        x2: point.x,
-        y2: point.y,
-        stroke: cfg.color,
-        lineWidth: 2,
-        lineCap: 'round',
-      },
-    });
-    return group.addShape('circle', {
-      attrs: {
-        x: center.x,
-        y: center.y,
-        r: 6,
-        stroke: cfg.color,
-        lineWidth: 3,
-        fill: '#fff',
-      },
-    });
-  },
-});
+if (Shape.registerShape) {
+  Shape.registerShape('point', 'pointer', {
+    drawShape(cfg: any, group: any) {
+      let point = cfg.points[0];
+      point = this.parsePoint(point);
+      const center = this.parsePoint({
+        x: 0,
+        y: 0,
+      });
+      group.addShape('line', {
+        attrs: {
+          x1: center.x,
+          y1: center.y,
+          x2: point.x,
+          y2: point.y,
+          stroke: cfg.color,
+          lineWidth: 2,
+          lineCap: 'round',
+        },
+      });
+      return group.addShape('circle', {
+        attrs: {
+          x: center.x,
+          y: center.y,
+          r: 6,
+          stroke: cfg.color,
+          lineWidth: 3,
+          fill: '#fff',
+        },
+      });
+    },
+  });
+}
 
-@autoHeight()
-class Gauge extends React.Component {
+export interface IGaugeProps {
+  title: React.ReactNode;
+  color?: string;
+  height: number;
+  bgColor?: number;
+  percent: number;
+  style?: React.CSSProperties;
+  forceFit?: boolean;
+  formatter?: (val: string) => string;
+}
+
+class Gauge extends React.Component<IGaugeProps, any> {
   render() {
     const {
       title,
@@ -80,10 +92,8 @@ class Gauge extends React.Component {
         <Axis
           line={null}
           tickLine={null}
-          subTickLine={null}
           name="value"
           zIndex={2}
-          gird={null}
           label={{
             offset: -12,
             formatter,
@@ -100,7 +110,7 @@ class Gauge extends React.Component {
             end={[3, 0.85]}
             lineStyle={{
               stroke: color,
-              lineDash: null,
+              lineDash: [],
               lineWidth: 2,
             }}
           />
@@ -109,7 +119,7 @@ class Gauge extends React.Component {
             end={[5, 0.85]}
             lineStyle={{
               stroke: color,
-              lineDash: null,
+              lineDash: [],
               lineWidth: 3,
             }}
           />
@@ -118,7 +128,7 @@ class Gauge extends React.Component {
             end={[7, 0.85]}
             lineStyle={{
               stroke: color,
-              lineDash: null,
+              lineDash: [],
               lineWidth: 3,
             }}
           />
@@ -142,7 +152,7 @@ class Gauge extends React.Component {
           />
           <Html
             position={['50%', '95%']}
-            html={() => `
+            html={`
                 <div style="width: 300px;text-align: center;font-size: 12px!important;">
                   <p style="font-size: 14px; color: rgba(0,0,0,0.43);margin: 0;">${title}</p>
                   <p style="font-size: 24px;color: rgba(0,0,0,0.85);margin: 0;">
@@ -164,4 +174,4 @@ class Gauge extends React.Component {
   }
 }
 
-export default Gauge;
+export default autoHeight()(Gauge);

@@ -1,10 +1,36 @@
 import React from 'react';
-import { Chart, Axis, Tooltip, Geom } from 'bizcharts';
+import { Chart, Axis, Tooltip, Geom, tooltipData } from 'bizcharts';
 import autoHeight from '../autoHeight';
 import '../index.less';
 
-@autoHeight()
-class MiniArea extends React.PureComponent {
+
+export interface IAxis {
+  title: any;
+  line: any;
+  gridAlign: any;
+  labels: any;
+  tickLine: any;
+  grid: any;
+}
+
+export interface IMiniAreaProps {
+  color?: string;
+  height: number;
+  borderColor?: string;
+  line?: boolean;
+  animate?: boolean;
+  xAxis?: IAxis;
+  yAxis?: IAxis;
+  scale?: any;
+  borderWidth?: number;
+  forceFit?: boolean;
+  data: Array<{
+    x: number | string;
+    y: number;
+  }>;
+}
+
+class MiniArea extends React.Component<IMiniAreaProps, any> {
   render() {
     const {
       height,
@@ -36,13 +62,15 @@ class MiniArea extends React.PureComponent {
 
     const tooltip = [
       'x*y',
-      (x, y) => ({
+      (x: string, y: string) => ({
         name: x,
         value: y,
       }),
     ];
 
     const chartHeight = height + 54;
+
+    
 
     return (
       <div className="miniChart" style={{ height }}>
@@ -54,24 +82,17 @@ class MiniArea extends React.PureComponent {
               height={chartHeight}
               forceFit={forceFit}
               data={data}
-              padding={padding}
+              padding={padding as [number, number, number, number]}
             >
               <Axis
                 key="axis-x"
                 name="x"
-                label={false}
-                line={false}
-                tickLine={false}
-                grid={false}
+                label={undefined}
                 {...xAxis}
               />
               <Axis
                 key="axis-y"
                 name="y"
-                label={false}
-                line={false}
-                tickLine={false}
-                grid={false}
                 {...yAxis}
               />
               <Tooltip showTitle={false} crosshairs={false} />
@@ -79,7 +100,7 @@ class MiniArea extends React.PureComponent {
                 type="area"
                 position="x*y"
                 color={color}
-                tooltip={tooltip}
+                tooltip={tooltip as tooltipData}
                 shape="smooth"
                 style={{
                   fillOpacity: 1,
@@ -105,4 +126,4 @@ class MiniArea extends React.PureComponent {
   }
 }
 
-export default MiniArea;
+export default autoHeight()(MiniArea);

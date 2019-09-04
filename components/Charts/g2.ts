@@ -1,7 +1,7 @@
 // 全局 G2 设置
-import { track, setTheme } from 'bizcharts';
+import bizcharts, { G2 } from 'bizcharts';
 
-track(false);
+G2.track(false);
 
 const config = {
   defaultColor: '#1089ff',
@@ -12,4 +12,4 @@ const config = {
   },
 };
 
-setTheme(config);
+bizcharts.setTheme(config);

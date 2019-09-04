@@ -1,10 +1,20 @@
 import React from 'react';
-import { Chart, Tooltip, Geom } from 'bizcharts';
+import { Chart, Tooltip, Geom, tooltipData } from 'bizcharts';
 import autoHeight from '../autoHeight';
 import '../index.less';
 
-@autoHeight()
-class MiniBar extends React.Component {
+export interface IMiniBarProps {
+  color?: string;
+  height: number;
+  data: Array<{
+    x: number | string;
+    y: number;
+  }>;
+  forceFit?: boolean;
+  style?: React.CSSProperties;
+}
+
+class MiniBar extends React.Component<IMiniBarProps, any> {
   render() {
     const { height, forceFit = true, color = '#1890FF', data = [] } = this.props;
 
@@ -21,7 +31,7 @@ class MiniBar extends React.Component {
 
     const tooltip = [
       'x*y',
-      (x, y) => ({
+      (x: string, y: string) => ({
         name: x,
         value: y,
       }),
@@ -38,14 +48,15 @@ class MiniBar extends React.Component {
             height={chartHeight}
             forceFit={forceFit}
             data={data}
-            padding={padding}
+            padding={padding as [number, number, number, number]}
           >
             <Tooltip showTitle={false} crosshairs={false} />
-            <Geom type="interval" position="x*y" color={color} tooltip={tooltip} />
+            <Geom type="interval" position="x*y" color={color} tooltip={tooltip as tooltipData} />
           </Chart>
         </div>
       </div>
     );
   }
 }
-export default MiniBar;
+
+export default autoHeight()(MiniBar);
