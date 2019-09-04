@@ -10,7 +10,7 @@
     title: string,    // 第一层Tab的title
     maxLevel: number, // 最大可选择的级别
     code: string, // 第一层编码
-    data: [
+    items: [
       // 第二层Tab数据
       {
         title: string, // 第二层Tab的title
@@ -66,3 +66,28 @@
 | onSearchItemClick | 搜索出的`Item`列表点击事件 | function(item)              | 无     |
 | onBlur            | 输入框失去焦点事件         | function(e)                 | 无     |
 | onChange          | 选择的`Item`发生变化的事件 | function(selectedItems)     | 无     |
+
+
+### Models
+
+`PanelData`定义如下：
+
+```json
+{
+  title: string,    // top tab的title
+  code: string,     // 
+  maxLevel: number,
+  items: Array<TabData>
+}
+```
+
+`TabData`定义如下：
+
+```json
+{
+  title: string,
+  level: number,
+  entry: boolean,
+  items: Array<Item>
+}
+```

@@ -16,7 +16,7 @@ export interface PanelData {
   title: string;
   code: string;
   maxLevel: number;
-  data: Array<TabData>
+  items: Array<TabData>
 }
 
 export interface TabData {
@@ -110,8 +110,8 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
           selectedItems: nextProps.value,
           inputVal: nextProps.value.map(item => item.name).join('-')
         });
+        this.setInitialValue(nextProps.dataSource, nextProps.value);
       }
-      this.setInitialValue(nextProps.dataSource, nextProps.value);
     }
   }
 
@@ -123,9 +123,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     }
     let panelData = dataSource[panelIdx];
     let lastItem = value[value.length - 1];
-    if (panelData && panelData.data.length > 0) {
-      for (let i = 0; i < panelData.data.length; i++) {
-        if (panelData.data[i].level == lastItem.level) {
+    if (panelData && panelData.items.length > 0) {
+      for (let i = 0; i < panelData.items.length; i++) {
+        if (panelData.items[i].level == lastItem.level) {
           this.setState({ firstTab: panelIdx, secondTab: i });
           break;
         }
@@ -156,7 +156,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { firstTab, selectedItems } = this.state;
 
     let currentKey = Number(tabKey);
-    let currentTabData = dataSource[firstTab].data[currentKey];
+    let currentTabData = dataSource[firstTab].items[currentKey];
 
     if (currentTabData && currentTabData.items.length > 0) {
       this.setState({ secondTab: currentKey });
@@ -178,33 +178,27 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { onChange, onItemClick, dataSource } = this.props;
     let { selectedItems, firstTab, secondTab } = this.state;
 
-    // if ((secondTab === 0 || secondTab === 1) && firstTab == 0) {
-    //   selectedItems = [];
-    //   selectedItems.push(item);
-    // } else {
-    //   if (firstTab == 0) {
-    //     selectedItems = selectedItems.slice(0, secondTab - 1);
-    //     selectedItems[secondTab - 1] = item;
-    //   } else {
-    //     selectedItems = selectedItems.slice(0, secondTab);
-    //     selectedItems[secondTab] = item;
-    //   }
-    // }
     if (selectedItems.length == 0) {
       selectedItems.push(item);
     } else {
-      if (selectedItems[selectedItems.length - 1].level < item.level) {
-        selectedItems.push(item);
-      } else if (selectedItems[0].level > item.level) {
+      // 换组选择了
+      if (selectedItems[0].groupCode !== item.groupCode) {
         selectedItems = [item];
       } else {
-        for(let i = 0; i < selectedItems.length; i++) {
-          let sItem = selectedItems[i];
-          if (sItem.level < item.level) {
-            continue;
-          } else if (sItem.level == item.level) {
-            selectedItems[i] = item;
-            selectedItems = selectedItems.slice(0, i + 1);
+        // 同一组选择
+        if (selectedItems[selectedItems.length - 1].level < item.level) { // 点击的item级别大于selected的最大的级别
+          selectedItems.push(item);
+        } else if (selectedItems[0].level > item.level) { // 点的级别小于最小的级别
+          selectedItems = [item];
+        } else {  // 点的级别在之间
+          for(let i = 0; i < selectedItems.length; i++) {
+            let sItem = selectedItems[i];
+            if (sItem.level < item.level) {
+              continue;
+            } else if (sItem.level == item.level) {
+              selectedItems[i] = item;
+              selectedItems = selectedItems.slice(0, i + 1);
+            }
           }
         }
       }
@@ -231,7 +225,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         }
       })
     } else { // 静态数据
-      let nextTabData = dataSource[firstTab].data[secondTab + 1];
+      let nextTabData = dataSource[firstTab].items[secondTab + 1];
       if (nextTabData && nextTabData.items.length > 0) {
         this.setState({ secondTab: secondTab + 1 });
       }
@@ -267,7 +261,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       onSearchItemClick(item).then(() => {
         this.setState({
           tabLoading: false,
-          secondTab: dataSource[firstTab].data.length - 1
+          secondTab: dataSource[firstTab].items.length - 1
         });
       });
     }
@@ -388,7 +382,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
                   onChange={this.handleSecondTabChange}
                 >
                   {
-                    item.data.map((tabItem: TabData, tabIdx: number) => (
+                    item.items.map((tabItem: TabData, tabIdx: number) => (
                       <TabPane
                         key={`${tabIdx}`}
                         className="andt-pro-tab-panel"

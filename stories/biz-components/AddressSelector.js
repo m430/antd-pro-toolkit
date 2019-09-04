@@ -40,20 +40,6 @@ export default class AddressSelector extends Component {
     let resGroup = await axios.get('/api/v1/areas/search/group');
     let resFirst = await this.searchArea({ isHot: true });
     let groups = resGroup.data || [];
-    // let groups = [
-    //   {
-    //     code: '0',
-    //     name: '内地'
-    //   },
-    //   {
-    //     code: '1',
-    //     name: '港澳台',
-    //   },
-    //   {
-    //     code: '2',
-    //     name: '国际'
-    //   }
-    // ];
     let hotCities = resFirst.data || [];
 
     this.setState({ groups, hotCities })
@@ -65,7 +51,7 @@ export default class AddressSelector extends Component {
         data: []
       }
       if (g.code === '0') {
-        dataItem.data = [
+        dataItem.items = [
           {
             title: '常用市',
             level: 3,
@@ -80,7 +66,7 @@ export default class AddressSelector extends Component {
           }
         ];
       } else if (g.code === '1') {
-        dataItem.data = [
+        dataItem.items = [
           {
             title: '港澳台',
             level: 2,
@@ -89,7 +75,7 @@ export default class AddressSelector extends Component {
           }
         ]
       } else if (g.code === '2') {
-        dataItem.data = [
+        dataItem.items = [
           {
             title: '海外',
             level: 1,
@@ -125,18 +111,18 @@ export default class AddressSelector extends Component {
 
   handleTopTabChange = async (topKey) => {
     const { dataSource } = this.state;
-    let tabData = dataSource[topKey].data;
+    let tabData = dataSource[topKey].items;
     if (topKey != 0 && tabData.length > 0 && tabData[0].items.length === 0) {
       let res = await this.searchArea({ groupCode: topKey, level: tabData[0].level });
       tabData[0].items = res.data;
-      dataSource[topKey].data = tabData;
+      dataSource[topKey].items = tabData;
       this.setState({ dataSource });
     }
   }
 
   handleTabChange = (key, topKey, item) => {
     const { dataSource } = this.state;
-    let tabData = dataSource[topKey].data;
+    let tabData = dataSource[topKey].items;
     let level = tabData[key].level;
     let query = { groupCode: topKey };
     if (key == 0) {
@@ -153,14 +139,14 @@ export default class AddressSelector extends Component {
       if (topKey == 0 && key > 0) {
         tabData = tabData.slice(0, key + 1);
       }
-      dataSource[topKey].data = tabData;
+      dataSource[topKey].items = tabData;
       this.setState({ dataSource });
     });
   }
 
   buildDataSource = (key, topKey, item, data) => {
     let { dataSource } = this.state;
-    let tabData = dataSource[topKey].data;
+    let tabData = dataSource[topKey].items;
     let currentData = tabData[key];
     if (key == 0 && topKey == 0) {
       tabData = tabData.slice(0, key + 2);
@@ -180,7 +166,7 @@ export default class AddressSelector extends Component {
     }
     tabData[key].entry = true;
 
-    dataSource[topKey].data = tabData;
+    dataSource[topKey].items = tabData;
     this.setState({ dataSource });
     return dataSource;
   }
@@ -188,10 +174,10 @@ export default class AddressSelector extends Component {
   handleItemClick = (key, topKey, item) => {
     let { dataSource } = this.state;
     if (item.level === dataSource[topKey].maxLevel) {
-      dataSource[topKey].data[key].title = item.name;
-      dataSource[topKey].data[key].entry = true;
+      dataSource[topKey].items[key].title = item.name;
+      dataSource[topKey].items[key].entry = true;
       this.setState({ dataSource });
-      return Promise.resolve(dataSource[topKey].data.length - 1);
+      return Promise.resolve(dataSource[topKey].items.length - 1);
     }
     return this.searchArea({ parentCode: item.code }).then(res => {
       let newDataSource = this.buildDataSource(key, topKey, item, res.data);
@@ -201,7 +187,7 @@ export default class AddressSelector extends Component {
   handleSearchItemClick = (item) => {
     let { dataSource } = this.state;
     let maxLevel = dataSource[item.groupCode].maxLevel;
-    let groupData = dataSource[item.groupCode].data;
+    let groupData = dataSource[item.groupCode].items;
     let lastData = groupData[groupData.length - 1];
     let betweenLastLevel = item.level - lastData.level;
     const fillGroupData = async () => {
@@ -247,7 +233,7 @@ export default class AddressSelector extends Component {
       groupData = groupData.slice(0, groupData.length - Math.abs(betweenLastLevel));
     }
     return fillGroupData().then(gData => {
-      dataSource[item.groupCode].data = groupData;
+      dataSource[item.groupCode].items = groupData;
       this.setState({ dataSource });
     })
   }
