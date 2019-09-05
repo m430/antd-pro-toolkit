@@ -103,11 +103,5 @@
     "react-dom": "^16.8.3",
     "react-draggable": "^3.3.0",
     "react-fittext": "^1.0.0"
-  },
-  "sideEffects": [
-    "dist/*",
-    "es/**/style/*",
-    "lib/**/style/*",
-    "*.less"
-  ]
+  }
 }

@@ -11,7 +11,7 @@ const { resolve } = require('../config/utils/helper');
 module.exports = ({ config }) => {
   config.module.rules.push(
     {
-      test: /\.tsx?$/,
+      test: /\.ts[x]?$/,
       use: [
         {
           loader: resolve('babel-loader'),
@@ -28,14 +28,14 @@ module.exports = ({ config }) => {
         { loader: 'style-loader' },
         {
           loader: 'css-loader',
-          // options: { importLoaders: 1}
         },
         {
           loader: 'less-loader', options: {
             javascriptEnabled: true
           }
         }
-      ]
+      ],
+      include: path.resolve(__dirname, '../')
     },
     {
       test: /\.stories\.js?$/,
@@ -43,7 +43,7 @@ module.exports = ({ config }) => {
       enforce: 'pre',
     }
   )
-  config.resolve.extensions.push('.ts', '.tsx', '.js');
+  config.resolve.extensions.push('.ts', '.tsx', '.js', '.less');
 
   return config;
 }
