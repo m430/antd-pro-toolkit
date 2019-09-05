@@ -1,6 +1,6 @@
 {
   "name": "antd-pro-toolkit",
-  "version": "0.2.9",
+  "version": "0.3.1",
   "description": "antd pro toolkit",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -14,10 +14,10 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "gh": "storybook-to-ghpages",
-    "dist": "gulp dist",
+    "analyze": "cross-env RUN_ENV=PRODUCTION ANALYZE=TRUE antd-tools run dist",
+    "dist": "cross-env RUN_ENV=PRODUCTION antd-tools run dist",
     "compile": "antd-tools run compile",
-    "clean": "gulp clean",
-    "pub": "gulp pub"
+    "pub": "antd-tools run pub"
   },
   "repository": {
     "type": "git",
@@ -61,6 +61,7 @@
     "babel-plugin-import": "^1.11.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "cross-env": "^5.2.1",
     "css-loader": "^2.1.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
@@ -85,6 +86,7 @@
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.2.3",
     "webpack-merge": "^4.2.1"
   },
@@ -98,12 +100,9 @@
     "lodash-decorators": "^6.0.1",
     "moment": "^2.24.0",
     "react": "^16.8.3",
-    "react-dnd": "^7.4.5",
-    "react-dnd-html5-backend": "^7.4.4",
     "react-dom": "^16.8.3",
     "react-draggable": "^3.3.0",
-    "react-fittext": "^1.0.0",
-    "umi": "^2.6.17"
+    "react-fittext": "^1.0.0"
   },
   "sideEffects": [
     "dist/*",

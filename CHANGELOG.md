@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [0.3.1] (2019-08-12)
+  - component: 新增`TabCascader`组件作为级联选择的基础组件
+  - refactor: 重构`AvatarList|CountDown|Headline|NumberInfo|ScrollSelect|SlideVerify|Trend|Charts`组件使用`typescript`，增强类型限制，语法提示。
+
 ## [0.2.8] (2019-08-12)
   - fix: `SlideVerify`组件在`IE`浏览器无法使用的问题
   - 

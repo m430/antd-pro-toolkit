@@ -1,6 +1,4 @@
 declare namespace bizcharts {
-  export function setTheme(themeObj: Object): void;
-
   export type tooltipData = [string, (...args: any[]) => {
     name?: string | undefined;
     value: string;
@@ -22,5 +20,4 @@ declare namespace bizcharts {
       zIndex?: number;
     }
   }
-
 }

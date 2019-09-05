@@ -1,5 +1,5 @@
 // 全局 G2 设置
-import bizcharts, { G2 } from 'bizcharts';
+import { G2 } from 'bizcharts';
 
 G2.track(false);
 
@@ -12,4 +12,4 @@ const config = {
   },
 };
 
-bizcharts.setTheme(config);
+G2.Global.setTheme(config as any);
