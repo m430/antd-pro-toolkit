@@ -194,7 +194,11 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
           for(let i = 0; i < selectedItems.length; i++) {
             let sItem = selectedItems[i];
             if (sItem.level < item.level) {
-              continue;
+              if (sItem.code == item.parentCode) {
+                continue;
+              } else {
+                selectedItems = [item];
+              }
             } else if (sItem.level == item.level) {
               selectedItems[i] = item;
               selectedItems = selectedItems.slice(0, i + 1);

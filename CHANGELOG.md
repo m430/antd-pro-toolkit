@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## [0.3.1] (2019-08-12)
+## [0.3.2] (2019-09-09)
+  - fix: 修复`TabCascader`组件选择时展示的数据不正确的bug。
+
+## [0.3.1] (2019-09-05)
   - component: 新增`TabCascader`组件作为级联选择的基础组件
   - refactor: 重构`AvatarList|CountDown|Headline|NumberInfo|ScrollSelect|SlideVerify|Trend|Charts`组件使用`typescript`，增强类型限制，语法提示。
 
