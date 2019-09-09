@@ -119,13 +119,16 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     let groupCode = value[0].groupCode;
     let panelIdx = dataSource.findIndex((data: PanelData) => data.code == groupCode);
     if (panelIdx == -1) {
-      throw new Error(`value cannot in the top datas.`);
+      throw new Error(`value does't in the top datas.`);
     }
     let panelData = dataSource[panelIdx];
+    let maxLevel = panelData.maxLevel;
     let lastItem = value[value.length - 1];
     if (panelData && panelData.items.length > 0) {
       for (let i = 0; i < panelData.items.length; i++) {
-        if (panelData.items[i].level == lastItem.level) {
+        let targetLevel = lastItem.level == maxLevel ? maxLevel : lastItem.level + 1;
+        if (groupCode == '0' && i == 0) continue;
+        if (panelData.items[i].level == targetLevel) {
           this.setState({ firstTab: panelIdx, secondTab: i });
           break;
         }
@@ -185,25 +188,19 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       if (selectedItems[0].groupCode !== item.groupCode) {
         selectedItems = [item];
       } else {
-        // 同一组选择
-        if (selectedItems[selectedItems.length - 1].level < item.level) { // 点击的item级别大于selected的最大的级别
-          selectedItems.push(item);
-        } else if (selectedItems[0].level > item.level) { // 点的级别小于最小的级别
-          selectedItems = [item];
-        } else {  // 点的级别在之间
-          for(let i = 0; i < selectedItems.length; i++) {
-            let sItem = selectedItems[i];
-            if (sItem.level < item.level) {
-              if (sItem.code == item.parentCode) {
-                continue;
-              } else {
-                selectedItems = [item];
-              }
-            } else if (sItem.level == item.level) {
-              selectedItems[i] = item;
-              selectedItems = selectedItems.slice(0, i + 1);
-            }
+        let parentIdx = 0;
+        let hasParent = selectedItems.some((sItem, sIdx) => {
+          if (sItem.code == item.parentCode) {
+            parentIdx = sIdx;
           }
+          return sItem.code == item.parentCode;
+        });
+
+        if (!hasParent) {
+          selectedItems = [item];
+        } else {
+          selectedItems = selectedItems.slice(0, parentIdx + 1);
+          selectedItems.push(item);
         }
       }
     }
