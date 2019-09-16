@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.3.5] (2019-09-16)
+  - fix: 修复`TabCascader`组件失去焦点时候下拉框一直显示的bug。
+
+## [0.3.4] (2019-09-09)
+  - fix: 修复`TabCascader`组件`value`为空时候报错的bug。
+
 ## [0.3.3] (2019-09-09)
   - fix: 修复`TabCascader`组件选择时展示的数据不正确的bug。
 

@@ -104,7 +104,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   componentWillReceiveProps(nextProps: CascaderProps) {
     const { value } = this.props;
     const { selectedItems } = this.state;
-    if (nextProps.value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    if (nextProps.value && nextProps.value.length > 0 && nextProps.dataSource && nextProps.dataSource.length > 0) {
       if (selectedItems.length == 0 || value != nextProps.value) {
         this.setState({
           selectedItems: nextProps.value,
@@ -137,11 +137,16 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   handleOutsideClick = (e: MouseEvent) => {
+    const { selectedItems } = this.state;
     const el = this.el as HTMLDivElement;
     e.stopPropagation();
     const target = e.target as Node;
     if (!el.contains(target)) {
-      this.setState({ visible: false });
+      this.setState({ 
+        visible: false, 
+        searchVisible: false, 
+        inputVal: selectedItems.map(item => item.name).join('-') 
+      });
     }
   }
 
