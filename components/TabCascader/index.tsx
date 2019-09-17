@@ -41,6 +41,10 @@ export interface CascaderProps {
   addonAfter?: string | React.ReactNode;
   hint?: string | React.ReactNode;
   style?: React.CSSProperties;
+  inputStyle?: React.CSSProperties;
+  contentStyle?: React.CSSProperties;
+  inputCls?: string;
+  contentCls?: string;
 }
 
 export interface Item {
@@ -359,18 +363,19 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   renderContent = () => {
-    const { dataSource, hint } = this.props;
+    const { dataSource, hint, contentCls, contentStyle } = this.props;
     const { visible, firstTab, secondTab, tabLoading } = this.state;
 
-    const contentCls = classNames(
+    const contentClassName = classNames(
       'antd-pro-cascader-content-wrap',
+      contentCls,
       {
         'antd-pro-hidden': !visible
       }
     );
 
     return (
-      <div className={contentCls}>
+      <div className={contentClassName} style={contentStyle}>
         <div className="hint">{hint}</div>
         <Tabs
           animated={false}
@@ -413,6 +418,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   };
 
   renderSearchSection() {
+    const { contentCls, contentStyle } = this.props;
     const { fetchList, isSearching, searchVisible } = this.state;
 
     const parentName = (item: any) => item[`areaName${item.level - 1}`];
@@ -425,11 +431,11 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         </li>
       ));
 
-    const cls = classNames('search-section', {
+    const cls = classNames('search-section', contentCls, {
       'antd-pro-hidden': !searchVisible
     });
     return (
-      <div className={cls}>
+      <div className={cls} style={contentStyle}>
         {
           isSearching ? <Spin className="loading-spin" /> : searchList
         }
@@ -439,9 +445,10 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   render() {
     const { inputVal } = this.state;
-    const { className, placeholder, addonAfter, style } = this.props;
+    const { className, placeholder, addonAfter, style, inputStyle, inputCls } = this.props;
 
     const cascaderCls = classNames('antd-pro-cascader', className);
+    const inputClassName = classNames('tab-search-bar', inputCls);
     return (
       <div
         ref={node => this.el = node}
@@ -450,12 +457,13 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       >
         <Input
           value={inputVal}
-          className="tab-search-bar"
+          className={inputClassName}
           addonAfter={addonAfter}
           onChange={this.hanldeInputChange}
           onClick={this.handleInputClick}
           onBlur={this.handleInputBlur}
           placeholder={placeholder}
+          style={inputStyle}
         ></Input>
         {this.renderContent()}
         {this.renderSearchSection()}

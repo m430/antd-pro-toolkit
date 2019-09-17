@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.3.6] (2019-09-17)
+  - feature: `TabCascader`组件添加`inputStyle/inputCls/contentStyle/contentCls`属性，支持外部自定义数样式。
+
 ## [0.3.5] (2019-09-16)
   - fix: 修复`TabCascader`组件失去焦点时候下拉框一直显示的bug。
 

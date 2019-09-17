@@ -45,15 +45,19 @@
 
 ### Properties
 
-| 参数        | 说明                             | 类型                 | 默认值 |
-| ----------- | -------------------------------- | -------------------- | ------ |
-| dataSource  | `Array<PanelData>`参考上面的结构 | `Array`              |        |
-| value       | 选择的`item`值                   | `Array<Item>`        |        |
-| style       | 样式对象                         | `CSSProperties`      |        |
-| className   | 样式类                           | `String/Object`    |        |
-| placeholder | 输入框提示语                     | `String/ReactNode` |        |
-| addonAfter  | 输入框后置标签                   | `String/ReactNode` |        |
-| hint        | `Tab`选择下拉框上方的提示语      | `String/ReactNode` |        |
+| 参数         | 说明                             | 类型               | 默认值 |
+| ------------ | -------------------------------- | ------------------ | ------ |
+| dataSource   | `Array<PanelData>`参考上面的结构 | `Array`            |        |
+| value        | 选择的`item`值                   | `Array<Item>`      |        |
+| style        | 样式对象                         | `CSSProperties`    |        |
+| className    | 样式类                           | `String/Object`    |        |
+| placeholder  | 输入框提示语                     | `String/ReactNode` |        |
+| addonAfter   | 输入框后置标签                   | `String/ReactNode` |        |
+| hint         | `Tab`选择下拉框上方的提示语      | `String/ReactNode` |        |
+| inputStyle   | `Input`框的样式                  | `CSSProperties`    |        |
+| inputCls     | `Input`框的`className`           | `string`           |        |
+| contentStyle | 下拉框的样式                     | `CSSProperties`    |        |
+| contentCls   | 下拉框框的`className`            | `string`           |        |
 
 
 ### Events
