@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [0.3.7] (2019-09-17)
+  - fix: `TabCascader`组件`value`为空时进行清空操作。
+
 ## [0.3.6] (2019-09-17)
   - feature: `TabCascader`组件添加`inputStyle/inputCls/contentStyle/contentCls`属性，支持外部自定义数样式。
 

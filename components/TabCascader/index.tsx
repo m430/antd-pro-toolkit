@@ -117,6 +117,14 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         this.setInitialValue(nextProps.dataSource, nextProps.value);
       }
     }
+    if (!nextProps.value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+      this.setState({
+        selectedItems: [],
+        inputVal: '',
+        firstTab: 0,
+        secondTab: 0
+      });
+    }
   }
 
   setInitialValue = (dataSource: Array<PanelData>, value: Array<Item>) => {
@@ -299,7 +307,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     if (onSearch && searchVisible) {
       this.setState({ isSearching: true, visible: false, searchVisible: true });
       onSearch(val).then(data => {
-        this.setState({ fetchList: data, isSearching: false });
+        this.setState({ fetchList: data || [], isSearching: false });
       });
     }
   }

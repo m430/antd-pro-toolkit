@@ -1,6 +1,6 @@
 {
   "name": "antd-pro-toolkit",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "antd pro toolkit",
   "main": "lib/index.js",
   "module": "es/index.js",
