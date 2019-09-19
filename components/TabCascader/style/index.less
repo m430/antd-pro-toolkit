@@ -57,10 +57,10 @@
     }
     .list-item {
       list-style: none;
-      height: 30px;
-      line-height: 30px;
+      height: 36px;
+      line-height: 36px;
       text-indent: 20px;
-      font-size: 12px;
+      font-size: 16px;
       cursor: pointer;
       &:hover {
         background: #F0F8FF;
@@ -83,7 +83,7 @@
     overflow: auto;
     border-radius: 0 0 4px 4px;
     .hint {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 400;
       color: #999;
       margin-bottom: 10px;
@@ -98,9 +98,10 @@
       text-align: center;
 
       .ant-tabs-tab {
-        color: #999;
+        color: #666;
         transition: none;
         padding: 7px 27px;
+        font-size: 16px;
 
         &.ant-tabs-tab-active {
           background: #3D96FF;
@@ -120,9 +121,9 @@
         text-align: left;
 
         .ant-tabs-tab {
-          color: #999;
+          color: #666;
           transition: none;
-          font-size: 12px;
+          font-size: 16px;
           padding: 4px 15px;
 
           .tab-header-dot {
@@ -181,6 +182,10 @@
           line-height: 18px;
           border-radius: 2px;
 
+          &:hover {
+            background: #ededed;
+          }
+
           &.tab-item-selected {
             background: #3D96FF;
             a { 
@@ -189,8 +194,8 @@
           }
 
           a {
-            color: #999;
-            font-size: 12px;
+            color: #666;
+            font-size: 16px;
           }
         }
       }

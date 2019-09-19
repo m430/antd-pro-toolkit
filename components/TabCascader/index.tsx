@@ -45,6 +45,8 @@ export interface CascaderProps {
   contentStyle?: React.CSSProperties;
   inputCls?: string;
   contentCls?: string;
+  disabled?: boolean;
+  colSpan?: number;
 }
 
 export interface Item {
@@ -53,14 +55,7 @@ export interface Item {
   level: number;
   groupCode: string;
   parentCode?: string;
-  areaCode1?: string;
-  areaCode2?: string;
-  areaCode3?: string;
-  areaCode4?: string;
-  areaName1?: string;
-  areaName2?: string;
-  areaName3?: string;
-  areaName4?: string;
+  parents: Array<Item>; 
   [key: string]: any;
 }
 
@@ -79,6 +74,10 @@ export interface CascaderState {
 export default class TabCascader extends Component<CascaderProps, CascaderState> {
   el: HTMLDivElement | null;
   debounceSearch: Function;
+
+  static defaultProps = {
+    colSpan: 6
+  }
 
   constructor(props: CascaderProps) {
     super(props);
@@ -154,10 +153,10 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     e.stopPropagation();
     const target = e.target as Node;
     if (!el.contains(target)) {
-      this.setState({ 
-        visible: false, 
-        searchVisible: false, 
-        inputVal: selectedItems.map(item => item.name).join('-') 
+      this.setState({
+        visible: false,
+        searchVisible: false,
+        inputVal: selectedItems.map(item => item.name).join('-')
       });
     }
   }
@@ -256,16 +255,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
     firstTab = Number(item.groupCode);
     selectedItems = [];
-    let startIndex = firstTab == 2 ? 1 : 2;
-    for (let i = startIndex; i <= item.level; i++) {
-      selectedItems.push({
-        code: item[`areaCode${i}`],
-        name: item[`areaName${i}`],
-        level: i,
-        groupCode: item.groupCode,
-        parentCode: item[`areaCode${i - 1}`]
-      });
-    }
+    let itemList = [...item.parents, item];
+    let startLevel = firstTab == 0 ? 2 : 1;
+    selectedItems = itemList.filter(nItem => nItem.level >= startLevel);
     const displayVal = selectedItems.map((item: Item) => item.name).join('-');
     this.setState({
       firstTab,
@@ -336,6 +328,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   renderItems = (tabItem: TabData) => {
     const items = tabItem.items;
+    const { colSpan } = this.props;
     const { selectedItems } = this.state;
 
     const hasSelectedItem = (item: Item) => {
@@ -343,7 +336,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     }
 
     const itemList = items.map((item: Item) => (
-      <Col xs={12} md={8} lg={6} key={item.code}>
+      <Col xs={12} md={colSpan} key={item.code}>
         <li
           className={classNames({
             'tab-item-selected': hasSelectedItem(item)
@@ -429,7 +422,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { contentCls, contentStyle } = this.props;
     const { fetchList, isSearching, searchVisible } = this.state;
 
-    const parentName = (item: any) => item[`areaName${item.level - 1}`];
+    const parentName = (item: Item) => item.parents[item.parents.length - 1].name;
 
     const searchList = fetchList.length == 0
       ? <Empty className="empty" />
@@ -453,7 +446,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   render() {
     const { inputVal } = this.state;
-    const { className, placeholder, addonAfter, style, inputStyle, inputCls } = this.props;
+    const { className, placeholder, addonAfter, style, inputStyle, inputCls, disabled } = this.props;
 
     const cascaderCls = classNames('antd-pro-cascader', className);
     const inputClassName = classNames('tab-search-bar', inputCls);
@@ -472,6 +465,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
           onBlur={this.handleInputBlur}
           placeholder={placeholder}
           style={inputStyle}
+          disabled={disabled}
         ></Input>
         {this.renderContent()}
         {this.renderSearchSection()}

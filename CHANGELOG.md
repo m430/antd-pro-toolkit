@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.4.0] (2019-09-19)
+  - fix: `TabCascader`组件选择时，`level`为`2`时候选择展示缺失的bug
+  - feature: `TabCascader`组件新增`colSpan`属性用于设置`Item`列占比
+  - improve: `TabCascader`组件样式调整，字体整体变大
+  - update: `TabCascader`修改因节点数据结构变更引起的变化。
+
 ## [0.3.7] (2019-09-17)
   - fix: `TabCascader`组件`value`为空时进行清空操作。
 

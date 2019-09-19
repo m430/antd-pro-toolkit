@@ -58,6 +58,7 @@
 | inputCls     | `Input`框的`className`           | `string`           |        |
 | contentStyle | 下拉框的样式                     | `CSSProperties`    |        |
 | contentCls   | 下拉框框的`className`            | `string`           |        |
+| colSpan      | `TabPanel`中的`Item`占比的`span` | `number`           | 6      |
 
 
 ### Events
