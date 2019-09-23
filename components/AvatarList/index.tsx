@@ -6,7 +6,7 @@ import './style';
 export interface IAvatarListProps {
   size?: 'large' | 'small' | 'default' | number;
   style?: React.CSSProperties;
-  children: React.ReactElement<AvatarItem> | Array<React.ReactElement<AvatarItem>>;
+  children: React.ReactElement<IAvatarItemProps> | Array<React.ReactElement<IAvatarItemProps>>;
 }
 
 export default class AvatarList extends React.Component<IAvatarListProps, any> {
