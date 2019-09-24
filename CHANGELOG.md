@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [0.4.3] (2019-09-24)
+  - migrate: 迁移`Charts`相关组件到`antd-pro-charts`组件库中
+  - remove: 移除相关不必要的代码。
+
+## [0.4.1] (2019-09-23)
+  - feature: 新增`Ellipsis`组件。
+
 ## [0.4.0] (2019-09-19)
   - fix: `TabCascader`组件选择时，`level`为`2`时候选择展示缺失的bug
   - feature: `TabCascader`组件新增`colSpan`属性用于设置`Item`列占比
