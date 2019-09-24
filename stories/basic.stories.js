@@ -1,5 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import { Row, Col } from 'antd';
 import AvatarList from '../components/AvatarList';
 import CountDown from '../components/CountDown';
 import Ellipsis from '../components/Ellipsis';
@@ -50,9 +51,23 @@ class Demo4 extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Ellipsis tooltip length={10} fullWidthRecognition >
-          "123456789012345678901234567890"
+        <Row>
+          <Col span={24}>
+            <Ellipsis tooltip length={10} fullWidthRecognition >
+              "123456789012345678901234567890"
+            </Ellipsis>
+          </Col>
+          <Col span={24}>
+            <Ellipsis tooltip length={10} fullWidthRecognition >
+              "这是一个很长很长很长很长的句子"
         </Ellipsis>
+          </Col>
+          <Col span={24}>
+            <Ellipsis tooltip length={10} >
+              "这是一个很长很长很长很长的句子"
+        </Ellipsis>
+          </Col>
+        </Row>
       </DemoContainer>
     )
   }
