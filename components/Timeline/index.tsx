@@ -36,7 +36,7 @@ export default class CusTimeline extends Component<CusTimelineProps, any> {
           {item.year && <div className="week">{item.year}&nbsp;{item.week}</div>}
           <span className="messageTime">{item.messageTime}</span>
           <span className="statusName">{item.curStatus}</span>
-          <span className="trackMessage">{item.message}</span>
+          <span className="message">{item.message}</span>
         </Timeline.Item>
       )
     })
