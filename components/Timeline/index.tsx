@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Timeline, Icon } from 'antd';
 import './style';
 
@@ -21,8 +21,7 @@ export default class CusTimeline extends Component<CusTimelineProps, any> {
     super(props);
   }
 
-  render() {
-    const { steps } = this.props;
+  renderSteps(steps: TimelineStep[]) {
     const timelineDot = (index: number) => {
       if (index === 0) {
         return <span className="dotfirst"><Icon type="check" /></span>
@@ -31,30 +30,25 @@ export default class CusTimeline extends Component<CusTimelineProps, any> {
       }
     }
 
+    return steps.map((item: TimelineStep, index: number) => {
+      return (
+        <Timeline.Item key={index} dot={timelineDot(index)}>
+          {item.year && <div className="week">{item.year}&nbsp;{item.week}</div>}
+          <span className="messageTime">{item.messageTime}</span>
+          <span className="statusName">{item.curStatus}</span>
+          <span className="trackMessage">{item.message}</span>
+        </Timeline.Item>
+      )
+    })
+  }
+
+  render() {
+    const { steps } = this.props;
+
     return (
-      <div className="timelines">
-        <div className="timelinesItem">
-          <Timeline>
-            {
-              steps.map((item: TimelineStep, index: number) => {
-                return (
-                  <Fragment key={index}>
-                    <Timeline.Item dot={timelineDot(index)}>
-                      {item.year && <div className="week">{item.year}&nbsp;{item.week}</div>}
-                      <span className="messageTime">{item.messageTime}</span>
-                      <span className="statusName">{item.curStatus}</span>
-                      <span className="trackMessage">{item.message}</span>
-                    </Timeline.Item>
-                  </Fragment>
-                )
-              })
-            }
-          </Timeline>
-        </div>
-      </div>
+      <Timeline className="timelines">
+        {this.renderSteps(steps)}
+      </Timeline>
     );
-
-
-
   }
 }
