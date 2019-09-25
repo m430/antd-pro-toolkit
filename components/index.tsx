@@ -16,3 +16,5 @@ export { default as CountDown } from './CountDown';
 export { default as Ellipsis } from './Ellipsis';
 
 export { default as TabCascader, PanelData, TabData, Item, Result } from './TabCascader';
+
+export { default as Uploader } from './Uploader';

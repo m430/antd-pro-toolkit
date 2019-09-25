@@ -46,7 +46,7 @@ export interface UploadState {
   valueType: string
 }
 
-export default class UploadComponent extends Component<UploadProps, UploadState>{
+export default class Uploader extends Component<UploadProps, UploadState>{
   constructor(props: UploadProps) {
     super(props);
     this.state = {
@@ -192,11 +192,11 @@ export default class UploadComponent extends Component<UploadProps, UploadState>
   render() {
     const { uploadInfo, isView = false, type = 'card', style, max = 9999, placeholder = '' } = this.props
     const { previewVisible, previewImage, fileUploading, fileList, width, previewType } = this.state
+    let renderImageList = type === 'card' && fileList.map(item => (<Image isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
+    let renderFileList = type === 'list' && fileList.map(item => (<File width={width} isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
     return (
       <div style={{ ...style, width }} ref='file'>
-        {
-          type === 'card' && fileList.map(item => (<Image isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
-        }
+        {renderImageList}
         <Upload
           {...uploadInfo}
           showUploadList={false}
@@ -211,14 +211,12 @@ export default class UploadComponent extends Component<UploadProps, UploadState>
               </div>
               :
               <Button>
-                <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder?placeholder:'上传'}
+                <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder ? placeholder : '上传'}
               </Button>
           )
           }
         </Upload>
-        {
-          type === 'list' && fileList.map(item => (<File width={width} isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
-        }
+        {renderFileList}
         <Modal maskClosable={false}
           keyboard={false}
           visible={previewVisible}

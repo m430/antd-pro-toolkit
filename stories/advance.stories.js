@@ -1,11 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import TabCascader from '../components/TabCascader'
-import Upload from '../components/Upload'
+import Uploader from '../components/Uploader'
 import DemoContainer from '../tools/DemoContainer';
 import { Icon } from 'antd';
 import doc from '../components/TabCascader/README.md';
-import doc1 from '../components/Upload/README.md';
+import doc1 from '../components/Uploader/README.md';
 import _ from 'lodash';
 import axios from '../http';
 
@@ -959,7 +959,7 @@ class Demo2 extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Upload type='list' uploadInfo={{ listType: "text", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+        <Uploader type='list' uploadInfo={{ listType: "text", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }
@@ -968,7 +968,7 @@ storiesOf('Advance', module)
   .add('TabCascader',
     () => <Demo1 />,
     { notes: doc }
-  ).add('Upload',
+  ).add('Uploader',
     () => <Demo2 />,
     { notes: doc1 }
   )
