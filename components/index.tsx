@@ -15,4 +15,6 @@ export { default as CountDown } from './CountDown';
 
 export { default as Ellipsis } from './Ellipsis';
 
+export { default as Timeline } from './Timeline';
+
 export { default as TabCascader, PanelData, TabData, Item, Result } from './TabCascader';

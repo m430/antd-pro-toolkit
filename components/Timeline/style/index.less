@@ -1,0 +1,126 @@
+@import '~antd/lib/style/themes/default.less';
+
+.description {
+  font-size: 12px;
+
+  :global {
+    .hol-components-description-list-index-term {
+      padding-right: 30px;
+      color: rgba(0, 0, 0, 0.6);
+      padding-bottom: 12px;
+
+      &:after {
+        display: none;
+      }
+    }
+
+    .hol-components-description-list-index-detail {
+      color: rgba(0, 0, 0, 0.8);
+      padding-bottom: 12px;
+    }
+  }
+}
+
+:global {
+  .ant-popover-inner,
+  .ant-popover-inner-content {
+    max-height: 400px;
+    overflow: auto;
+  }
+}
+
+.timelines {
+  // position: relative;
+  position: initial;
+
+  .timelinesItem {
+    position: relative;
+    padding: 0px 10px 10px 200px;
+
+    :global {
+      .ant-timeline {
+        .ant-timeline-item {
+          &:last-child {
+            .ant-timeline-item-tail {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .ant-timeline-item-head {
+        border: none;
+        background-color: transparent;
+      }
+
+      .ant-timeline-item {
+        height: 70px;
+        padding: 0;
+        padding-bottom: 10px;
+      }
+    }
+  }
+
+  .week {
+    position: absolute;
+    top: 0;
+    left: -210px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 1);
+
+  }
+
+  .messageTime {
+    margin-left: -85px;
+    width: 50px;
+    font-size: 10px;
+    font-weight: 400;
+    color: #00000087;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 3px;
+    font-family: 'Microsoft YaHei'
+  }
+
+  .statusName {
+    font-size: 14px;
+    height: 60px;
+    width: 90px;
+    line-height: 20px;
+    overflow: hidden;
+    padding-left: 47px;
+    display: inline-block;
+    color: rgba(0, 0, 0, 1);
+  }
+
+  .message {
+    margin-left: 24px;
+    font-size: 14px;
+    height: 60px;
+    line-height: 20px;
+    overflow: hidden;
+    max-width: 290px;
+    display: inline-block;
+    color: rgba(0, 0, 0, 1);
+  }
+
+  .dotfirst {
+    width: 20px;
+    height: 20px;
+    display: block;
+    background-color: #3D96FF;
+    border-radius: 20px;
+    line-height: 20px;
+    margin-top: -3px;
+    color: #fff;
+
+  }
+
+  .dots {
+    width: 11px;
+    display: block;
+    height: 11px;
+    border-radius: 11px;
+    background: rgba(214, 214, 214, 1);
+  }
+}
