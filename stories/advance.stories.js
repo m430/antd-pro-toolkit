@@ -1,10 +1,13 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import TabCascader from '../components/TabCascader'
+import Upload from '../components/Upload'
 import DemoContainer from '../tools/DemoContainer';
 import { Icon } from 'antd';
 import doc from '../components/TabCascader/README.md';
+import doc1 from '../components/Upload/README.md';
 import _ from 'lodash';
+import axios from '../http';
 
 class Demo1 extends React.Component {
   constructor(props) {
@@ -929,8 +932,34 @@ class Demo1 extends React.Component {
           placeholder="请选择地址..."
           hint="温馨提示：支持中文、拼音或首字母，如：西安 或 XA"
           addonAfter={<Icon type="ellipsis" />}
-          dataSource={dataSource} 
+          dataSource={dataSource}
         />
+      </DemoContainer>
+    )
+  }
+}
+
+class Demo2 extends React.Component {
+
+  componentDidMount() {
+    this.handleLogin();
+  }
+
+  handleLogin = async () => {
+    await axios({
+      method: 'POST',
+      url: '/api/v1/auth/login',
+      data: {
+        username: 'zhengwei',
+        password: '9981E27A307CDFC15EAF316AA3B691F52F078C6AFB785B9A'
+      }
+    })
+  }
+
+  render() {
+    return (
+      <DemoContainer>
+        <Upload type='list' uploadInfo={{ listType: "text", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }
@@ -939,4 +968,7 @@ storiesOf('Advance', module)
   .add('TabCascader',
     () => <Demo1 />,
     { notes: doc }
+  ).add('Upload',
+    () => <Demo2 />,
+    { notes: doc1 }
   )
