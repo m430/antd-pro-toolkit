@@ -1,43 +1,24 @@
 ## 何时使用
 
-需要展示运单操作历史时，可以使用`OrderStatus`：
+需要展示操作变更历史时，可以使用`Timeline`组件：
 
 ### Properties
 
 | 参数        | 说明                             | 类型               | 默认值 |
 | ----------- | -------------------------------- | ------------------ | ------ |
-| trackInfo  | `OrderTrackingStatus`参考上面的结构 | `Object`            |        |
+| steps  | `Array<TimelineStep>`参考下面的结构 | `Array`            |        |
 
 ### Models
-
-`OrderTrackingStatus`定义如下：
-
-```json
-{
-  string: TrackingInfo[];
-}
-```
-
-`TrackingInfo`定义如下：
+`TimelineStep`定义如下：
 
 ```json
 {
-  date: string;
-  whichDay: string;
-  trackingList: TrackingStep[];
-}
-```
-
-`TrackingStep`定义如下：
-
-```json
-{
-  id: number;            // 此Tab的code
-  time: string;
-  statusName: string;
-  trackMessage: string;
-  year?: string;
-  week?: string;
+  id: number;
+  messageTime: string;       // 时分秒
+  message: string;           // 每一步骤对应的展示消息内容
+  curStatus?: string;        // 当前状态，理论上每一步骤一个状态变更
+  year?: string;             // 状态变更时间
+  week?: string;             // 星期
 }
 ```
 

@@ -1105,16 +1105,129 @@ class TimelineDemo2 extends React.Component {
   }
 }
 
+class TimelineDemo3 extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      waybills: [],
+      trackInfo: {},
+      orderStatus: {},
+      token: ""
+    }
+  }
+
+  componentDidMount() {
+    this.initOrderInfo();
+  }
+
+  handleSearchOrders = (params) => {
+    const { token } = this.state;
+    return axios.get('/api/v1/order/list', {
+      ...params,
+      headers: { "x-token": token }
+    })
+  }
+
+  handleSearchOrderTrackingStatus = (waybillNo) => {
+    const { token } = this.state;
+    return axios.get(`/api/v1/order/track/${waybillNo}`, {
+      headers: { "x-token": token }
+    })
+  }
+
+  handleSearchOrderStatus = (waybillNo) => {
+    const { token } = this.state;
+    return axios.get(`/api/v1/order/${waybillNo}`, {
+      headers: { "x-token": token }
+    })
+  }
+
+  initOrderInfo = async () => {
+    let resLogin = await handleLogin();
+    if (resLogin.errorCode === 0) {
+      const token = resLogin.data.token;
+      this.setState({ token });
+    }
+
+    let resWaybills = await this.handleSearchOrders({ pageIndex: 1, pageSize: 8 });
+    if ((resWaybills.errorCode === 0) && (resWaybills.data.length > 0)) {
+      const waybills = resWaybills.data;
+      this.setState({ waybills });
+
+      const waybillNo = waybills[1].waybillNo;
+
+      let resOrderTrackStatus = await this.handleSearchOrderTrackingStatus(waybillNo);
+      if (resOrderTrackStatus.errorCode === 0) {
+        const trackInfo = resOrderTrackStatus.data;
+        this.setState({ trackInfo });
+      }
+
+      let resOrderStatus = await this.handleSearchOrderStatus(waybillNo);
+      if (resOrderStatus.errorCode === 0) {
+        const orderStatus = resOrderStatus.data;
+        this.setState({ orderStatus });
+      }
+    }
+  }
+
+  renderTimeline(key, steps, trackKeys, index) {
+    return (
+      <div style={{ width: 600, paddingTop: 24 }} key={index}>
+        {trackKeys.length > 1 && (
+          <Divider orientation="left" style={{ width: 400 }}>子单号：{key}</Divider>
+        )}
+        <Timeline
+          steps={steps}
+        />
+      </div>
+    );
+  }
+
+  render() {
+    const { trackInfo, orderStatus } = this.state;
+    const curStatus = orderStatus.orderStatusName;
+
+    let trackKeys = Object.keys(trackInfo);
+    let subWaybillsList = Object.entries(trackInfo);
+
+    const content = subWaybillsList.length > 0 && subWaybillsList.map(([key, val], index1) => {
+      let steps = val.map((item) => {
+        return item.trackingList.map((sub, index) => {
+          if (index === 0) {
+            return Object.assign({}, sub, { year: item.date, week: item.week, curStatus: curStatus })
+          }
+          return sub
+        })
+      }).reduce((total, current) => {
+        return [...total, ...current]
+      }, []);
+
+      return this.renderTimeline(key, steps, trackKeys, index1);
+    });
+
+    return (
+      <DemoContainer>
+        {content}
+      </DemoContainer>
+    );
+  }
+}
+
 storiesOf('Advance', module)
   .add('TabCascader',
     () => <Demo1 />,
     { notes: doc }
   )
-  .add('Timeline',
+  .add('Timeline-mock-1',
     () => <TimelineDemo1 />,
     { notes: timelineDoc }
   )
-  .add('Timeline-2',
+  .add('Timeline-mock-2',
     () => <TimelineDemo2 />,
+    { notes: timelineDoc }
+  )
+  .add('Timeline-backend-1',
+    () => <TimelineDemo3 />,
     { notes: timelineDoc }
   )
