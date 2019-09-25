@@ -19,7 +19,7 @@ export interface FileInterface {
 }
 
 export interface UploadInfo {
-  listType?: 'text' | 'picture' | 'picture-card',
+  listType?: 'picture-card',
   action: string,
   accept: string
 }
@@ -211,7 +211,7 @@ export default class UploadComponent extends Component<UploadProps, UploadState>
               </div>
               :
               <Button>
-                <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder}
+                <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder?placeholder:'上传'}
               </Button>
           )
           }

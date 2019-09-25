@@ -959,7 +959,7 @@ class Demo2 extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Upload uploadInfo={{ listType: "picture-card", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+        <Upload type='list' uploadInfo={{ listType: "text", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }
