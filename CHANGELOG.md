@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## [0.4.3] (2019-09-24)
+  - feature: 新增`TabCascader`的`inputProps`属性，支持`antd`所有的`Input`组件属性`InputProps`， 除了`'onBlur' | 'onClick' | 'onChange'`这三个需要配置在组件上;
+  - feature: 新增`TabCascader`的`pagination`属性，支持`Boolean | Pagination`, 用于异步搜索时候进行分页的配置项, 当设置此属性时搜索下拉滚动会进行异步加载;
+  - remove: 移除`TabCascader`的`inputCls, inputStyle, addonAfter, placeholder`迁移至`inputProps`属性中;
+
+
+## [0.4.3] (2019-09-24)
+  - migrate: 迁移`Charts`相关组件到`antd-pro-charts`组件库中
+  - remove: 移除相关不必要的代码。
+
+## [0.4.1] (2019-09-23)
+  - feature: 新增`Ellipsis`组件。
+
 ## [0.4.0] (2019-09-19)
   - fix: `TabCascader`组件选择时，`level`为`2`时候选择展示缺失的bug
   - feature: `TabCascader`组件新增`colSpan`属性用于设置`Item`列占比

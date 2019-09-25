@@ -1,0 +1,50 @@
+@import '~antd/lib/style/themes/default.less';
+
+.uploadFile {
+  :global {
+    .ant-upload-list-item-info {
+      padding: 0 50px 0 4px;
+    }
+
+    .ant-upload-list-item:hover .anticon-eye,
+    .ant-upload-list-item:hover .anticon-download {
+      opacity: 1;
+    }
+
+    .ant-upload-list-item .anticon-eye {
+      display: inline-block;
+      font-size: 12px;
+      font-size: 10px \9;
+      transform: scale(0.83333333) rotate(0deg);
+      position: absolute;
+      top: 6px;
+      right: 20px;
+      color: rgba(0, 0, 0, 0.45);
+      line-height: 0;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .ant-upload-list-item .anticon-download {
+      display: inline-block;
+      font-size: 12px;
+      font-size: 10px \9;
+      transform: scale(0.83333333) rotate(0deg);
+      position: absolute;
+      top: 6px;
+      right: 36px;
+      color: rgba(0, 0, 0, 0.45);
+      line-height: 0;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+  }
+
+  .name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}

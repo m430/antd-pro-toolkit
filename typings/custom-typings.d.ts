@@ -1,5 +1,8 @@
+declare module "AvatarList";
 
-declare module "Charts";
+declare module "CountDown";
+
+declare module "Ellipsis";
 
 declare module "Headline";
 
@@ -7,15 +10,8 @@ declare module "NumberInfo";
 
 declare module "ScrollSelect";
 
-declare module "Trend";
-
 declare module "SlideVerify";
 
-declare module "CountDown";
+declare module "TabCascader";
 
-// override
-declare module "@antv/data-set";
-
-declare module "react-fittext";
-
-declare module "bizcharts-plugin-slider";
+declare module "Trend";

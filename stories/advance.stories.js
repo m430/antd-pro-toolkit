@@ -1,10 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import TabCascader from '../components/TabCascader';
+import Upload from '../components/Upload'
 import Timeline from '../components/Timeline';
 import DemoContainer from '../tools/DemoContainer';
 import { Icon } from 'antd';
 import doc from '../components/TabCascader/README.md';
+import doc1 from '../components/Upload/README.md';
 import timelineDoc from '../components/Timeline/README.md';
 import _ from 'lodash';
 import { handleLogin } from '../utils/utils';
@@ -1214,6 +1216,31 @@ class TimelineDemo3 extends React.Component {
   }
 }
 
+class Demo2 extends React.Component {
+
+  componentDidMount() {
+    this.handleLogin();
+  }
+
+  handleLogin = async () => {
+    await axios({
+      method: 'POST',
+      url: '/api/v1/auth/login',
+      data: {
+        username: 'zhengwei',
+        password: '9981E27A307CDFC15EAF316AA3B691F52F078C6AFB785B9A'
+      }
+    })
+  }
+
+  render() {
+    return (
+      <DemoContainer>
+        <Upload type='list' uploadInfo={{ listType: "text", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+      </DemoContainer>
+    )
+  }
+}
 storiesOf('Advance', module)
   .add('TabCascader',
     () => <Demo1 />,
@@ -1230,4 +1257,7 @@ storiesOf('Advance', module)
   .add('Timeline-backend-1',
     () => <TimelineDemo3 />,
     { notes: timelineDoc }
+  ).add('Upload',
+    () => <Demo2 />,
+    { notes: doc1 }
   )

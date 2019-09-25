@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, UIEventHandler } from 'react';
+import _ from 'lodash';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import './style';
 import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
+import { Omit } from '../_util/type';
+import { InputProps } from 'antd/lib/input';
 
 const TabPane = Tabs.TabPane
 
@@ -26,27 +29,34 @@ export interface TabData {
   items: Array<Item>;
 }
 
+export interface Pagination {
+  currentPage: number;
+  currentResult: number;
+  pageSize: number;
+  totalPage: number;
+  totalResult: number;
+}
+
 export interface CascaderProps {
   onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
   onSearchItemClick?: (item: Item, ) => Promise<any>;
   onTopTabChange?: (topKey: number) => void;
   onTabChange?: (key: number, topKey: number, item: Item | undefined) => Promise<Result>;
-  onSearch?: (val: string) => Promise<any>;
+  onSearch?: (params: any) => Promise<any>;
   onBlur?: React.FocusEventHandler<Element>;
   onChange?: Function;
+  onClear?: Function;
+  onPopupScroll?: UIEventHandler<HTMLDivElement>;
   value?: Array<Item>;
   dataSource: Array<PanelData>;
   className?: string;
-  placeholder?: string;
-  addonAfter?: string | React.ReactNode;
   hint?: string | React.ReactNode;
   style?: React.CSSProperties;
-  inputStyle?: React.CSSProperties;
   contentStyle?: React.CSSProperties;
-  inputCls?: string;
   contentCls?: string;
-  disabled?: boolean;
   colSpan?: number;
+  inputProps?: Omit<InputProps, 'onBlur' | 'onClick' | 'onChange'>;
+  pagination?: Boolean | Pagination;
 }
 
 export interface Item {
@@ -55,7 +65,7 @@ export interface Item {
   level: number;
   groupCode: string;
   parentCode?: string;
-  parents: Array<Item>; 
+  parents: Array<Item>;
   [key: string]: any;
 }
 
@@ -69,6 +79,7 @@ export interface CascaderState {
   tabLoading: Boolean;
   isSearching: Boolean;
   fetchList: Array<any>;
+  pagination?: Pagination;
 }
 
 export default class TabCascader extends Component<CascaderProps, CascaderState> {
@@ -98,6 +109,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   componentDidMount() {
     document.addEventListener('click', this.handleOutsideClick, false);
+    this.initPagination();
   }
 
   componentWillUnmount() {
@@ -123,6 +135,26 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         firstTab: 0,
         secondTab: 0
       });
+    }
+  }
+
+  initPagination = () => {
+    const { pagination } = this.props;
+    if (pagination) {
+      let initPagination = {
+        currentPage: 1,
+        currentResult: 0,
+        pageSize: 10,
+        totalPage: 0,
+        totalResult: 0
+      };
+      if (typeof pagination == 'boolean') {
+        this.setState({
+          pagination: initPagination
+        })
+      } else if (typeof pagination == 'object') {
+        this.setState({ pagination: Object.assign(initPagination, pagination) });
+      }
     }
   }
 
@@ -152,6 +184,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const el = this.el as HTMLDivElement;
     e.stopPropagation();
     const target = e.target as Node;
+    if (!document.contains(target)) {
+      return;
+    }
     if (!el.contains(target)) {
       this.setState({
         visible: false,
@@ -278,13 +313,26 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   hanldeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { onClear } = this.props;
+
     let inputVal = e.target.value;
     this.setState({ inputVal });
     if (!inputVal) {
       this.setState({
         visible: false,
         searchVisible: false
-      })
+      });
+      // click the clear icon
+      if (e.type == 'click') {
+        this.setState({
+          selectedItems: [],
+          firstTab: 0,
+          secondTab: 0
+        });
+        if (onClear) {
+          onClear(e);
+        }
+      }
       return;
     }
     this.setState({ isSearching: true, visible: false, searchVisible: true });
@@ -294,12 +342,20 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   handleSearch = (val: string) => {
     const { onSearch } = this.props;
-    const { searchVisible } = this.state;
+    const { searchVisible, pagination } = this.state;
 
     if (onSearch && searchVisible) {
       this.setState({ isSearching: true, visible: false, searchVisible: true });
-      onSearch(val).then(data => {
-        this.setState({ fetchList: data || [], isSearching: false });
+      let query: any = { content: val };
+      if (pagination) {
+        query.pageSize = pagination.pageSize;
+      }
+      onSearch(query).then(res => {
+        this.setState({ 
+          fetchList: res.data || [], 
+          pagination: res.pagination,
+          isSearching: false 
+        });
       });
     }
   }
@@ -323,6 +379,33 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     }
     if (onBlur) {
       onBlur(e);
+    }
+  }
+
+  handleSearchScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { onPopupScroll, onSearch } = this.props;
+    const { fetchList, pagination, inputVal } = this.state;
+    const target = e.target as HTMLDivElement;
+    const { scrollTop, scrollHeight, clientHeight } = target;
+    if (!pagination) return;
+    if (onPopupScroll) {
+      onPopupScroll(e);
+    }
+    if (scrollTop + clientHeight == scrollHeight && fetchList.length < pagination.totalResult) {
+      if (onSearch) {
+        onSearch({
+          content: inputVal,
+          pageIndex: pagination.currentPage + 1,
+          pageSize: pagination.pageSize,
+        }).then(res => {
+          if (res.errorCode === 0) {
+            this.setState({
+              fetchList: [...fetchList].concat(res.data),
+              pagination: res.pagination
+            });
+          }
+        });
+      }
     }
   }
 
@@ -436,7 +519,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       'antd-pro-hidden': !searchVisible
     });
     return (
-      <div className={cls} style={contentStyle}>
+      <div className={cls} style={contentStyle} onScroll={this.handleSearchScroll}>
         {
           isSearching ? <Spin className="loading-spin" /> : searchList
         }
@@ -446,10 +529,17 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   render() {
     const { inputVal } = this.state;
-    const { className, placeholder, addonAfter, style, inputStyle, inputCls, disabled } = this.props;
+    const { className, style, inputProps } = this.props;
 
     const cascaderCls = classNames('antd-pro-cascader', className);
-    const inputClassName = classNames('tab-search-bar', inputCls);
+    const inputClassName = classNames(
+      'tab-search-bar', 
+      inputProps ? inputProps.className : '',
+      {
+        'tab-search-suffix': inputProps && inputProps.allowClear && inputProps.addonAfter
+      }
+    );
+
     return (
       <div
         ref={node => this.el = node}
@@ -457,15 +547,12 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         style={style}
       >
         <Input
-          value={inputVal}
+          {...inputProps}
           className={inputClassName}
-          addonAfter={addonAfter}
+          value={inputVal}
           onChange={this.hanldeInputChange}
           onClick={this.handleInputClick}
           onBlur={this.handleInputBlur}
-          placeholder={placeholder}
-          style={inputStyle}
-          disabled={disabled}
         ></Input>
         {this.renderContent()}
         {this.renderSearchSection()}
