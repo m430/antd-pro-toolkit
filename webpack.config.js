@@ -46,18 +46,6 @@ function externalMoment(config) {
     commonjs: 'lodash-decorators',
     amd: 'lodash-decorators',
   };
-  config.externals.bizcharts = {
-    root: 'bizcharts',
-    commonjs2: 'bizcharts',
-    commonjs: 'bizcharts',
-    amd: 'bizcharts',
-  };
-  config.externals['@antv/data-set'] = {
-    root: 'DataSet',
-    commonjs2: 'DataSet',
-    commonjs: 'DataSet',
-    amd: 'DataSet',
-  };
 }
 
 function addBundleAnalyzer(webpackConfig) {

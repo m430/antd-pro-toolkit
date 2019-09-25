@@ -1,8 +1,11 @@
 # CHANGELOG
 
-## [0.4.3] (2019-09-24)
+## [0.4.4] (2019-09-25)
   - feature: 新增`TabCascader`的`inputProps`属性，支持`antd`所有的`Input`组件属性`InputProps`， 除了`'onBlur' | 'onClick' | 'onChange'`这三个需要配置在组件上;
   - feature: 新增`TabCascader`的`pagination`属性，支持`Boolean | Pagination`, 用于异步搜索时候进行分页的配置项, 当设置此属性时搜索下拉滚动会进行异步加载;
+  - feature: 新增`Uploader`组件，提供`card | list`两种样式，并提供上传组件的预览;
+  - feature: 新增`Timeline`组件，提供统一的时间线展示组件;
+  - feature: 新增`Ellipsis`组件，提供根据字符长度统一截断的组件，鼠标移入可提示全部字符;
   - remove: 移除`TabCascader`的`inputCls, inputStyle, addonAfter, placeholder`迁移至`inputProps`属性中;
 
 
