@@ -19,7 +19,6 @@ export interface FileInterface {
 }
 
 export interface UploadInfo {
-  listType?: 'picture-card',
   action: string,
   accept: string
 }
@@ -47,6 +46,7 @@ export interface UploadState {
 }
 
 export default class Uploader extends Component<UploadProps, UploadState>{
+  listType: {}
   constructor(props: UploadProps) {
     super(props);
     this.state = {
@@ -68,7 +68,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
       // 已有的文件列表
       fileList: [],
       // 组件宽度
-      width: 0,
+      width: 300,
       valueType: 'array'
     }
   }
@@ -190,15 +190,19 @@ export default class Uploader extends Component<UploadProps, UploadState>{
   }
 
   render() {
-    const { uploadInfo, isView = false, type = 'card', style, max = 9999, placeholder = '' } = this.props
+    let { uploadInfo, isView = false, type = 'card', style, max = 9999, placeholder = '' } = this.props
     const { previewVisible, previewImage, fileUploading, fileList, width, previewType } = this.state
     let renderImageList = type === 'card' && fileList.map(item => (<Image isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
     let renderFileList = type === 'list' && fileList.map(item => (<File width={width} isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
+    if (type === 'card') {
+      this.listType = { listType: 'picture-card' }
+    }
     return (
       <div style={{ ...style, width }} ref='file'>
         {renderImageList}
         <Upload
           {...uploadInfo}
+          {...this.listType}
           showUploadList={false}
           beforeUpload={this.beforeUpload}
           onChange={this.handleChange}

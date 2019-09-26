@@ -6,9 +6,9 @@
 
 | 参数         | 说明                             | 类型               | 默认值 |
 | ------------ | -------------------------------- | ------------------ | ------ |
-| width   | 组件宽度 | `number`           |        |
+| width   | 组件宽度 | `number`           |        | 300
 | isView        | 是否只读                  | `boolean`      |   false     |
-| type        | 组件类型(上传以及文件展示类型)                        | `card | list`    |    `card`    |
+| type        | 组件类型(上传以及文件展示类型,值仅为`card|list`)                        | `string`    |    `card`    |
 | placeholder    | 上传文字提示                           | `string`    |  无      |
 | max  | 最大上传文件数量                     | `number` |     9999   |
 | uploadInfo   | 上传配置                   | `UploadInfo` |  无      |
@@ -44,13 +44,8 @@
 ```
 
 {
-  listType?: 'picture-card',
   action: string, // 上传路径
   accept: string, // 可以上传的文件类型
 }
 
 ```
-
-### 注意:
-
-`Upload`的`type`和`uploadInfo`的`type`
