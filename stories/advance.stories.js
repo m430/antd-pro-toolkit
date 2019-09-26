@@ -310,7 +310,7 @@ class TimelineDemo3 extends React.Component {
   }
 }
 
-class UploaderDemo extends React.Component {
+class UploaderDemoCard extends React.Component {
 
   componentDidMount() {
     handleLogin();
@@ -319,7 +319,21 @@ class UploaderDemo extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Uploader uploadInfo={{ listType: "picture-card", action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+        <Uploader uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+      </DemoContainer>
+    )
+  }
+}
+class UploaderDemoList extends React.Component {
+
+  componentDidMount() {
+    handleLogin();
+  }
+
+  render() {
+    return (
+      <DemoContainer>
+        <Uploader type='list' max={1} uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }
@@ -340,7 +354,9 @@ storiesOf('Advance', module)
   .add('Timeline-backend-1',
     () => <TimelineDemo3 />,
     { notes: timelineDoc }
-  ).add('Upload',
-    () => <UploaderDemo />,
+  ).add('Uploader-card',
+    () => <UploaderDemoCard />,
     { notes: uploaderDoc }
-  )
+  ).add('Uploader-list',
+    () => <UploaderDemoList />,
+    { notes: uploaderDoc })
