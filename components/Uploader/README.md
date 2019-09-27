@@ -14,13 +14,15 @@
 | uploadInfo   | 上传配置                   | `UploadInfo` |  无      |
 | value         |  已上传的文件      | ` Array<FileInterface> | FileInterface` |        |
 | style   | 样式对象                 | `CSSProperties`    |        |
+| maxFileSize   |  文件的最大值                | `number`    |        |
 
 
 ### Events
 
 | 参数              | 说明                       | 类型                        | 默认值 |
 | ----------------- | -------------------------- | --------------------------- | ------ |
-| onChange          | 上传成功后的时间 | function(value)     | 无     |
+| onChange          | 上传成功后的事件 | function(value)     | 无     |
+| beforeUpload   | 上传前的校验                 | function(File)   |     无   |
 
 ### Model
 
@@ -49,3 +51,7 @@
 }
 
 ```
+
+### 注意
+
+1. `maxFileSize` 和 `beforeUpload`. 如果设置了`beforeUpload`,则无需设置`maxFileSize`.此时会走设置的`beforeUpload`来进行上传前的校验.而如果没有设置`beforeUpload`,此时会走默认的上传前的校验,此时设置`maxFileSize`才会生效.
