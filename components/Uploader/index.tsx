@@ -8,6 +8,7 @@ import {
 } from 'antd';
 import File from './File'
 import Image from './Image'
+import _ from 'lodash'
 
 export interface FileInterface {
   id: string,
@@ -91,12 +92,12 @@ export default class Uploader extends Component<UploadProps, UploadState>{
     let fileList = [], valueType = 'array'
     // 判断传入对象,如果是object,则将其存入数组中
     if (Object.prototype.toString.call(value) === '[object Object]') {
-      fileList = [value]
+      fileList = !_.isEmpty(value) ? [value] : []
       valueType = 'object'
     }
     // 如果是array,则将其赋值给fileList
     if (Object.prototype.toString.call(value) === '[object Array]') {
-      fileList = value
+      fileList = value.filter((item: any) => !_.isEmpty(item))
     }
     this.setState({ fileList, valueType })
   }
