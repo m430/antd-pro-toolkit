@@ -319,7 +319,7 @@ class UploaderDemoCard extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Uploader uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+        <Uploader beforeUpload={true} uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }
