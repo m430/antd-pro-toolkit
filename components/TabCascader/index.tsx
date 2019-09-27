@@ -118,15 +118,12 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   componentWillReceiveProps(nextProps: CascaderProps) {
     const { value } = this.props;
-    const { selectedItems } = this.state;
     if (nextProps.value && nextProps.value.length > 0 && nextProps.dataSource && nextProps.dataSource.length > 0) {
-      if (selectedItems.length == 0 || value != nextProps.value) {
-        this.setState({
-          selectedItems: nextProps.value,
-          inputVal: nextProps.value.map(item => item.name).join('-')
-        });
-        this.setInitialValue(nextProps.dataSource, nextProps.value);
-      }
+      this.setState({
+        selectedItems: nextProps.value,
+        inputVal: nextProps.value.map(item => item.name).join('-')
+      });
+      this.setInitialValue(nextProps.dataSource, nextProps.value);
     }
     if (!nextProps.value && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
       this.setState({
@@ -313,7 +310,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   hanldeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { onClear } = this.props;
+    const { onClear, onChange } = this.props;
 
     let inputVal = e.target.value;
     this.setState({ inputVal });
@@ -329,6 +326,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
           firstTab: 0,
           secondTab: 0
         });
+        if (onChange) {
+          onChange([]);
+        }
         if (onClear) {
           onClear(e);
         }
@@ -351,10 +351,10 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         query.pageSize = pagination.pageSize;
       }
       onSearch(query).then(res => {
-        this.setState({ 
-          fetchList: res.data || [], 
+        this.setState({
+          fetchList: res.data || [],
           pagination: res.pagination,
-          isSearching: false 
+          isSearching: false
         });
       });
     }
@@ -533,7 +533,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
     const cascaderCls = classNames('antd-pro-cascader', className);
     const inputClassName = classNames(
-      'tab-search-bar', 
+      'tab-search-bar',
       inputProps ? inputProps.className : '',
       {
         'tab-search-suffix': inputProps && inputProps.allowClear && inputProps.addonAfter
