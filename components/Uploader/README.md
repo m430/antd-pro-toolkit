@@ -51,3 +51,7 @@
 }
 
 ```
+
+### 注意
+
+1. `maxFileSize` 和 `beforeUpload`. 如果设置了`beforeUpload`,则无需设置`maxFileSize`.此时会走设置的`beforeUpload`来进行上传前的校验.而如果没有设置`beforeUpload`,此时会走默认的上传前的校验,此时设置`maxFileSize`才会生效.
