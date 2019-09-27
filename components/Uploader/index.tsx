@@ -117,7 +117,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
       return false;
     }
     if (maxFileSize) {
-      const scaleOut = file.size <= Math.abs(maxFileSize)
+      const scaleOut = file.size / 1024 / 1024 <= Math.abs(maxFileSize)
       if (!scaleOut) {
         message.error(`上传文件必须小于${maxFileSize}MB!`);
         return false
