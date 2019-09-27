@@ -33,7 +33,7 @@ export interface UploadProps {
   onChange?: Function,
   value?: Array<FileInterface> | FileInterface,
   style?: React.CSSProperties,
-  fileSize?: number,
+  maxFileSize?: number,
   beforeUpload?: Function
 }
 
@@ -103,9 +103,10 @@ export default class Uploader extends Component<UploadProps, UploadState>{
 
   // 上传前校验文件格式和文件大小
   beforeUpload = (file: any) => {
-    const { beforeUpload, fileSize } = this.props;
+    const { beforeUpload, maxFileSize } = this.props;
+    console.log(file)
     if (typeof beforeUpload === 'function') {
-      return beforeUpload()
+      return beforeUpload(file)
     }
     // 获取设置的可以上传的文件类型
     const { uploadInfo: { accept } } = this.props;
@@ -116,10 +117,10 @@ export default class Uploader extends Component<UploadProps, UploadState>{
       message.error('文件格式不正确');
       return false;
     }
-    if (fileSize) {
-      const scaleOut = file.size <= Math.abs(fileSize)
+    if (maxFileSize) {
+      const scaleOut = file.size <= Math.abs(maxFileSize)
       if (!scaleOut) {
-        message.error(`上传文件必须小于${fileSize}MB!`);
+        message.error(`上传文件必须小于${maxFileSize}MB!`);
         return false
       }
     }

@@ -14,13 +14,15 @@
 | uploadInfo   | 上传配置                   | `UploadInfo` |  无      |
 | value         |  已上传的文件      | ` Array<FileInterface> | FileInterface` |        |
 | style   | 样式对象                 | `CSSProperties`    |        |
+| maxFileSize   |  文件的最大值                | `number`    |        |
 
 
 ### Events
 
 | 参数              | 说明                       | 类型                        | 默认值 |
 | ----------------- | -------------------------- | --------------------------- | ------ |
-| onChange          | 上传成功后的时间 | function(value)     | 无     |
+| onChange          | 上传成功后的事件 | function(value)     | 无     |
+| beforeUpload   | 上传前的校验                 | function(File)   |     无   |
 
 ### Model
 
