@@ -104,7 +104,6 @@ export default class Uploader extends Component<UploadProps, UploadState>{
   // 上传前校验文件格式和文件大小
   beforeUpload = (file: any) => {
     const { beforeUpload, maxFileSize } = this.props;
-    console.log(file)
     if (typeof beforeUpload === 'function') {
       return beforeUpload(file)
     }
