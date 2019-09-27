@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [0.4.6] (2019-09-27)
+  - feature: 修改`Uploader`部分特性，添加`beforeUpload`钩子函数;
+  - fix: 修复`TabCascader`清空的bug
+
+## [0.4.5] (2019-09-26)
+  - feature: 修改`Uploader`部分特性;
+
 ## [0.4.4] (2019-09-25)
   - feature: 新增`TabCascader`的`inputProps`属性，支持`antd`所有的`Input`组件属性`InputProps`， 除了`'onBlur' | 'onClick' | 'onChange'`这三个需要配置在组件上;
   - feature: 新增`TabCascader`的`pagination`属性，支持`Boolean | Pagination`, 用于异步搜索时候进行分页的配置项, 当设置此属性时搜索下拉滚动会进行异步加载;
