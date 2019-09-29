@@ -63,17 +63,18 @@
 
 ### Events
 
-| 参数              | 说明                            | 类型                          | 默认值 |
-| ----------------- | ------------------------------- | ----------------------------- | ------ |
-| onTopTabChange    | 第一层`Tab`改变的事件           | `function(tabKey)`            | 无     |
-| onTabChange       | 第二层`Tab`改变的事件           | `function(key, topKey, item)` | 无     |
-| onSearch          | 输入框搜索事件                  | `function(val)`               | 无     |
-| onSearchItemClick | 搜索出的`Item`列表点击事件      | `function(item)`              | 无     |
-| onItemClick       | 点击的`Item`的事件              | `function(key, topKey, item)` | 无     |
-| onBlur            | 输入框失去焦点事件              | `function(e)`                 | 无     |
-| onChange          | 选择的`Item`发生变化的事件      | `function(selectedItems)`     | 无     |
-| onClear           | `Input`设置为`allowClear`的回调 | `function(e)`                 | 无     |
-| onPopupScroll     | 搜索下拉框滚动事件              | `function(e)`                 | 无     |
+| 参数                   | 说明                            | 类型                          | 默认值 |
+| ---------------------- | ------------------------------- | ----------------------------- | ------ |
+| onTopTabChange         | 第一层`Tab`改变的事件           | `function(tabKey)`            | 无     |
+| onTabChange            | 第二层`Tab`改变的事件           | `function(key, topKey, item)` | 无     |
+| onSearch               | 输入框搜索事件                  | `function(val)`               | 无     |
+| onSearchItemClick      | 搜索出的`Item`列表点击事件      | `function(item)`              | 无     |
+| onItemClick            | 点击的`Item`的事件              | `function(key, topKey, item)` | 无     |
+| onBlur                 | 输入框失去焦点事件              | `function(e)`                 | 无     |
+| onChange               | 选择的`Item`发生变化的事件      | `function(selectedItems)`     | 无     |
+| onClear                | `Input`设置为`allowClear`的回调 | `function(e)`                 | 无     |
+| onPopupScroll          | 搜索下拉框滚动事件              | `function(e)`                 | 无     |
+| inputProps.renderValue | 自定义渲染函数                  | `function(selectedItems)`     |      |
 
 
 ### Models

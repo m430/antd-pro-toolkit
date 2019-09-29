@@ -15,3 +15,6 @@ declare module "SlideVerify";
 declare module "TabCascader";
 
 declare module "Trend";
+
+// external
+declare module "rc-util/lib/KeyCode";
