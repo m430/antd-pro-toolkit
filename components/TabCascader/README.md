@@ -76,6 +76,7 @@
 | onPopupScroll          | 搜索下拉框滚动事件              | `function(e)`                 | 无     |
 | inputProps.renderValue | 自定义渲染函数                  | `function(selectedItems)`     |      |
 
+> 注意： 设置`inputProps.renderValue`的时候，用于自定义渲染Input中显示的值，可根据需求自行传入。
 
 ### Models
 
