@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## [0.4.8] (2019-09-29)
-  - feature: `Uploader`添加`inputProps.renderValue`自定义渲染函数，支持根据选择路径自定义渲染
+  - feature: `TabCascader`组件添加`inputProps.renderValue`自定义渲染函数，支持根据选择路径自定义渲染
 
 ## [0.4.6] (2019-09-27)
   - feature: 修改`Uploader`部分特性，添加`beforeUpload`钩子函数;
