@@ -1,4 +1,4 @@
-import React, { Component, useRef, useState, useImperativeHandle } from 'react';
+import React, { useRef, useState, useImperativeHandle } from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import List from 'rc-virtual-list';
@@ -6,10 +6,15 @@ import Option from './Option';
 import { Item } from './index';
 
 export interface IOptionListProps {
+  prefixCls: string;
   data: Array<Item>;
+  height: number;
+  itemHeight: number;
+  searchValue: string;
+  notFoundContent?: React.ReactNode;
   onSelect: (item: Item) => void;
   onToggle: (open?: boolean) => void;
-  notFoundContent?: React.ReactNode;
+  onScroll: React.UIEventHandler<HTMLDivElement>;
 }
 
 export interface RefOptionListProps {
@@ -21,9 +26,13 @@ const OptionList: React.RefForwardingComponent<
   IOptionListProps
 > = (
   {
+    prefixCls,
     data,
+    height,
+    itemHeight,
     onSelect,
     onToggle,
+    onScroll,
     notFoundContent
   },
   ref
@@ -48,8 +57,12 @@ const OptionList: React.RefForwardingComponent<
 
     const [activeIndex, setActiveIndex] = useState(() => getActiveIndex(0));
 
+    const onListMouseDown: React.MouseEventHandler<HTMLDivElement> = e => {
+      e.preventDefault();
+    }
 
-    // ================== Keyboard =========================
+
+    // ================= Keyboard =================
     useImperativeHandle(ref, () => ({
       onKeyDown: e => {
         const { which } = e;
@@ -62,23 +75,23 @@ const OptionList: React.RefForwardingComponent<
             } else if (which === KeyCode.DOWN) {
               offset = 1;
             }
-    
+
             if (offset !== 0) {
               const nextActiveIndex = getActiveIndex(activeIndex, offset);
               scrollIntoView(nextActiveIndex);
               setActiveIndex(nextActiveIndex);
             }
-    
+
             break;
           }
-    
+
           case KeyCode.ENTER: {
             const selectItem = data[activeIndex];
             onSelect(selectItem);
-    
+
             break;
           }
-    
+
           case KeyCode.ESC: {
             onToggle(false);
           }
@@ -86,103 +99,51 @@ const OptionList: React.RefForwardingComponent<
       }
     }));
 
-    
-
-  }
-
-export default class OptionList extends Component<IOptionListProps, any> {
-  listRef: React.RefObject<List>;
-
-  constructor(props: IOptionListProps) {
-    super(props);
-    this.state = {
-      activeIndex: 0
-    };
-    this.listRef = React.createRef();
-  }
-
-  getActiveIndex = (index: number, offset: number = 1): number => {
-    const { data } = this.props;
-    const len = data.length;
-
-    for (let i = 1; i < len; i++) {
-      const current = (index + i * offset + len) % len;
-      return current;
+    // ================= render =================
+    if (data.length === 0) {
+      return (
+        <div
+          className={`${prefixCls}-empty`}
+          onMouseDown={onListMouseDown}
+        >
+          {notFoundContent}
+        </div>
+      )
     }
-    return -1;
-  }
 
-  scrollIntoView = (index: number) => {
-    if (this.listRef.current) {
-      this.listRef.current.scrollTo({ index });
-    }
-  }
-
-  onKeyDown = (e: React.KeyboardEvent) => {
-    const { data, onSelect, onToggle } = this.props;
-    const { activeIndex } = this.state;
-
-    const { which } = e;
-    switch (which) {
-      case KeyCode.UP:
-      case KeyCode.DOWN: {
-        let offset = 0;
-        if (which === KeyCode.UP) {
-          offset = -1;
-        } else if (which === KeyCode.DOWN) {
-          offset = 1;
-        }
-
-        if (offset !== 0) {
-          const nextActiveIndex = this.getActiveIndex(activeIndex, offset);
-          this.scrollIntoView(nextActiveIndex);
-          this.setState({ activeIndex: nextActiveIndex });
-        }
-
-        break;
-      }
-
-      case KeyCode.ENTER: {
-        const selectItem = data[activeIndex];
-        onSelect(selectItem);
-
-        break;
-      }
-
-      case KeyCode.ESC: {
-        onToggle(false);
-      }
-    }
-  }
-
-  handleScroll = (e: React.UIEvent<HTMLElement>) => {
-    console.log(e);
-  }
-
-  handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  }
-
-  render() {
-    const { data, onSelect } = this.props;
     return (
       <List<Item>
         itemKey="key"
-        ref={this.listRef}
+        ref={listRef}
         data={data}
-        height={200}
-        itemHeight={40}
+        height={height}
+        itemHeight={itemHeight}
         fullHeight={false}
-        onKeyDown={this.onKeyDown}
-        onScroll={this.handleScroll}
-        onMouseDown={this.handleMouseDown}
+        onScroll={onScroll}
+        onMouseDown={onListMouseDown}
       >
         {(item, itemIndex) => {
 
-          const optionClassName = classNames('')
-          return <Option item={item} onClick={onSelect} />
+          const optionPrefixCls = `${prefixCls}-option`;
+          const optionClassName = classNames({
+            [`${optionPrefixCls}-active`]: activeIndex === itemIndex
+          })
+
+          return <Option
+            prefixCls={prefixCls}
+            className={optionClassName}
+            item={item}
+            onClick={onSelect}
+          />
         }}
       </List>
-    )
-  }
-}
+    );
+  };
+
+const RefOptionList = React.forwardRef<RefOptionListProps, IOptionListProps>(OptionList);
+RefOptionList.displayName = "OptionList";
+
+export default RefOptionList;
+
+
+

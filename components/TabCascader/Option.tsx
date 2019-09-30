@@ -1,22 +1,31 @@
-import React, { Component } from 'react';
+import React from 'react';
+import classNames from 'classnames';
 import { Item } from './index';
 
 export interface IOptionProps {
   item: Item;
+  prefixCls: string;
+  className: string;
   onClick: (item: Item) => void;
 }
 
-export default class Option extends Component<IOptionProps, any> {
+const Option: React.FC<IOptionProps> = (
+  {
+    item,
+    prefixCls,
+    className,
+    onClick
+  }) => {
 
-  render() {
-    const { item, onClick } = this.props;
+  const parentName = (item: Item) => item.parents[item.parents.length - 1].name;
 
-    const parentName = (item: Item) => item.parents[item.parents.length - 1].name;
+  const mergedClassName = classNames([`${prefixCls}-option`], className);
 
-    return (
-      <li className="list-item" key={item.code} onClick={() => onClick(item)}>
-        {item.name} {item.level !== 1 && `(${parentName(item)})`}
-      </li>
-    )
-  }
+  return (
+    <li className={mergedClassName} key={item.code} onClick={() => onClick(item)}>
+      {item.name} {item.level !== 1 && `(${parentName(item)})`}
+    </li>
+  )
 }
+
+export default Option;
