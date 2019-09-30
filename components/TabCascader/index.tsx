@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import './style';
 import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
+import OptionList from './OptionList';
 import { Omit } from '../_util/type';
 import { isArrayEqual } from '../_util/tools';
 import { InputProps } from 'antd/lib/input';
@@ -90,6 +91,7 @@ export interface CascaderState {
 export default class TabCascader extends Component<CascaderProps, CascaderState> {
   el: HTMLDivElement | null;
   debounceSearch: Function;
+  listRef: React.RefObject<OptionList>;
 
   static defaultProps = {
     colSpan: 6
@@ -109,6 +111,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       fetchList: []
     };
     this.debounceSearch = debounce(this.handleSearch, 600);
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
@@ -432,6 +435,12 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     }
   }
 
+  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (this.listRef.current) {
+      this.listRef.current.onKeyDown(e);
+    }
+  }
+
   renderItems = (tabItem: TabData) => {
     const items = tabItem.items;
     const { colSpan } = this.props;
@@ -528,15 +537,15 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { contentCls, contentStyle } = this.props;
     const { fetchList, isSearching, searchVisible } = this.state;
 
-    const parentName = (item: Item) => item.parents[item.parents.length - 1].name;
+    // const parentName = (item: Item) => item.parents[item.parents.length - 1].name;
 
-    const searchList = fetchList.length == 0
-      ? <Empty className="empty" />
-      : fetchList.map(item => (
-        <li className="list-item" key={item.code} onClick={() => this.handleSearchItemClick(item)}>
-          {item.name} {item.level !== 1 && `(${parentName(item)})`}
-        </li>
-      ));
+    // const searchList = fetchList.length == 0
+    //   ? <Empty className="empty" />
+    //   : fetchList.map(item => (
+    //     <li className="list-item" key={item.code} onClick={() => this.handleSearchItemClick(item)}>
+    //       {item.name} {item.level !== 1 && `(${parentName(item)})`}
+    //     </li>
+    //   ));
 
     const cls = classNames('search-section', contentCls, {
       'antd-pro-hidden': !searchVisible
@@ -544,7 +553,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     return (
       <div className={cls} style={contentStyle} onScroll={this.handleSearchScroll}>
         {
-          isSearching ? <Spin className="loading-spin" /> : searchList
+          isSearching 
+          ? <Spin className="loading-spin" /> 
+          : <OptionList ref={this.listRef} data={fetchList} onSelect={() => {}} onToggle={() => {}}></OptionList>
         }
       </div>
     )
@@ -574,6 +585,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
           className={inputClassName}
           value={inputVal}
           onChange={this.hanldeInputChange}
+          onKeyDown={this.handleKeyDown}
           onClick={this.handleInputClick}
           onBlur={this.handleInputBlur}
         ></Input>
