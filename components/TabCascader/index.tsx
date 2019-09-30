@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import './style';
 import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
 import { Omit } from '../_util/type';
+import { isArrayEqual } from '../_util/tools';
 import { InputProps } from 'antd/lib/input';
 
 const TabPane = Tabs.TabPane
@@ -120,15 +121,18 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   componentWillReceiveProps(nextProps: CascaderProps) {
-    const { value } = this.props;
-    if (nextProps.value && nextProps.value.length > 0 && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    const { value, dataSource } = this.props;
+    let dataSourceCondition = nextProps.dataSource && nextProps.dataSource.length > 0;
+    let hasValChange = !isArrayEqual(nextProps.value, value);
+    let hasDataSourceChange = !isArrayEqual(nextProps.dataSource, dataSource);
+    if (nextProps.value && !_.isEmpty(nextProps.value) && dataSourceCondition && (hasValChange || hasDataSourceChange)) {
       this.setState({
         selectedItems: nextProps.value,
         inputVal: this.renderValue(nextProps.value)
       });
       this.setInitialValue(nextProps.dataSource, nextProps.value);
     }
-    if (!nextProps.value && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    if (_.isEmpty(nextProps.value) && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
       this.setState({
         selectedItems: [],
         inputVal: '',
@@ -179,8 +183,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     if (panelData && panelData.items.length > 0) {
       for (let i = 0; i < panelData.items.length; i++) {
         let targetLevel = lastItem.level == maxLevel ? maxLevel : lastItem.level + 1;
-        if (groupCode == '0' && i == 0) continue;
-        if (panelData.items[i].level == targetLevel) {
+        if (panelData.items[i].entry && panelData.items[i].level == targetLevel) {
           this.setState({ firstTab: panelIdx, secondTab: i });
           break;
         }
