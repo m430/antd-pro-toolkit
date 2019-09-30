@@ -302,7 +302,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
     firstTab = Number(item.groupCode);
     selectedItems = [];
-    let itemList = [...item.parents, item];
+    let itemList = [...(item.parents ? item.parents : []), item];
     let startLevel = firstTab == 0 ? 2 : 1;
     selectedItems = itemList.filter(nItem => nItem.level >= startLevel);
     const displayVal = this.renderValue(selectedItems);
@@ -325,8 +325,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         this.setState({ tabLoading: true });
         onSearchItemClick(item).then(() => {
           this.setState({
-            tabLoading: false,
-            secondTab: dataSource[firstTab].items.length - 1
+            tabLoading: false
           });
         });
       }
