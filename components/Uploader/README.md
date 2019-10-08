@@ -12,7 +12,7 @@
 | placeholder    | 上传文字提示                           | `string`    |  无      |
 | max  | 最大上传文件数量                     | `number` |     9999   |
 | uploadInfo   | 上传配置                   | `UploadInfo` |  无      |
-| value         |  已上传的文件      | ` Array<FileInterface> | FileInterface` |        |
+| value         |  已上传的文件      | ` Array<FileInterface>` |        |
 | style   | 样式对象                 | `CSSProperties`    |        |
 | maxFileSize   |  文件的最大值                | `number`    |        |
 

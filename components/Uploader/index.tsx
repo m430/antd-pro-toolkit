@@ -32,7 +32,7 @@ export interface UploadProps {
   max?: number,
   uploadInfo: UploadInfo,
   onChange?: Function,
-  value?: Array<FileInterface> | FileInterface,
+  value?: Array<FileInterface>,
   style?: React.CSSProperties,
   maxFileSize?: number,
   beforeUpload?: Function
@@ -44,8 +44,7 @@ export interface UploadState {
   previewType: string,
   fileUploading: boolean,
   fileList: Array<FileInterface>,
-  width: number,
-  valueType: string
+  width: number
 }
 
 export default class Uploader extends Component<UploadProps, UploadState>{
@@ -71,8 +70,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
       // 已有的文件列表
       fileList: [],
       // 组件宽度
-      width: 300,
-      valueType: 'array'
+      width: 300
     }
   }
   componentDidMount() {
@@ -89,17 +87,11 @@ export default class Uploader extends Component<UploadProps, UploadState>{
     this.getValue(nextProps.value)
   }
   getValue = (value: any) => {
-    let fileList = [], valueType = 'array'
-    // 判断传入对象,如果是object,则将其存入数组中
-    if (Object.prototype.toString.call(value) === '[object Object]') {
-      fileList = !_.isEmpty(value) ? [value] : []
-      valueType = 'object'
-    }
-    // 如果是array,则将其赋值给fileList
+    let fileList = []
     if (Object.prototype.toString.call(value) === '[object Array]') {
       fileList = value.filter((item: any) => !_.isEmpty(item))
     }
-    this.setState({ fileList, valueType })
+    this.setState({ fileList })
   }
 
   // 上传前校验文件格式和文件大小
@@ -156,7 +148,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
 
   handleChange = (info: any) => {
     const { onChange } = this.props
-    const { fileList, valueType } = this.state
+    const { fileList } = this.state
     if ('uploading' === info.file.status) {
       this.setState({ fileUploading: true })
       return
@@ -165,12 +157,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
       if (info.file.response.errorCode === 0) {
         this.setState({ fileUploading: false, fileList: [...fileList, info.file.response.data] })
         if (onChange) {
-          // 根据传入的数据来决定回填的数据
-          if (valueType === 'object') {
-            onChange(info.file.response.data)
-          } else {
-            onChange([...fileList, info.file.response.data])
-          }
+          onChange([...fileList, info.file.response.data])
         }
       } else {
         this.setState({ fileUploading: false })
@@ -182,14 +169,10 @@ export default class Uploader extends Component<UploadProps, UploadState>{
   // 删除文件
   handleRemoveFile = (file: FileInterface) => {
     const { onChange } = this.props
-    const { fileList, valueType } = this.state
+    const { fileList } = this.state
     this.setState({ fileList: fileList.filter(item => item.id !== file.id) })
     if (onChange) {
-      if (valueType === 'object') {
-        onChange({})
-      } else {
-        onChange(fileList.filter(item => item.id !== file.id))
-      }
+      onChange(fileList.filter(item => item.id !== file.id))
     }
   }
 
