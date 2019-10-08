@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import './style';
 import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
 import { Omit } from '../_util/type';
+import { isArrayEqual } from '../_util/tools';
 import { InputProps } from 'antd/lib/input';
 
 const TabPane = Tabs.TabPane
@@ -37,6 +38,10 @@ export interface Pagination {
   totalResult: number;
 }
 
+export interface TabInputProps extends Omit<InputProps, 'onBlur' | 'onClick' | 'onChange'> {
+  renderValue?: (selectedItems: Array<Item>) => string;
+}
+
 export interface CascaderProps {
   onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
   onSearchItemClick?: (item: Item, ) => Promise<any>;
@@ -55,7 +60,7 @@ export interface CascaderProps {
   contentStyle?: React.CSSProperties;
   contentCls?: string;
   colSpan?: number;
-  inputProps?: Omit<InputProps, 'onBlur' | 'onClick' | 'onChange'>;
+  inputProps?: TabInputProps;
   pagination?: Boolean | Pagination;
 }
 
@@ -104,7 +109,6 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       fetchList: []
     };
     this.debounceSearch = debounce(this.handleSearch, 600);
-
   }
 
   componentDidMount() {
@@ -117,21 +121,33 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   componentWillReceiveProps(nextProps: CascaderProps) {
-    const { value } = this.props;
-    if (nextProps.value && nextProps.value.length > 0 && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    const { value, dataSource } = this.props;
+    let dataSourceCondition = nextProps.dataSource && nextProps.dataSource.length > 0;
+    let hasValChange = !isArrayEqual(nextProps.value, value);
+    let hasDataSourceChange = !isArrayEqual(nextProps.dataSource, dataSource);
+    if (nextProps.value && !_.isEmpty(nextProps.value) && dataSourceCondition && (hasValChange || hasDataSourceChange)) {
       this.setState({
         selectedItems: nextProps.value,
-        inputVal: nextProps.value.map(item => item.name).join('-')
+        inputVal: this.renderValue(nextProps.value)
       });
       this.setInitialValue(nextProps.dataSource, nextProps.value);
     }
-    if (!nextProps.value && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    if (_.isEmpty(nextProps.value) && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
       this.setState({
         selectedItems: [],
         inputVal: '',
         firstTab: 0,
         secondTab: 0
       });
+    }
+  }
+
+  renderValue = (items: Array<Item>): string => {
+    const { inputProps } = this.props;
+    if (!inputProps || !inputProps.renderValue) {
+      return items.map(i => i.name).join('-');
+    } else {
+      return inputProps.renderValue(items);
     }
   }
 
@@ -167,8 +183,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     if (panelData && panelData.items.length > 0) {
       for (let i = 0; i < panelData.items.length; i++) {
         let targetLevel = lastItem.level == maxLevel ? maxLevel : lastItem.level + 1;
-        if (groupCode == '0' && i == 0) continue;
-        if (panelData.items[i].level == targetLevel) {
+        if (panelData.items[i].entry && panelData.items[i].level == targetLevel) {
           this.setState({ firstTab: panelIdx, secondTab: i });
           break;
         }
@@ -188,7 +203,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       this.setState({
         visible: false,
         searchVisible: false,
-        inputVal: selectedItems.map(item => item.name).join('-')
+        inputVal: this.renderValue(selectedItems)
       });
     }
   }
@@ -252,7 +267,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         }
       }
     }
-    const displayVal = selectedItems.map((item: Item) => item.name).join('-');
+    const displayVal = this.renderValue(selectedItems);
     this.setState({ selectedItems, inputVal: displayVal });
 
     if (dataSource[firstTab].maxLevel == item.level) {
@@ -282,15 +297,15 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   };
 
   handleSearchItemClick = async (item: Item) => {
-    const { dataSource, onSearchItemClick } = this.props;
+    const { dataSource, onSearchItemClick, onChange } = this.props;
     let { firstTab, selectedItems } = this.state;
 
     firstTab = Number(item.groupCode);
     selectedItems = [];
-    let itemList = [...item.parents, item];
+    let itemList = [...(item.parents ? item.parents : []), item];
     let startLevel = firstTab == 0 ? 2 : 1;
     selectedItems = itemList.filter(nItem => nItem.level >= startLevel);
-    const displayVal = selectedItems.map((item: Item) => item.name).join('-');
+    const displayVal = this.renderValue(selectedItems);
     this.setState({
       firstTab,
       searchVisible: false,
@@ -298,14 +313,22 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       selectedItems,
       inputVal: displayVal
     });
-    if (onSearchItemClick) {
-      this.setState({ tabLoading: true });
-      onSearchItemClick(item).then(() => {
-        this.setState({
-          tabLoading: false,
-          secondTab: dataSource[firstTab].items.length - 1
-        });
+    if (onChange) {
+      onChange(selectedItems);
+    }
+    if (item.level == dataSource[firstTab].maxLevel) {
+      this.setState({
+        visible: false
       });
+    } else {
+      if (onSearchItemClick) {
+        this.setState({ tabLoading: true });
+        onSearchItemClick(item).then(() => {
+          this.setState({
+            tabLoading: false
+          });
+        });
+      }
     }
   }
 
@@ -547,7 +570,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         style={style}
       >
         <Input
-          {...inputProps}
+          {..._.omit(inputProps, ['renderValue'])}
           className={inputClassName}
           value={inputVal}
           onChange={this.hanldeInputChange}
