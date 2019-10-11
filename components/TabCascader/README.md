@@ -45,18 +45,21 @@
 
 ### Properties
 
-| 参数         | 说明                                       | 类型                   | 默认值 |
-| ------------ | ------------------------------------------ | ---------------------- | ------ |
-| dataSource   | `Array<PanelData>`参考上面的结构           | `Array`                |        |
-| value        | 选择的`item`值                             | `Array<Item>`          |        |
-| style        | 样式对象                                   | `CSSProperties`        |        |
-| className    | 样式类                                     | `String/Object`        |        |
-| hint         | `Tab`选择下拉框上方的提示语                | `String/ReactNode`     |        |
-| contentStyle | 下拉框的样式                               | `CSSProperties`        |        |
-| contentCls   | 下拉框框的`className`                      | `string`               |        |
-| colSpan      | `TabPanel`中的`Item`占比的`span`           | `number`               | 6      |
-| inputProps   | `Input`组件的所有属性除了`onChange|onBlur` | `InputProps`           |        |
-| pagination   | 搜索下拉框的分页设置                       | `Boolean | Pagination` |        |
+| 参数           | 说明                                       | 类型                   | 默认值             |
+| -------------- | ------------------------------------------ | ---------------------- | ------------------ |
+| dataSource     | `Array<PanelData>`参考上面的结构           | `Array`                |                    |
+| value          | 选择的`item`值                             | `Array<Item>`          |                    |
+| style          | 样式对象                                   | `CSSProperties`        |                    |
+| className      | 样式类                                     | `String/Object`        |                    |
+| hint           | `Tab`选择下拉框上方的提示语                | `String/ReactNode`     |                    |
+| contentStyle   | 下拉框的样式                               | `CSSProperties`        |                    |
+| contentCls     | 下拉框框的`className`                      | `string`               |                    |
+| colSpan        | `TabPanel`中的`Item`占比的`span`           | `number`               | 6                  |
+| inputProps     | `Input`组件的所有属性除了`onChange|onBlur` | `InputProps`           |                    |
+| prefixCls      | 组件的`className`前缀                      | `String`               | `ant-tab-cascader` |
+| listHeight     | 下拉列表高度                               | `number`               | 200                |
+| listItemHeight | 下拉列表选项高度                           | `number`               | 40                 |
+| pagination     | 搜索下拉框的分页设置                       | `Boolean | Pagination` |                    |
 
 > 注意： 当设置`pagination`的时候，如果不设置具体的配置参数，则默认从第一页开始加载，pageSize为10.
 
@@ -74,7 +77,7 @@
 | onChange               | 选择的`Item`发生变化的事件      | `function(selectedItems)`     | 无     |
 | onClear                | `Input`设置为`allowClear`的回调 | `function(e)`                 | 无     |
 | onPopupScroll          | 搜索下拉框滚动事件              | `function(e)`                 | 无     |
-| inputProps.renderValue | 自定义渲染函数                  | `function(selectedItems)`     |      |
+| inputProps.renderValue | 自定义渲染函数                  | `function(selectedItems)`     |        |
 
 > 注意： 设置`inputProps.renderValue`的时候，用于自定义渲染Input中显示的值，可根据需求自行传入。
 
