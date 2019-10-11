@@ -5,16 +5,19 @@ import List from 'rc-virtual-list';
 import Option from './Option';
 import { Item } from './index';
 
+type KeyFunc = (item: Item) => string;
+
 export interface IOptionListProps {
-  prefixCls: string;
+  prefixCls: any;
   data: Array<Item>;
   height: number;
+  itemKey: string | KeyFunc;
   itemHeight: number;
-  searchValue: string;
+  searchValue?: string;
   notFoundContent?: React.ReactNode;
   onSelect: (item: Item) => void;
-  onToggle: (open?: boolean) => void;
-  onScroll: React.UIEventHandler<HTMLDivElement>;
+  onToggle?: (open?: boolean) => void;
+  onScroll?: React.UIEventHandler<HTMLDivElement>;
 }
 
 export interface RefOptionListProps {
@@ -28,6 +31,7 @@ const OptionList: React.RefForwardingComponent<
   {
     prefixCls,
     data,
+    itemKey = "key",
     height,
     itemHeight,
     onSelect,
@@ -48,7 +52,7 @@ const OptionList: React.RefForwardingComponent<
     const getActiveIndex = (index: number, offset: number = 1): number => {
       const len = data.length;
 
-      for (let i = 1; i < len; i++) {
+      for (let i = 0; i < len; i++) {
         const current = (index + i * offset + len) % len;
         return current;
       }
@@ -77,7 +81,7 @@ const OptionList: React.RefForwardingComponent<
             }
 
             if (offset !== 0) {
-              const nextActiveIndex = getActiveIndex(activeIndex, offset);
+              const nextActiveIndex = getActiveIndex(activeIndex + offset, offset);
               scrollIntoView(nextActiveIndex);
               setActiveIndex(nextActiveIndex);
             }
@@ -93,7 +97,9 @@ const OptionList: React.RefForwardingComponent<
           }
 
           case KeyCode.ESC: {
-            onToggle(false);
+            if (onToggle) {
+              onToggle(false);
+            }
           }
         }
       }
@@ -113,7 +119,9 @@ const OptionList: React.RefForwardingComponent<
 
     return (
       <List<Item>
-        itemKey="key"
+        component="ul"
+        className={`${prefixCls}-list`}
+        itemKey={itemKey}
         ref={listRef}
         data={data}
         height={height}
@@ -124,9 +132,9 @@ const OptionList: React.RefForwardingComponent<
       >
         {(item, itemIndex) => {
 
-          const optionPrefixCls = `${prefixCls}-option`;
+          const optionPrefixCls = `${prefixCls}-list-option`;
           const optionClassName = classNames({
-            [`${optionPrefixCls}-active`]: activeIndex === itemIndex
+            [`${optionPrefixCls}__active`]: activeIndex === itemIndex
           })
 
           return <Option
