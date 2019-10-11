@@ -193,6 +193,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
           showUploadList={false}
           beforeUpload={this.beforeUpload}
           onChange={this.handleChange}
+          disabled={fileUploading}
         >
           {(!isView && !((max - fileList.length) === 0)) && (
             type === 'card' ?
