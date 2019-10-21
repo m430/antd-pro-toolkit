@@ -141,7 +141,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       });
       this.setInitialValue(nextProps.dataSource, nextProps.value);
     }
-    if (_.isEmpty(nextProps.value) && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    if (!nextProps.value && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
       this.setState({
         selectedItems: [],
         inputVal: '',
