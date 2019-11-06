@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [0.5.2] (2019-10-12)
+  - feature: `TabCascader`组件添加`prefixCls`属性，用于设置自定义`ClassName`前缀
+  - feature: `TabCascader`组件添加`listHeight`属性，用于设置搜索下拉列表高度
+  - feature: `TabCascader`组件添加`listItemHeight`属性，用于设置搜索下拉列表选项高度
+  - feature: `TabCascader`组件添加`onPopupScroll`属性，用于监听搜索拉下列表滚动事件
+  - feature: `TabCascader`组件下拉列表添加键盘控制事件，支持`UP | DOWN | ESC | ENTER`，上下控制方向，`ESC`用于取消，`ENTER`用于选择。
+  - improve: `Uploader`组件优化部分特性。
+
 ## [0.4.8] (2019-09-29)
   - feature: `TabCascader`组件添加`inputProps.renderValue`自定义渲染函数，支持根据选择路径自定义渲染
 

@@ -1,6 +1,8 @@
 @import '~antd/dist/antd.css';
 
-.antd-pro-cascader {
+@prefixCls: ~"ant-tab-cascader";
+
+.@{prefixCls} {
   * {
     box-sizing: border-box;
   }
@@ -16,7 +18,7 @@
     display: none;
   }
 
-  .tab-search-bar {
+  .@{prefixCls}-search-bar {
     .ant-input {
       border-top-right-radius: 4px !important;
       border-bottom-right-radius: 4px !important;
@@ -36,7 +38,7 @@
       align-items: center;
       justify-content: center;
     }
-    &.tab-search-suffix {
+    &.@{prefixCls}-search-suffix {
       .ant-input-suffix {
         right: 38px;
       }
@@ -60,18 +62,29 @@
     .loading-spin {
       padding: 10px 0 10px 20px;
     }
-    .list-item {
-      list-style: none;
-      text-indent: 20px;
-      font-size: 16px;
-      cursor: pointer;
-      &:hover {
-        background: #F0F8FF;
+
+    .@{prefixCls}-list {
+
+      margin: 0;
+      padding: 0;
+
+      .@{prefixCls}-list-option {
+        list-style: none;
+        text-indent: 20px;
+        font-size: 16px;
+        cursor: pointer;
+        &:hover {
+          background: #F0F8FF;
+        }
+        &.@{prefixCls}-list-option__active {
+          background: #F0F8FF;
+        }
       }
     }
+    
   }
 
-  &-content-wrap {
+  .@{prefixCls}-content-wrap {
     position: absolute;
     top: 32px;
     left: 0;
@@ -93,7 +106,7 @@
     }
   }
 
-  .antd-pro-top-tab {
+  .@{prefixCls}-top-tab {
     > .ant-tabs-bar {
       margin-bottom: 8px;
     }
@@ -119,7 +132,7 @@
 
     }
 
-    .antd-pro-second-tab {
+    .@{prefixCls}-second-tab {
       .ant-tabs-nav-scroll {
         text-align: left;
 
@@ -161,12 +174,12 @@
       }
     }
 
-    .andt-pro-tab-panel {
+    .@{prefixCls}-tab-panel {
       .tab-loading {
         padding: 20px 0;
         text-align: center;
       }
-      .antd-pro-panel-list {
+      .@{prefixCls}-panel-list {
         margin: 0;
         padding: 0;
         list-style: none;

@@ -2,11 +2,14 @@ import React, { Component, UIEventHandler } from 'react';
 import _ from 'lodash';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
-import './style';
 import { Tabs, Input, Row, Col, Spin, Empty } from 'antd';
+import OptionList, { RefOptionListProps } from './OptionList';
 import { Omit } from '../_util/type';
 import { isArrayEqual } from '../_util/tools';
 import { InputProps } from 'antd/lib/input';
+import KeyCode from 'rc-util/lib/KeyCode';
+
+import './style';
 
 const TabPane = Tabs.TabPane
 
@@ -43,6 +46,19 @@ export interface TabInputProps extends Omit<InputProps, 'onBlur' | 'onClick' | '
 }
 
 export interface CascaderProps {
+  value?: Array<Item>;
+  dataSource: Array<PanelData>;
+  prefixCls?: string;
+  className?: string;
+  hint?: string | React.ReactNode;
+  style?: React.CSSProperties;
+  contentStyle?: React.CSSProperties;
+  contentCls?: string;
+  colSpan?: number;
+  inputProps?: TabInputProps;
+  pagination?: Boolean | Pagination;
+  listHeight?: number;
+  listItemHeight?: number;
   onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
   onSearchItemClick?: (item: Item, ) => Promise<any>;
   onTopTabChange?: (topKey: number) => void;
@@ -52,16 +68,6 @@ export interface CascaderProps {
   onChange?: Function;
   onClear?: Function;
   onPopupScroll?: UIEventHandler<HTMLDivElement>;
-  value?: Array<Item>;
-  dataSource: Array<PanelData>;
-  className?: string;
-  hint?: string | React.ReactNode;
-  style?: React.CSSProperties;
-  contentStyle?: React.CSSProperties;
-  contentCls?: string;
-  colSpan?: number;
-  inputProps?: TabInputProps;
-  pagination?: Boolean | Pagination;
 }
 
 export interface Item {
@@ -90,9 +96,11 @@ export interface CascaderState {
 export default class TabCascader extends Component<CascaderProps, CascaderState> {
   el: HTMLDivElement | null;
   debounceSearch: Function;
+  listRef: React.RefObject<RefOptionListProps>;
 
   static defaultProps = {
-    colSpan: 6
+    prefixCls: 'ant-tab-cascader',
+    colSpan: 6,
   }
 
   constructor(props: CascaderProps) {
@@ -109,6 +117,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       fetchList: []
     };
     this.debounceSearch = debounce(this.handleSearch, 600);
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
@@ -132,7 +141,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       });
       this.setInitialValue(nextProps.dataSource, nextProps.value);
     }
-    if (_.isEmpty(nextProps.value) && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
+    if (!nextProps.value && value && nextProps.dataSource && nextProps.dataSource.length > 0) {
       this.setState({
         selectedItems: [],
         inputVal: '',
@@ -393,9 +402,9 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     const { onBlur } = this.props;
     const el = this.el as HTMLDivElement;
     const target = e.target as Node;
+    this.setState({ searchVisible: false });
     if (searchVisible && !el.contains(target)) {
       this.setState({
-        searchVisible: false,
         selectedItems: [],
         inputVal: ''
       });
@@ -432,9 +441,36 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     }
   }
 
+  onToggleDropdown = (flag: boolean = false) => {
+    this.setState({
+      searchVisible: flag
+    });
+  }
+
+  handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { selectedItems } = this.state;
+    const { which } = e;
+
+    if (which === KeyCode.ESC) {
+      this.onToggleDropdown();
+      this.setState({
+        inputVal: this.renderValue(selectedItems)
+      });
+      return;
+    }
+
+    if (which === KeyCode.UP || which === KeyCode.DOWN) {
+      e.preventDefault();
+    }
+
+    if (this.listRef.current) {
+      this.listRef.current.onKeyDown(e);
+    }
+  }
+
   renderItems = (tabItem: TabData) => {
     const items = tabItem.items;
-    const { colSpan } = this.props;
+    const { colSpan, prefixCls } = this.props;
     const { selectedItems } = this.state;
 
     const hasSelectedItem = (item: Item) => {
@@ -455,8 +491,8 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     ))
 
     return (
-      <div className="antd-pro-tab-items">
-        <ul className="antd-pro-panel-list">
+      <div className={`${prefixCls}-tab-items`}>
+        <ul className={`${prefixCls}-panel-list`}>
           <Row>
             {
               items.length === 0
@@ -470,11 +506,11 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   renderContent = () => {
-    const { dataSource, hint, contentCls, contentStyle } = this.props;
+    const { prefixCls, dataSource, hint, contentCls, contentStyle } = this.props;
     const { visible, firstTab, secondTab, tabLoading } = this.state;
 
     const contentClassName = classNames(
-      'antd-pro-cascader-content-wrap',
+      `${prefixCls}-content-wrap`,
       contentCls,
       {
         'antd-pro-hidden': !visible
@@ -486,7 +522,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
         <div className="hint">{hint}</div>
         <Tabs
           animated={false}
-          className="antd-pro-top-tab"
+          className={`${prefixCls}-top-tab`}
           activeKey={`${firstTab}`}
           onChange={this.handleTopTabChange}
         >
@@ -495,7 +531,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
               <TabPane key={`${panelIdx}`} tab={item.title}>
                 <Tabs
                   animated={false}
-                  className="antd-pro-second-tab"
+                  className={`${prefixCls}-second-tab`}
                   activeKey={`${secondTab}`}
                   onChange={this.handleSecondTabChange}
                 >
@@ -503,7 +539,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
                     item.items.map((tabItem: TabData, tabIdx: number) => (
                       <TabPane
                         key={`${tabIdx}`}
-                        className="andt-pro-tab-panel"
+                        className={`${prefixCls}-tab-panel`}
                         tab={
                           <li className={classNames({ 'tab-header-dot': tabItem.entry })}>
                             {tabItem.title}
@@ -516,7 +552,6 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
                   }
                 </Tabs>
               </TabPane>
-
             ))
           }
         </Tabs>
@@ -525,18 +560,14 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   };
 
   renderSearchSection() {
-    const { contentCls, contentStyle } = this.props;
+    const {
+      contentCls,
+      contentStyle,
+      prefixCls,
+      listHeight = 200,
+      listItemHeight = 40
+    } = this.props;
     const { fetchList, isSearching, searchVisible } = this.state;
-
-    const parentName = (item: Item) => item.parents[item.parents.length - 1].name;
-
-    const searchList = fetchList.length == 0
-      ? <Empty className="empty" />
-      : fetchList.map(item => (
-        <li className="list-item" key={item.code} onClick={() => this.handleSearchItemClick(item)}>
-          {item.name} {item.level !== 1 && `(${parentName(item)})`}
-        </li>
-      ));
 
     const cls = classNames('search-section', contentCls, {
       'antd-pro-hidden': !searchVisible
@@ -544,7 +575,18 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
     return (
       <div className={cls} style={contentStyle} onScroll={this.handleSearchScroll}>
         {
-          isSearching ? <Spin className="loading-spin" /> : searchList
+          isSearching
+            ? <Spin className="loading-spin" />
+            : <OptionList
+              itemKey="code"
+              prefixCls={prefixCls}
+              ref={this.listRef}
+              height={listHeight}
+              itemHeight={listItemHeight}
+              data={fetchList}
+              onSelect={this.handleSearchItemClick}
+              notFoundContent={<Empty className="empty" />}
+            />
         }
       </div>
     )
@@ -552,14 +594,14 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
 
   render() {
     const { inputVal } = this.state;
-    const { className, style, inputProps } = this.props;
+    const { className, style, inputProps, prefixCls } = this.props;
 
-    const cascaderCls = classNames('antd-pro-cascader', className);
+    const cascaderCls = classNames(prefixCls, className);
     const inputClassName = classNames(
-      'tab-search-bar',
+      `${prefixCls}-search-bar`,
       inputProps ? inputProps.className : '',
       {
-        'tab-search-suffix': inputProps && inputProps.allowClear && inputProps.addonAfter
+        [`${prefixCls}-search-suffix`]: inputProps && inputProps.allowClear && inputProps.addonAfter
       }
     );
 
@@ -574,6 +616,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
           className={inputClassName}
           value={inputVal}
           onChange={this.hanldeInputChange}
+          onKeyDown={this.handleKeyDown}
           onClick={this.handleInputClick}
           onBlur={this.handleInputBlur}
         ></Input>
