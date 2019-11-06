@@ -333,7 +333,7 @@ class UploaderDemoList extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Uploader type='list' uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
+        <Uploader type='list' alwaysShowUploadButton={true} showResult={false} max={1} uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }

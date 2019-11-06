@@ -15,6 +15,8 @@
 | value         |  已上传的文件      | ` Array<FileInterface>` |        |
 | style   | 样式对象                 | `CSSProperties`    |        |
 | maxFileSize   |  文件的最大值                | `number`    |        |
+| alwaysShowUploadButton   |  是否始终显示上传按钮                | `boolean`    |   false     |
+| showResult   |  是否显示上传结果列表                | `boolean`    |    true    |
 
 
 ### Events
