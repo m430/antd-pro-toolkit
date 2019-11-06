@@ -35,7 +35,9 @@ export interface UploadProps {
   value?: Array<FileInterface>,
   style?: React.CSSProperties,
   maxFileSize?: number,
-  beforeUpload?: Function
+  beforeUpload?: Function,
+  showResult?: boolean,
+  alwaysShowUploadButton?: boolean
 }
 
 export interface UploadState {
@@ -177,7 +179,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
   }
 
   render() {
-    let { uploadInfo, isView = false, type = 'card', style, max = 9999, placeholder = '' } = this.props
+    let { uploadInfo, isView = false, type = 'card', style, max = 9999, placeholder = '', showResult = true, alwaysShowUploadButton = false } = this.props
     const { previewVisible, previewImage, fileUploading, fileList, width, previewType } = this.state
     let renderImageList = type === 'card' && fileList.map(item => (<Image isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
     let renderFileList = type === 'list' && fileList.map(item => (<File width={width} isUploading={!isView} key={item.id} item={item} handlePreview={this.handlePreview} handleRemove={this.handleRemoveFile} />))
@@ -186,7 +188,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
     }
     return (
       <div style={{ ...style, width }} ref='file'>
-        {renderImageList}
+        {showResult && renderImageList}
         <Upload
           {...uploadInfo}
           {...this.listType}
@@ -195,7 +197,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
           onChange={this.handleChange}
           disabled={fileUploading}
         >
-          {(!isView && !((max - fileList.length) === 0)) && (
+          {(!isView && !alwaysShowUploadButton && !((max - fileList.length) === 0)) && (
             type === 'card' ?
               <div>
                 <Icon type={fileUploading ? 'loading' : 'plus'} />
@@ -205,10 +207,22 @@ export default class Uploader extends Component<UploadProps, UploadState>{
               <Button>
                 <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder ? placeholder : '上传'}
               </Button>
-          )
+          )}
+          {
+            alwaysShowUploadButton && (
+              type === 'card' ?
+                <div>
+                  <Icon type={fileUploading ? 'loading' : 'plus'} />
+                  {placeholder && <div className="ant-upload-text">{placeholder}</div>}
+                </div>
+                :
+                <Button>
+                  <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder ? placeholder : '上传'}
+                </Button>
+            )
           }
         </Upload>
-        {renderFileList}
+        {showResult && renderFileList}
         <Modal maskClosable={false}
           keyboard={false}
           visible={previewVisible}
