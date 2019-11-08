@@ -149,7 +149,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
   }
 
   handleChange = (info: any) => {
-    const { onChange } = this.props
+    const { onChange, alwaysShowUploadButton, max = 9999 } = this.props
     const { fileList } = this.state
     if ('uploading' === info.file.status) {
       this.setState({ fileUploading: true })
@@ -157,9 +157,20 @@ export default class Uploader extends Component<UploadProps, UploadState>{
     }
     if ('done' === info.file.status) {
       if (info.file.response.errorCode === 0) {
-        this.setState({ fileUploading: false, fileList: [...fileList, info.file.response.data] })
+        let fileResultList = []
+        // 如果始终显示上传按钮,则表明会存在上传数量大于max的情况
+        if (alwaysShowUploadButton) {
+          if (fileList.length === max) {
+            fileResultList = [...fileList.filter((_, index) => index !== 0), info.file.response.data]
+          } else {
+            fileResultList = [...fileList, info.file.response.data]
+          }
+        } else {
+          fileResultList = [...fileList, info.file.response.data]
+        }
+        this.setState({ fileUploading: false, fileList: fileResultList })
         if (onChange) {
-          onChange([...fileList, info.file.response.data])
+          onChange(fileResultList)
         }
       } else {
         this.setState({ fileUploading: false })
