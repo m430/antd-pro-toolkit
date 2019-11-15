@@ -319,7 +319,7 @@ class UploaderDemoCard extends React.Component {
   render() {
     return (
       <DemoContainer>
-        <Uploader width='100%' value={[{ "id": "627142797988130816", "name": "Screen Shot 2019-06-28 at 09.45.57.png", "type": "image/png", "path": "/files/M00/00/0E/wKgGMV2Npb6ACV8LAACSzIOXLPg513.png", "originPath": null, "thumbnailPath": null }]} isView={true}/>
+        <Uploader max={1} uploadInfo={{ action: "/api/v1/sys/files/upload", accept: '.jpg,.jpeg,.png,.zip,.rar,.doc,.docx,.xls,.xlsx,.pdf' }} />
       </DemoContainer>
     )
   }
