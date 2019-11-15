@@ -197,6 +197,25 @@ export default class Uploader extends Component<UploadProps, UploadState>{
     if (type === 'card') {
       this.listType = { listType: 'picture-card' }
     }
+    let UploadRender = null
+    const UploadButton = type === 'card' ?
+      <div>
+        <Icon type={fileUploading ? 'loading' : 'plus'} />
+        {placeholder && <div className="ant-upload-text">{placeholder}</div>}
+      </div>
+      :
+      <Button>
+        <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder ? placeholder : '上传'}
+      </Button>
+    if (!isView) {
+      if (alwaysShowUploadButton) {
+        UploadRender = UploadButton
+      } else {
+        if ((max - fileList.length) !== 0) {
+          UploadRender = UploadButton
+        }
+      }
+    }
     return (
       <div style={{ ...style, width }} ref='file'>
         {showResult && renderImageList}
@@ -208,30 +227,7 @@ export default class Uploader extends Component<UploadProps, UploadState>{
           onChange={this.handleChange}
           disabled={fileUploading}
         >
-          {(!isView && !alwaysShowUploadButton && !((max - fileList.length) === 0)) && (
-            type === 'card' ?
-              <div>
-                <Icon type={fileUploading ? 'loading' : 'plus'} />
-                {placeholder && <div className="ant-upload-text">{placeholder}</div>}
-              </div>
-              :
-              <Button>
-                <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder ? placeholder : '上传'}
-              </Button>
-          )}
-          {
-            alwaysShowUploadButton && (
-              type === 'card' ?
-                <div>
-                  <Icon type={fileUploading ? 'loading' : 'plus'} />
-                  {placeholder && <div className="ant-upload-text">{placeholder}</div>}
-                </div>
-                :
-                <Button>
-                  <Icon type={fileUploading ? 'loading' : 'paper-clip'} /> {placeholder ? placeholder : '上传'}
-                </Button>
-            )
-          }
+          {UploadRender}
         </Upload>
         {showResult && renderFileList}
         <Modal maskClosable={false}
