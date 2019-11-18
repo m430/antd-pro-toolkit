@@ -24,7 +24,7 @@ const Image = (props: ImageProps) => {
   const canPrev = imgType.includes(fileType)
   return (
     <>
-      <div className="ant-upload-list ant-upload-list-picture-card">
+      <div className="ant-upload-list ant-upload-list-picture-card" onClick={() => handlePreview(item)} >
         <div className="ant-upload-list-item ant-upload-list-item-done" style={{ width: 102, height: 102 }}>
           <div className="ant-upload-list-item-info">
             <span style={{ height: '100%', textAlign: 'center' }}>
@@ -68,25 +68,10 @@ const Image = (props: ImageProps) => {
                 color: '#fff',
                 opacity: canPrev ? 1 : 0.4,
               }}
-              onClick={() => handlePreview(item)}
             />
             {
               isUploading ? <Icon type='delete' style={{ color: 'rgba(255, 255, 255, 0.85)', marginLeft: 10 }} onClick={() => handleRemove(item)} /> :
-                <a
-                  href={item.path}
-                  download={`${item.name}`}
-                  style={{ color: 'rgba(0, 0, 0, 0.65)', marginLeft: 10 }}
-                >
-                  <Icon
-                    type="download"
-                    style={{
-                      fontSize: 18,
-                      cursor: 'pointer',
-                      marginRight: 10,
-                      color: '#fff',
-                    }}
-                  />
-                </a>
+                <div />
             }
           </span>
         </div>
