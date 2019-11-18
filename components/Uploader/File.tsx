@@ -26,13 +26,13 @@ const File = (props: FileProps) => {
   const isImg = imgType.includes(fileType);
   const length = Math.floor((width - 100) / 14)
   return (
-    <span className='uploadFile'>
+    <span className='uploadFile' onClick={() => handlePreview(item)}>
       <div className="ant-upload-list ant-upload-list-text">
         <div className="ant-upload-list-item ant-upload-list-item-done">
           <div className="ant-upload-list-item-info">
             <span className='name'>
               <Icon style={{ fontSize: 14 }} type={isImg ? 'file-image' : 'file'} />
-              <a className='name' style={{ marginLeft: 20 }} onClick={() => handlePreview(item)}>
+              <a className='name' style={{ marginLeft: 20 }} >
                 <Ellipsis tooltip length={length}>
                   {item.name}
                 </Ellipsis>
@@ -40,11 +40,8 @@ const File = (props: FileProps) => {
             </span>
           </div>
           {
-            isUploading ? <Icon style={{ fontSize: 14 }} type="close" onClick={() => handleRemove(item)} /> : <a href={item.path}
-              download={`${item.name}`}
-              style={{ color: 'rgba(0, 0, 0, 0.65)', marginLeft: 10 }}>
-              <Icon style={{ fontSize: 14 }} type="download" />
-            </a>
+            isUploading ? <Icon style={{ fontSize: 14 }} type="close" onClick={() => handleRemove(item)} /> :
+              <div />
           }
         </div>
       </div>
