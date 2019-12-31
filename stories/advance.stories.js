@@ -30,6 +30,9 @@ class Demo1 extends React.Component {
           hint="温馨提示：支持中文、拼音或首字母，如：西安 或 XA"
           addonAfter={<Icon type="ellipsis" />}
           dataSource={dataSource}
+          inputProps={{
+            size: 'large'
+          }}
         />
       </DemoContainer>
     )
