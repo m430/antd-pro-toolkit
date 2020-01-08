@@ -40,7 +40,10 @@ const File = (props: FileProps) => {
             </span>
           </div>
           {
-            isUploading ? <Icon style={{ fontSize: 14 }} type="close" onClick={() => handleRemove(item)} /> :
+            isUploading ? <Icon style={{ fontSize: 14 }} type="close" onClick={(e) => {
+              e.stopPropagation()
+              handleRemove(item)
+            }} /> :
               <div />
           }
         </div>

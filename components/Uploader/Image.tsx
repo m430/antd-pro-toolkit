@@ -70,7 +70,10 @@ const Image = (props: ImageProps) => {
               }}
             />
             {
-              isUploading ? <Icon type='delete' style={{ color: 'rgba(255, 255, 255, 0.85)', marginLeft: 10 }} onClick={() => handleRemove(item)} /> :
+              isUploading ? <Icon type='delete' style={{ color: 'rgba(255, 255, 255, 0.85)', marginLeft: 10 }} onClick={(e) => {
+                e.stopPropagation()
+                handleRemove(item)
+              }} /> :
                 <div />
             }
           </span>
