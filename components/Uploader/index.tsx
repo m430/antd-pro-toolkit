@@ -156,21 +156,22 @@ export default class Uploader extends Component<UploadProps, UploadState>{
       return
     }
     if ('done' === info.file.status) {
+      const data = info.file.response.data.fileResult ? info.file.response.data.fileResult : info.file.response.data
       if (info.file.response.errorCode === 0) {
         let fileResultList = []
         // 如果始终显示上传按钮,则表明会存在上传数量大于max的情况
         if (alwaysShowUploadButton) {
           if (fileList.length === max) {
-            fileResultList = [...fileList.filter((_, index) => index !== 0), info.file.response.data]
+            fileResultList = [...fileList.filter((_, index) => index !== 0), data]
           } else {
-            fileResultList = [...fileList, info.file.response.data]
+            fileResultList = [...fileList, data]
           }
         } else {
-          fileResultList = [...fileList, info.file.response.data]
+          fileResultList = [...fileList, data]
         }
         this.setState({ fileUploading: false, fileList: fileResultList })
         if (onChange) {
-          onChange(fileResultList)
+          onChange(fileResultList, info.file.response.data)
         }
       } else {
         this.setState({ fileUploading: false })
