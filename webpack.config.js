@@ -19,9 +19,14 @@ function addLocales(webpackConfig) {
   }
   webpackConfig.entry[packageName] = './index-with-locales.js';
   webpackConfig.output.filename = '[name].js';
+  webpackConfig.output.library = {
+    root: 'AntdProToolkit',
+    commonjs: 'antd-pro-toolkit',
+    amd: 'antd-pro-toolkit',
+  }
 }
 
-function externalMoment(config) {
+function externalLibrary(config) {
   config.externals.moment = {
     root: 'moment',
     commonjs2: 'moment',
@@ -58,7 +63,7 @@ const webpackConfig = getWebpackConfig(false);
 if (process.env.RUN_ENV === 'PRODUCTION') {
   webpackConfig.forEach(config => {
     ignoreMomentLocale(config);
-    externalMoment(config);
+    externalLibrary(config);
     addLocales(config);
     if (process.env.ANALYZE = 'TRUE') {
       addBundleAnalyzer(config);

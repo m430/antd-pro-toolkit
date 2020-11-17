@@ -45,7 +45,6 @@
 
   .search-section {
     position: absolute;
-    top: 100%;
     left: 0;
     border: 1px solid #e8e8e8;
     width: 100%;
@@ -54,6 +53,12 @@
     max-height: 300px;
     overflow-y: auto;
     border-radius: 0 0 4px 4px;
+    &.placement-top {
+      bottom: 100%;
+    }
+    &.placement-bottom {
+      top: 100%;
+    }
     .empty {
       padding: 10px 0;
     }
@@ -84,7 +89,6 @@
 
   .@{prefixCls}-content-wrap {
     position: absolute;
-    top: 100%;
     left: 0;
     border: 1px solid #e8e8e8;
     width: 100%;
@@ -96,6 +100,12 @@
     max-height: 300px;
     overflow: auto;
     border-radius: 0 0 4px 4px;
+    &.placement-bottom {
+      top: 100%;
+    }
+    &.placement-top {
+      bottom: 100%;
+    }
     .hint {
       font-size: 12px;
       font-weight: 400;

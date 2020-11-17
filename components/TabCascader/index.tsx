@@ -54,13 +54,14 @@ export interface CascaderProps {
   style?: React.CSSProperties;
   contentStyle?: React.CSSProperties;
   contentCls?: string;
+  contentPlacement: string;
   colSpan?: number;
   inputProps?: TabInputProps;
   pagination?: Boolean | Pagination;
   listHeight?: number;
   listItemHeight?: number;
-  onItemClick?: (key: number, topKey: number, item: Item, ) => Promise<any>;
-  onSearchItemClick?: (item: Item, ) => Promise<any>;
+  onItemClick?: (key: number, topKey: number, item: Item,) => Promise<any>;
+  onSearchItemClick?: (item: Item,) => Promise<any>;
   onTopTabChange?: (topKey: number) => void;
   onTabChange?: (key: number, topKey: number, item: Item | undefined) => Promise<Result>;
   onSearch?: (params: any) => Promise<any>;
@@ -101,6 +102,7 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   static defaultProps = {
     prefixCls: 'ant-tab-cascader',
     colSpan: 6,
+    contentPlacement: 'bottom'
   }
 
   constructor(props: CascaderProps) {
@@ -506,11 +508,12 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
   }
 
   renderContent = () => {
-    const { prefixCls, dataSource, hint, contentCls, contentStyle } = this.props;
+    const { prefixCls, dataSource, hint, contentCls, contentStyle, contentPlacement } = this.props;
     const { visible, firstTab, secondTab, tabLoading } = this.state;
 
     const contentClassName = classNames(
       `${prefixCls}-content-wrap`,
+      `placement-${contentPlacement}`,
       contentCls,
       {
         'antd-pro-hidden': !visible
@@ -565,13 +568,18 @@ export default class TabCascader extends Component<CascaderProps, CascaderState>
       contentStyle,
       prefixCls,
       listHeight = 200,
-      listItemHeight = 40
+      listItemHeight = 40,
+      contentPlacement
     } = this.props;
     const { fetchList, isSearching, searchVisible } = this.state;
 
-    const cls = classNames('search-section', contentCls, {
-      'antd-pro-hidden': !searchVisible
-    });
+    const cls = classNames('search-section',
+      contentCls,
+      `placement-${contentPlacement}`,
+      {
+        'antd-pro-hidden': !searchVisible
+      }
+    );
     return (
       <div className={cls} style={contentStyle} onScroll={this.handleSearchScroll}>
         {

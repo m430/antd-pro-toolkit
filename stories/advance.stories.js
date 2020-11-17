@@ -33,6 +33,7 @@ class Demo1 extends React.Component {
           inputProps={{
             size: 'large'
           }}
+          contentPlacement="top"
         />
       </DemoContainer>
     )
